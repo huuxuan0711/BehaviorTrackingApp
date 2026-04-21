@@ -1,6 +1,5 @@
-package com.xmobile.project2digitalwellbeing.presentation.onboarding
+package com.xmobile.project2digitalwellbeing.presentation.onboarding.splash
 
-import android.R.attr.repeatCount
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -10,25 +9,28 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.xmobile.project2digitalwellbeing.R
+import com.xmobile.project2digitalwellbeing.data.local.AppPreferencesDataStore
 import com.xmobile.project2digitalwellbeing.databinding.ActivitySplashBinding
-import com.xmobile.project2digitalwellbeing.presentation.MainActivity
+import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
+import com.xmobile.project2digitalwellbeing.presentation.main.MainActivity
+import com.xmobile.project2digitalwellbeing.presentation.onboarding.intro.IntroActivity
+import com.xmobile.project2digitalwellbeing.presentation.onboarding.permission.PermissionActivity
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+    private lateinit var appPreferencesDataStore: AppPreferencesDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        appPreferencesDataStore = AppPreferencesDataStore(applicationContext)
         initControl()
     }
 
@@ -52,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
 
             // navigate sau khi splash xong
             delay(2500)
-            goToMain()
+            navigateNext()
         }
     }
 
@@ -98,18 +100,28 @@ class SplashActivity : AppCompatActivity() {
         val scaleY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.9f, 1f, 0.9f)
         val alpha = ObjectAnimator.ofFloat(view, View.ALPHA, 0.3f, 1f, 0.3f)
 
+        scaleX.repeatCount = ValueAnimator.INFINITE
+        scaleY.repeatCount = ValueAnimator.INFINITE
+        alpha.repeatCount = ValueAnimator.INFINITE
+
         AnimatorSet().apply {
             playTogether(scaleX, scaleY, alpha)
             duration = 1500
             startDelay = delay
             interpolator = AccelerateDecelerateInterpolator()
-            repeatCount = ValueAnimator.INFINITE
             start()
         }
     }
 
-    private fun goToMain() {
-        startActivity(Intent(this, IntroActivity::class.java))
+    private suspend fun navigateNext() {
+        val isIntroCompleted = appPreferencesDataStore.isIntroCompleted.first()
+        val destination = when {
+            !isIntroCompleted -> IntroActivity::class.java
+            UsageAccessPermissionHelper.hasUsageAccessPermission(this) -> MainActivity::class.java
+            else -> PermissionActivity::class.java
+        }
+
+        startActivity(Intent(this, destination))
         finish()
     }
 }

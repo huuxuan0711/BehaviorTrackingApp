@@ -6,7 +6,7 @@
     android:background="#F6F7FB"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.onboarding.IntroActivity">
+    tools:context=".presentation.onboarding.intro.IntroActivity">
 
     <!-- ViewPager -->
     <androidx.viewpager2.widget.ViewPager2
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Dots -->
-        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
             android:id="@+id/dotsIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,8 +44,9 @@
             app:dotsColor="#D1D5DB"
             app:selectedDotColor="#5C6BC0"
             app:dotsSize="14dp"
-            app:dotsSpacing="8dp"
-            app:dotsCornerRadius="5dp"/>
+            app:dotsSpacing="12dp"
+            app:dotsCornerRadius="6dp"
+            app:dotsWidthFactor="2.8" />
 
         <!-- Next button -->
         <androidx.appcompat.widget.AppCompatButton

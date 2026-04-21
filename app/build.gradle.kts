@@ -99,4 +99,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.8.1")
     implementation("androidx.room:room-ktx:2.8.1")
     ksp("androidx.room:room-compiler:2.8.1")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }

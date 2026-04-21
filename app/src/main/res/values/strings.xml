@@ -9,7 +9,7 @@
     <string name="weekly_overview_title">Weekly Overview</string>
     <string name="weekly_overview_date_range_placeholder">Mar 5 - Mar 11</string>
     <string name="weekly_chart_title">Daily Screen Time</string>
-    <string name="weekly_stats_title">This Week&apos;s Stats</string>
+    <string name="weekly_stats_title">This Week\'s Stats</string>
     <string name="weekly_avg_daily_screen_time">Average daily screen time</string>
     <string name="weekly_avg_placeholder">4h 20m</string>
     <string name="weekly_most_used_day">Most used day</string>

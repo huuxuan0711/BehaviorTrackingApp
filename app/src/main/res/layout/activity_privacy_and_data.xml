@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F6F7FB"
-    tools:context=".presentation.settings.PrivacyAndDataActivity">
+    tools:context=".presentation.settings.privacy.PrivacyAndDataActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -483,9 +483,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    app:thumb="@drawable/switch_thumb"
                     app:track="@drawable/switch_track"
-                    app:thumbTint="@null"
+                    app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
                     app:switchMinWidth="44dp"

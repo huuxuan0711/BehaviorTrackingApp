@@ -6,7 +6,7 @@
     android:background="#F6F7FB"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.onboarding.SplashActivity">
+    tools:context=".presentation.onboarding.splash.SplashActivity">
 
     <LinearLayout
         android:orientation="vertical"

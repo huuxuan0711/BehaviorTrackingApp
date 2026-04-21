@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/weekly_overview_background"
     android:fillViewport="true"
-    tools:context=".presentation.dashboard.WeeklyOverviewActivity">
+    tools:context=".presentation.dashboard.weekly.WeeklyOverviewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

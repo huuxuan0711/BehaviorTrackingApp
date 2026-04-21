@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F6F7FB"
-    tools:context=".presentation.dashboard.SessionTimelineActivity">
+    tools:context=".presentation.dashboard.session.SessionTimelineActivity">
 
     <!-- HEADER -->
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.xmobile.project2digitalwellbeing.presentation.settings
+package com.xmobile.project2digitalwellbeing.presentation.settings.preferences
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

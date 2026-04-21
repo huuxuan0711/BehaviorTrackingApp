@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,47 +16,47 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project2DigitalWellbeing">
         <activity
-            android:name=".presentation.settings.AboutActivity"
+            android:name=".presentation.settings.about.AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.settings.PreferencesActivity"
+            android:name=".presentation.settings.preferences.PreferencesActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.settings.PrivacyAndDataActivity"
+            android:name=".presentation.settings.privacy.PrivacyAndDataActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.BehaviorInsightDetailActivity"
+            android:name=".presentation.analysis.behavior.BehaviorInsightDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.UsagePatternDetailActivity"
+            android:name=".presentation.analysis.usagepattern.UsagePatternDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.LateNightAnalysisActivity"
+            android:name=".presentation.analysis.latenight.LateNightAnalysisActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.AppTransitionGraphActivity"
+            android:name=".presentation.analysis.transition.AppTransitionGraphActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.AppCategoryActivity"
+            android:name=".presentation.analysis.appcategory.AppCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.dashboard.SessionTimelineActivity"
+            android:name=".presentation.dashboard.session.SessionTimelineActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.dashboard.WeeklyOverviewActivity"
+            android:name=".presentation.dashboard.weekly.WeeklyOverviewActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.dashboard.DailyOverviewActivity"
+            android:name=".presentation.dashboard.daily.DailyOverviewActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.onboarding.PermissionActivity"
+            android:name=".presentation.onboarding.permission.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.onboarding.IntroActivity"
+            android:name=".presentation.onboarding.intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.onboarding.SplashActivity"
-            android:exported="true" >
+            android:name=".presentation.onboarding.splash.SplashActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
 
         </activity>

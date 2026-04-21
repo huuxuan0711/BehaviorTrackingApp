@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/weekly_overview_background"
-    tools:context=".presentation.analysis.AnalysisHubFragment">
+    tools:context=".presentation.analysis.hub.AnalysisHubFragment">
 
     <!-- Header -->
     <LinearLayout

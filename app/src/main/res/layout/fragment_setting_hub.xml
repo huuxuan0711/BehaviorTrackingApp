@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/weekly_overview_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.settings.SettingHubFragment">
+    tools:context=".presentation.settings.hub.SettingHubFragment">
 
     <!-- Scroll -->
     <androidx.core.widget.NestedScrollView
