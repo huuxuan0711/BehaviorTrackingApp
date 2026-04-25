@@ -89,6 +89,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:id="@+id/txtKeyInsight"
                     app:layout_constraintTop_toBottomOf="@id/txt1"
                     app:layout_constraintStart_toStartOf="@id/txt1"
                     app:layout_constraintEnd_toEndOf="parent"

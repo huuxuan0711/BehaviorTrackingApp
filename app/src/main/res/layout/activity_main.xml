@@ -22,7 +22,7 @@
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/icon_home"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:src="@drawable/house"
                 app:tint="@color/nav_color_selector" />
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Home"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/nav_color_selector"/>
         </LinearLayout>
@@ -76,8 +76,8 @@
 
             <ImageView
                 android:id="@+id/icon_analysis"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:src="@drawable/chart_column"
                 app:tint="@color/nav_color_selector" />
 
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Analysis"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/nav_color_selector"/>
         </LinearLayout>
@@ -105,8 +105,8 @@
 
             <ImageView
                 android:id="@+id/icon_settings"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:src="@drawable/settings"
                 app:tint="@color/nav_color_selector" />
 
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Settings"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/nav_color_selector"/>
         </LinearLayout>
