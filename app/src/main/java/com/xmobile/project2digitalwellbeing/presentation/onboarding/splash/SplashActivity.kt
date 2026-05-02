@@ -11,7 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.xmobile.project2digitalwellbeing.data.local.AppPreferencesDataStore
+import com.xmobile.project2digitalwellbeing.data.preferences.local.AppPreferencesDataStore
 import com.xmobile.project2digitalwellbeing.databinding.ActivitySplashBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.main.MainActivity

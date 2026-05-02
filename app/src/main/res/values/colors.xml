@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#5C6BC0</color>
+    <color name="primary_light">#EBE5FF</color>
     <color name="weekly_overview_background">#F6F7FB</color>
     <color name="weekly_overview_title">#111111</color>
     <color name="weekly_overview_text_primary">#1A1A1A</color>

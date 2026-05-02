@@ -59,12 +59,15 @@
 
             <!-- Insight Card -->
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardKeyInsight"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_card"
                 android:padding="20dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
                     android:id="@+id/imgInsight"
@@ -245,11 +248,34 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Chart -->
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="140dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/weekly_section_spacing"
+                app:cardCornerRadius="@dimen/weekly_card_corner_radius"
+                app:cardElevation="@dimen/weekly_card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/weekly_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Usage Distribution"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <!-- Chart -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <!-- Top Apps -->
             <LinearLayout
@@ -293,6 +319,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardDailyOverview"
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -329,6 +356,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardWeeklyOverview"
                         android:layout_weight="1"
                         android:layout_marginEnd="20dp"
                         android:layout_width="wrap_content"
@@ -362,6 +390,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardSessionTimeline"
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

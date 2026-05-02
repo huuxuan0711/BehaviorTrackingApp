@@ -1,6 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.model
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 
 data class AnalysisUiState(
     val isLoading: Boolean = false,

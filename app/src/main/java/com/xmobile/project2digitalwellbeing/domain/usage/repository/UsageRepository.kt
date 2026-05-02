@@ -1,10 +1,10 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.repository
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppMetadata
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageEvent
-import com.xmobile.project2digitalwellbeing.domain.usage.model.Insight
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
+import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 
 interface UsageRepository {
     suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long): List<AppUsageEvent>
@@ -30,4 +30,12 @@ interface UsageRepository {
     suspend fun getSyncState(): UsageSyncState
 
     suspend fun saveSyncState(state: UsageSyncState)
+
+    suspend fun commitRefreshResult(
+        windowStartMillis: Long,
+        windowEndMillis: Long,
+        sessions: List<AppSession>,
+        insights: List<Insight>,
+        newSyncState: UsageSyncState
+    )
 }

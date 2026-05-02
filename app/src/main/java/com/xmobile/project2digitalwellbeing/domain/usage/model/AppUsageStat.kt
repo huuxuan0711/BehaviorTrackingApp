@@ -1,5 +1,7 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.model
 
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+
 data class AppUsageStat(
     val packageName: String,
     val appName: String?,

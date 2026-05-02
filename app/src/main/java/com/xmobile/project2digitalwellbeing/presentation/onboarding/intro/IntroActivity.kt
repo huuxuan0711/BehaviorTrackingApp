@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.xmobile.project2digitalwellbeing.R
-import com.xmobile.project2digitalwellbeing.data.local.AppPreferencesDataStore
+import com.xmobile.project2digitalwellbeing.data.preferences.local.AppPreferencesDataStore
 import com.xmobile.project2digitalwellbeing.databinding.ActivityIntroBinding
 import com.xmobile.project2digitalwellbeing.presentation.onboarding.permission.PermissionActivity
 import kotlinx.coroutines.launch
