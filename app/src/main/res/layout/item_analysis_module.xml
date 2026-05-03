@@ -9,60 +9,68 @@
     app:cardElevation="2dp"
     app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:minHeight="220dp"
         android:padding="16dp">
 
-        <!-- Icon box -->
         <FrameLayout
+            android:id="@+id/iconContainer"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:background="@drawable/bg_app_icon"
             android:backgroundTint="#EEF0FF"
-            android:background="@drawable/bg_app_icon">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imgIcon"
-                android:src="@drawable/house"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center"
+                android:src="@drawable/house"
                 app:tint="#5C6BC0" />
         </FrameLayout>
 
-        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Usage Patterns"
+            android:textColor="#1A1A1A"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#1A1A1A"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iconContainer" />
 
-        <!-- Description -->
         <TextView
             android:id="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Explore patterns in your session behavior."
-            android:textSize="16sp"
-            android:textColor="#6B7280"
-            android:textStyle="bold"
             android:lineSpacingExtra="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="Explore patterns in your session behavior."
+            android:textColor="#6B7280"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
-        <!-- Arrow -->
         <ImageView
+            android:id="@+id/imgArrow"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_gravity="start"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:src="@drawable/chevron_right"
+            app:layout_constraintTop_toBottomOf="@id/tvDesc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:tint="#9CA3AF" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

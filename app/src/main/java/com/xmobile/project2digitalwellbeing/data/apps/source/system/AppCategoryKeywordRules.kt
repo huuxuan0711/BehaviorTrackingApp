@@ -98,10 +98,18 @@ internal val APP_CATEGORY_KEYWORD_RULES = listOf(
     CategoryKeywordRule(
         sourceCategory = SourceAppCategory.TOOLS_UTILITIES,
         keywords = setOf(
-            "tool", "utility", "calculator", "clock", "setting", "settings",
-            "launcher", "cleaner", "filemanager", "files", "scanner", "weather",
+            "tool", "utility", "calculator", "clock",
+            "cleaner", "filemanager", "files", "scanner", "weather",
             "vpn", "notes", "recorder", "map", "maps", "translate",
             "keyboard", "camera", "compass"
+        )
+    ),
+    CategoryKeywordRule(
+        sourceCategory = SourceAppCategory.SYSTEM,
+        keywords = setOf(
+            "setting", "settings", "launcher", "nexuslauncher", "systemui",
+            "overlay", "permissioncontroller", "setupwizard", "service",
+            "framework", "core", "vending", "packageinstaller", "gms"
         )
     )
 )

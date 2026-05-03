@@ -1,6 +1,7 @@
 package com.xmobile.project2digitalwellbeing.domain.tracking.usecase
 
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngine
@@ -52,6 +53,23 @@ class RefreshUsageDataUseCase @Inject constructor(
             syncState = syncState
         )
 
+        if (refreshWindow.refreshMode == RefreshMode.SKIPPED) {
+            return RefreshUsageDataOutcome.Success(
+                RefreshUsageDataResult(
+                    refreshMode = RefreshMode.SKIPPED,
+                    processedRangeStartMillis = refreshWindow.startTimeMillis,
+                    processedRangeEndMillis = refreshWindow.endTimeMillis,
+                    currentLocalDate = Instant.ofEpochMilli(params.nowMillis)
+                        .atZone(ZoneId.of(params.timezoneId))
+                        .toLocalDate()
+                        .toString(),
+                    eventsFetched = 0,
+                    sessionsAffected = 0,
+                    insightsGenerated = 0
+                )
+            )
+        }
+
         val usageEvents = runStage(UsagePipelineStage.FETCH_USAGE_EVENTS, params) {
             repository.getUsageEvents(
                 startTimeMillis = refreshWindow.startTimeMillis,
@@ -74,6 +92,16 @@ class RefreshUsageDataUseCase @Inject constructor(
             }
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
+        val appMetadataByPackage = runStage(UsagePipelineStage.READ_APP_METADATA, params) {
+            repository.getAppMetadata(
+                sessions.map { it.packageName }.toSet()
+            )
+        }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
+
+        val filteredSessions = sessions.filter {
+            appMetadataByPackage[it.packageName]?.reportingCategory != AppCategory.SYSTEM
+        }
+
         val currentLocalDate = runStage(UsagePipelineStage.BUILD_DAILY_USAGE, params) {
             Instant.ofEpochMilli(params.nowMillis)
                 .atZone(ZoneId.of(params.timezoneId))
@@ -83,15 +111,9 @@ class RefreshUsageDataUseCase @Inject constructor(
 
         val dailyUsage = runStage(UsagePipelineStage.BUILD_DAILY_USAGE, params) {
             aggregator.buildDailyUsage(
-                sessions = sessions,
+                sessions = filteredSessions,
                 timezoneId = params.timezoneId,
                 localDate = currentLocalDate
-            )
-        }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
-
-        val appMetadataByPackage = runStage(UsagePipelineStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(
-                dailyUsage.sessions.map { it.packageName }.toSet()
             )
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
@@ -132,7 +154,7 @@ class RefreshUsageDataUseCase @Inject constructor(
             repository.commitRefreshResult(
                 windowStartMillis = refreshWindow.startTimeMillis,
                 windowEndMillis = refreshWindow.endTimeMillis,
-                sessions = sessions,
+                sessions = filteredSessions,
                 insights = insights,
                 newSyncState = newSyncState
             )
@@ -145,7 +167,7 @@ class RefreshUsageDataUseCase @Inject constructor(
                 processedRangeEndMillis = refreshWindow.endTimeMillis,
                 currentLocalDate = currentLocalDate,
                 eventsFetched = usageEvents.size,
-                sessionsAffected = sessions.size,
+                sessionsAffected = filteredSessions.size,
                 insightsGenerated = insights.size
             )
         )

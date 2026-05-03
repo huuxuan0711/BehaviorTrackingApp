@@ -33,6 +33,24 @@ class UsageAggregatorImplTest {
     }
 
     @Test
+    fun `buildDailyUsage merges adjacent sessions of the same package`() {
+        val sessions = listOf(
+            session("app.a", "2026-04-28T10:00:00+07:00", "2026-04-28T10:05:00+07:00"),
+            session("app.a", "2026-04-28T10:05:00+07:00", "2026-04-28T10:10:00+07:00")
+        )
+
+        val dailyUsage = aggregator.buildDailyUsage(
+            sessions = sessions,
+            timezoneId = ZONE_ID,
+            localDate = "2026-04-28"
+        )
+
+        assertEquals(1, dailyUsage.totalSessionCount)
+        assertEquals(1, dailyUsage.sessions.size)
+        assertEquals(10L * 60L * 1000L, dailyUsage.totalScreenTimeMillis)
+    }
+
+    @Test
     fun `buildHourlyUsage splits a session across hour boundaries`() {
         val sessions = listOf(
             session("app.a", "2026-04-28T10:50:00+07:00", "2026-04-28T11:10:00+07:00")

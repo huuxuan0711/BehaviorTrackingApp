@@ -23,7 +23,11 @@ internal object DailyOverviewChartConfigurator {
             setPinchZoom(false)
             setDrawGridBackground(false)
             setFitBars(true)
-            setViewPortOffsets(56f, 24f, 20f, 44f)
+            minOffset = 0f
+            extraLeftOffset = 12f
+            extraTopOffset = 8f
+            extraRightOffset = 12f
+            extraBottomOffset = 12f
             axisRight.isEnabled = false
             setNoDataText("No hourly data yet")
 
@@ -44,10 +48,12 @@ internal object DailyOverviewChartConfigurator {
                 granularity = 1f
                 axisMinimum = -0.5f
                 axisMaximum = 23.5f
+                labelCount = 24
                 textColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
                 textSize = 12f
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
+                setAvoidFirstLastClipping(false)
                 yOffset = 8f
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {

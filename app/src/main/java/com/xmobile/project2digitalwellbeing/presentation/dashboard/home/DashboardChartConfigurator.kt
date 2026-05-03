@@ -26,7 +26,11 @@ internal object DashboardChartConfigurator {
             setScaleEnabled(false)
             setPinchZoom(false)
             setDrawGridBackground(false)
-            setViewPortOffsets(56f, 16f, 20f, 44f)
+            minOffset = 0f
+            extraLeftOffset = 12f
+            extraTopOffset = 8f
+            extraRightOffset = 12f
+            extraBottomOffset = 12f
             axisRight.isEnabled = false
             setNoDataText("No hourly data yet")
             axisLeft.apply {
@@ -37,7 +41,6 @@ internal object DashboardChartConfigurator {
                 setDrawAxisLine(false)
                 setDrawZeroLine(false)
                 labelCount = 5
-                xOffset = 0f
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String = "${value.toInt()}m"
                 }
@@ -47,14 +50,17 @@ internal object DashboardChartConfigurator {
                 granularity = 1f
                 axisMinimum = 0f
                 axisMaximum = 23f
+                labelCount = 24
                 textSize = 12f
                 textColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
+                setAvoidFirstLastClipping(false)
                 yOffset = 8f
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
-                        return when (value.toInt()) {
+                        val rounded = value.toInt()
+                        return when (rounded) {
                             0 -> "12AM"
                             9 -> "9AM"
                             18 -> "6PM"
@@ -67,8 +73,9 @@ internal object DashboardChartConfigurator {
     }
 
     fun render(chart: LineChart, context: Context, hourlyUsage: List<HourlyUsage>) {
-        val entries = hourlyUsage.map { hour ->
-            Entry(hour.hourOfDay.toFloat(), hour.totalTimeMillis / (60f * 1000f))
+        val usageByHour = hourlyUsage.associateBy { it.hourOfDay }
+        val entries = (0..23).map { hour ->
+            Entry(hour.toFloat(), (usageByHour[hour]?.totalTimeMillis ?: 0L) / (60f * 1000f))
         }
 
         chart.axisLeft.axisMaximum = entries.resolveAxisMaximum()

@@ -77,7 +77,35 @@ class SessionBuilderImpl @Inject constructor() : SessionBuilder {
             )
         }
 
-        return sessions
+        return sessions.mergeAdjacent()
+    }
+
+    private fun List<AppSession>.mergeAdjacent(toleranceMillis: Long = 1000L): List<AppSession> {
+        if (size <= 1) return this
+        val merged = mutableListOf<AppSession>()
+        var current = this[0]
+
+        for (i in 1 until size) {
+            val next = this[i]
+            if (current.packageName == next.packageName &&
+                next.startTimeMillis <= current.endTimeMillis + toleranceMillis
+            ) {
+                val newEnd = maxOf(current.endTimeMillis, next.endTimeMillis)
+                current = current.copy(
+                    endTimeMillis = newEnd,
+                    durationMillis = newEnd - current.startTimeMillis
+                )
+            } else {
+                if (current.durationMillis >= MIN_SESSION_DURATION_MILLIS) {
+                    merged.add(current)
+                }
+                current = next
+            }
+        }
+        if (current.durationMillis >= MIN_SESSION_DURATION_MILLIS) {
+            merged.add(current)
+        }
+        return merged
     }
 
     private fun closeActiveSession(
@@ -101,5 +129,9 @@ class SessionBuilderImpl @Inject constructor() : SessionBuilder {
             endTimeMillis = endTimeMillis,
             durationMillis = durationMillis
         )
+    }
+
+    private companion object {
+        private const val MIN_SESSION_DURATION_MILLIS = 500L
     }
 }

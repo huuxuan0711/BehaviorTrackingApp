@@ -184,8 +184,10 @@ class TransitionInsightGeneratorImpl @Inject constructor() : TransitionInsightGe
 
             AppCategory.COMMUNICATION,
             AppCategory.BROWSER,
+            AppCategory.SYSTEM,
             AppCategory.OTHER,
             AppCategory.UNKNOWN -> AppFocusGroup.NEUTRAL
+
         }
     }
 

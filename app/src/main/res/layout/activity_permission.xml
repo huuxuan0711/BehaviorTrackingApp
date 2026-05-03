@@ -8,32 +8,14 @@
     android:layout_height="match_parent"
     tools:context=".presentation.onboarding.permission.PermissionActivity">
 
-    <!-- ================= TOP: Illustration ================= -->
-    <ImageView
-        android:id="@+id/imgIllustration"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_usage_access"
-        android:contentDescription="Usage illustration"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cardContent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- ================= CENTER: Content Card ================= -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardContent"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="2dp"
-        app:strokeWidth="0dp"
-        android:backgroundTint="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/imgIllustration"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layoutButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -41,61 +23,85 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="30dp">
+            android:orientation="vertical">
 
-            <!-- Title -->
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Allow Usage Access"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A"
-                android:layout_marginBottom="20dp"/>
+            <!-- ================= TOP: Illustration ================= -->
+            <ImageView
+                android:id="@+id/imgIllustration"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Usage illustration"
+                android:src="@drawable/ic_usage_access" />
 
-            <!-- Description -->
-            <TextView
-                android:id="@+id/tvDescription"
+            <!-- ================= CENTER: Content Card ================= -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="To understand your digital habits, the app needs permission to view app usage statistics. This allows us to analyze usage sessions and provide meaningful insights."
-                android:textSize="20sp"
-                android:textColor="#6B7280"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
-            <!-- Info Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="top">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_info"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="4dp"
-                    android:alpha="0.6"
-                    app:tint="#5C6BC0" />
-
-                <TextView
-                    android:id="@+id/tvNote"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="We never access personal content or messages."
-                    android:textSize="18sp"
-                    android:textColor="#6B7280"/>
+                    android:orientation="vertical"
+                    android:padding="30dp">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:text="Allow Usage Access"
+                        android:textColor="#1A1A1A"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="To understand your digital habits, the app needs permission to view app usage statistics. This allows us to analyze usage sessions and provide meaningful insights."
+                        android:textColor="#6B7280"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:alpha="0.6"
+                            android:src="@drawable/ic_info"
+                            app:tint="#5C6BC0" />
+
+                        <TextView
+                            android:id="@+id/tvNote"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="We never access personal content or messages."
+                            android:textColor="#6B7280"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- ================= BOTTOM: Buttons ================= -->
     <LinearLayout

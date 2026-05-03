@@ -8,5 +8,6 @@ data class UsageRefreshWindow(
 
 enum class RefreshMode {
     FULL,
-    INCREMENTAL
+    INCREMENTAL,
+    SKIPPED
 }

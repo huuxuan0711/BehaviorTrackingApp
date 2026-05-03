@@ -13,6 +13,7 @@ enum class SourceAppCategory {
     FINANCE,
     READING_INFORMATION,
     CREATIVITY,
+    SYSTEM,
     OTHER,
     UNKNOWN
 }

@@ -9,6 +9,19 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
         params: RefreshUsageDataParams,
         syncState: UsageSyncState
     ): UsageRefreshWindow {
+        val lastRefresh = syncState.lastSuccessfulRefreshTimestampMillis ?: 0L
+        val isCoolingDown = !params.forceFullRefresh &&
+                syncState.isInitialSyncCompleted &&
+                (params.nowMillis - lastRefresh < COOLDOWN_MILLIS)
+
+        if (isCoolingDown) {
+            return UsageRefreshWindow(
+                startTimeMillis = lastRefresh,
+                endTimeMillis = params.nowMillis,
+                refreshMode = RefreshMode.SKIPPED
+            )
+        }
+
         val endTimeMillis = params.nowMillis
         val fullRefreshStartMillis = (params.nowMillis - FULL_REFRESH_WINDOW_MILLIS).coerceAtLeast(0L)
 
@@ -33,5 +46,6 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
     private companion object {
         private const val FULL_REFRESH_WINDOW_MILLIS = 24L * 60L * 60L * 1000L
         private const val SAFETY_WINDOW_MILLIS = 5L * 60L * 1000L
+        private const val COOLDOWN_MILLIS = 60L * 1000L
     }
 }

@@ -43,6 +43,7 @@ internal fun SourceAppCategory.toReportingCategory(): AppCategory {
         SourceAppCategory.TOOLS_UTILITIES -> AppCategory.TOOLS
         SourceAppCategory.READING_INFORMATION -> AppCategory.OTHER
         SourceAppCategory.CREATIVITY -> AppCategory.OTHER
+        SourceAppCategory.SYSTEM -> AppCategory.SYSTEM
         SourceAppCategory.OTHER,
         SourceAppCategory.UNKNOWN -> AppCategory.UNKNOWN
     }

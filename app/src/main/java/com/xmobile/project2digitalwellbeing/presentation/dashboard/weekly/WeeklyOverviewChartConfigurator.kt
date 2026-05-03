@@ -23,7 +23,11 @@ internal object WeeklyOverviewChartConfigurator {
             setDrawGridBackground(false)
             setDrawBarShadow(false)
             setFitBars(false)
-            setExtraOffsets(8f, 16f, 8f, 8f)
+            minOffset = 0f
+            extraLeftOffset = 12f
+            extraTopOffset = 8f
+            extraRightOffset = 12f
+            extraBottomOffset = 12f
             axisRight.isEnabled = false
             setNoDataText("No weekly data yet")
 

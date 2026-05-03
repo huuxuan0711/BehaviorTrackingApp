@@ -1,6 +1,8 @@
 package com.xmobile.project2digitalwellbeing.data.tracking.repository
 
+import android.util.Log
 import androidx.room.withTransaction
+import com.xmobile.project2digitalwellbeing.BuildConfig
 import com.xmobile.project2digitalwellbeing.data.apps.mapper.toDomain
 import com.xmobile.project2digitalwellbeing.data.apps.mapper.toEntity
 import com.xmobile.project2digitalwellbeing.data.apps.source.local.room.dao.AppMetadataDao
@@ -23,6 +25,10 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class UsageRepositoryImpl @Inject constructor(
@@ -34,6 +40,8 @@ class UsageRepositoryImpl @Inject constructor(
     private val insightDao: InsightDao,
     private val syncStateDao: SyncStateDao
 ) : UsageRepository {
+
+    private val logTag = "UsageSessions"
 
     override suspend fun getUsageEvents(
         startTimeMillis: Long,
@@ -101,7 +109,16 @@ class UsageRepositoryImpl @Inject constructor(
         endTimeMillis: Long
     ): List<AppSession> {
         return try {
-            sessionDao.getSessionsInRange(startTimeMillis, endTimeMillis).map { it.toDomain() }
+            sessionDao.getSessionsInRange(startTimeMillis, endTimeMillis)
+                .map { it.toDomain() }
+                .also { sessions ->
+                    logSessions(
+                        stage = "READ",
+                        startTimeMillis = startTimeMillis,
+                        endTimeMillis = endTimeMillis,
+                        sessions = sessions
+                    )
+                }
         } catch (exception: Exception) {
             throw UsageDataLayerException(
                 UsageDataLayerError.CacheReadFailed(
@@ -115,6 +132,12 @@ class UsageRepositoryImpl @Inject constructor(
     override suspend fun saveSessions(sessions: List<AppSession>) {
         try {
             sessionDao.insertSessions(sessions.map { it.toEntity() })
+            logSessions(
+                stage = "SAVE",
+                startTimeMillis = sessions.minOfOrNull { it.startTimeMillis } ?: 0L,
+                endTimeMillis = sessions.maxOfOrNull { it.endTimeMillis } ?: 0L,
+                sessions = sessions
+            )
         } catch (exception: Exception) {
             throw UsageDataLayerException(
                 UsageDataLayerError.CacheWriteFailed(
@@ -244,6 +267,12 @@ class UsageRepositoryImpl @Inject constructor(
                 }
                 syncStateDao.upsertSyncState(newSyncState.toEntity())
             }
+            logSessions(
+                stage = "COMMIT",
+                startTimeMillis = windowStartMillis,
+                endTimeMillis = windowEndMillis,
+                sessions = sessions
+            )
         } catch (exception: Exception) {
             throw UsageDataLayerException(
                 UsageDataLayerError.TransactionFailed(
@@ -251,6 +280,76 @@ class UsageRepositoryImpl @Inject constructor(
                     cause = exception
                 )
             )
+        }
+    }
+
+    private fun logSessions(
+        stage: String,
+        startTimeMillis: Long,
+        endTimeMillis: Long,
+        sessions: List<AppSession>
+    ) {
+        if (!BuildConfig.DEBUG) return
+
+        val topPackages = sessions
+            .groupBy { it.packageName }
+            .mapValues { (_, grouped) ->
+                grouped.sumOf { it.durationMillis } to grouped.size
+            }
+            .entries
+            .sortedByDescending { it.value.first }
+            .take(8)
+            .joinToString(separator = " | ") { (packageName, value) ->
+                val totalDurationMillis = value.first
+                val count = value.second
+                "$packageName count=$count total=${totalDurationMillis.toDurationText()}"
+            }
+
+        val suspiciousSamples = sessions
+            .filter { it.durationMillis <= 0L || it.durationMillis >= 3L * 60L * 60L * 1000L }
+            .take(8)
+            .joinToString(separator = " | ") { session ->
+                "${session.packageName} ${session.startTimeMillis.toDebugTime()}..${session.endTimeMillis.toDebugTime()} duration=${session.durationMillis.toDurationText()}"
+            }
+            .ifBlank { "none" }
+
+        val sampleSessions = sessions
+            .take(5)
+            .joinToString(separator = " | ") { session ->
+                "${session.packageName} ${session.startTimeMillis.toDebugTime()}..${session.endTimeMillis.toDebugTime()} (${session.durationMillis.toDurationText()})"
+            }
+            .ifBlank { "none" }
+
+        Log.d(
+            logTag,
+            buildString {
+                append("[$stage] range=${startTimeMillis.toDebugTime()}..${endTimeMillis.toDebugTime()}")
+                append(" count=${sessions.size}")
+                append(" topPackages=")
+                append(if (topPackages.isBlank()) "none" else topPackages)
+                append(" suspicious=")
+                append(suspiciousSamples)
+                append(" sample=")
+                append(sampleSessions)
+            }
+        )
+    }
+
+    private fun Long.toDebugTime(): String {
+        if (this <= 0L) return "0"
+        return Instant.ofEpochMilli(this)
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("MM-dd HH:mm:ss", Locale.getDefault()))
+    }
+
+    private fun Long.toDurationText(): String {
+        val totalMinutes = this / (60L * 1000L)
+        val hours = totalMinutes / 60L
+        val minutes = totalMinutes % 60L
+        return when {
+            hours > 0L && minutes > 0L -> "${hours}h${minutes}m"
+            hours > 0L -> "${hours}h"
+            else -> "${minutes}m"
         }
     }
 }

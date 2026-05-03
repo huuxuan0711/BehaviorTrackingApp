@@ -2,7 +2,6 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.home
 
 import android.content.Context
 import android.graphics.RectF
-import android.view.View
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
@@ -14,7 +13,7 @@ internal class DashboardUsageMarkerView(context: Context) : MarkerView(
     com.xmobile.project2digitalwellbeing.R.layout.view_dashboard_usage_marker
 ) {
 
-    private val binding = ViewDashboardUsageMarkerBinding.bind(this)
+    private val binding = ViewDashboardUsageMarkerBinding.bind(getChildAt(0))
     private val chartBounds = RectF()
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {

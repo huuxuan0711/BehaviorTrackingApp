@@ -75,7 +75,7 @@ class SessionTimelineAdapter : RecyclerView.Adapter<SessionTimelineAdapter.Sessi
                 AppCategory.PRODUCTIVITY, AppCategory.EDUCATION, AppCategory.TOOLS -> Color.parseColor("#4CAF50")
                 AppCategory.SOCIAL, AppCategory.VIDEO, AppCategory.GAME, AppCategory.MUSIC -> Color.parseColor("#5C6BC0")
                 AppCategory.COMMUNICATION, AppCategory.BROWSER -> Color.parseColor("#FF9800")
-                AppCategory.OTHER, AppCategory.UNKNOWN -> Color.parseColor("#9E9E9E")
+                AppCategory.SYSTEM, AppCategory.OTHER, AppCategory.UNKNOWN -> Color.parseColor("#9E9E9E")
             }
         }
 

@@ -10,12 +10,62 @@ internal object AppCategoryClassifier {
     fun resolve(
         packageName: String,
         appName: String?,
-        systemCategory: SourceAppCategory?
+        systemCategory: SourceAppCategory?,
+        isSystemApp: Boolean = false
     ): CategoryResolution {
         return resolveFromOverride(packageName)
+            ?: resolveFromSpecialPrefixes(packageName)
+            ?: resolveFromSystemFlag(packageName, isSystemApp)
             ?: resolveFromSystemCategory(systemCategory)
             ?: resolveFromHeuristic(packageName = packageName, appName = appName)
             ?: unknownCategoryResolution()
+    }
+
+    private fun resolveFromSystemFlag(packageName: String, isSystemApp: Boolean): CategoryResolution? {
+        if (isSystemApp && !isUserFacingGoogleApp(packageName)) {
+            return SourceAppCategory.SYSTEM.toResolution(
+                classificationSource = ClassificationSource.SYSTEM_CATEGORY,
+                confidence = 0.85f
+            )
+        }
+        return null
+    }
+
+    private fun resolveFromSpecialPrefixes(packageName: String): CategoryResolution? {
+        val isSystemPrefix = packageName == "android" ||
+            packageName.startsWith("com.android.") ||
+            packageName.startsWith("com.google.android.apps.nexuslauncher") ||
+            packageName.startsWith("com.google.android.permissioncontroller") ||
+            packageName.startsWith("com.google.android.setupwizard") ||
+            packageName.startsWith("com.google.android.packageinstaller") ||
+            packageName.startsWith("com.google.android.gms") ||
+            packageName.startsWith("com.oplus.") || // OPPO/Realme
+            packageName.startsWith("com.samsung.") || // Samsung
+            packageName.startsWith("com.miui.") // Xiaomi
+
+        if (isSystemPrefix) {
+            if (!isUserFacingGoogleApp(packageName)) {
+                return SourceAppCategory.SYSTEM.toResolution(
+                    classificationSource = ClassificationSource.HEURISTIC,
+                    confidence = 0.8f
+                )
+            }
+        }
+        return null
+    }
+
+    private fun isUserFacingGoogleApp(packageName: String): Boolean {
+        return packageName == "com.android.chrome" ||
+            packageName == "com.google.android.youtube" ||
+            packageName == "com.google.android.gm" ||
+            packageName == "com.google.android.apps.docs" ||
+            packageName == "com.google.android.apps.maps" ||
+            packageName == "com.google.android.calendar" ||
+            packageName == "com.google.android.keep" ||
+            packageName == "com.google.android.apps.photos" ||
+            packageName == "com.google.android.apps.messaging" ||
+            packageName == "com.google.android.apps.youtube.music" ||
+            packageName == "com.google.android.apps.nbu.files"
     }
 
     private fun resolveFromOverride(packageName: String): CategoryResolution? {

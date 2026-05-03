@@ -97,5 +97,13 @@ internal val APP_CATEGORY_OVERRIDES = mapOf(
     "com.adobe.lrmobile" to SourceAppCategory.CREATIVITY,
     "com.adobe.psmobile" to SourceAppCategory.CREATIVITY,
     "com.canva.editor" to SourceAppCategory.CREATIVITY,
-    "com.picsart.studio" to SourceAppCategory.CREATIVITY
+    "com.picsart.studio" to SourceAppCategory.CREATIVITY,
+    "com.android.settings" to SourceAppCategory.SYSTEM,
+    "com.android.launcher" to SourceAppCategory.SYSTEM,
+    "com.android.launcher3" to SourceAppCategory.SYSTEM,
+    "com.google.android.apps.nexuslauncher" to SourceAppCategory.SYSTEM,
+    "com.android.systemui" to SourceAppCategory.SYSTEM,
+    "com.google.android.permissioncontroller" to SourceAppCategory.SYSTEM,
+    "com.google.android.packageinstaller" to SourceAppCategory.SYSTEM,
+    "com.google.android.gms" to SourceAppCategory.SYSTEM
 )

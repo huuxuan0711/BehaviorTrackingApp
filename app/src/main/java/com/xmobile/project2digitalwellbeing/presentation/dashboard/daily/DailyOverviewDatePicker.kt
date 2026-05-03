@@ -39,9 +39,11 @@ internal class DailyOverviewDatePicker(
             adapter = calendarAdapter
         }
 
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        val popupWidth = anchor.width.coerceAtLeast(screenWidth - 64)
         val popup = PopupWindow(
             popupBinding.root,
-            anchor.width.coerceAtLeast(context.resources.displayMetrics.widthPixels - 64),
+            popupWidth,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
@@ -66,7 +68,11 @@ internal class DailyOverviewDatePicker(
         }
 
         renderMonth(displayedMonth)
-        popup.showAsDropDown(anchor, 0, 16)
+        val anchorLocation = IntArray(2)
+        anchor.getLocationOnScreen(anchorLocation)
+        val popupLeft = ((screenWidth - popupWidth) / 2f).toInt()
+        val xOffset = popupLeft - anchorLocation[0]
+        popup.showAsDropDown(anchor, xOffset, 16)
         popupWindow = popup
     }
 

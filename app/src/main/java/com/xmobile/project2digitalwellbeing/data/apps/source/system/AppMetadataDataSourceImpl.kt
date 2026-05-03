@@ -87,7 +87,11 @@ class AppMetadataDataSourceImpl @Inject constructor(
         return AppCategoryClassifier.resolve(
             packageName = packageName,
             appName = appName,
-            systemCategory = applicationInfo?.toSystemBackedCategory()
+            systemCategory = applicationInfo?.toSystemBackedCategory(),
+            isSystemApp = applicationInfo?.let {
+                (it.flags and ApplicationInfo.FLAG_SYSTEM) != 0 ||
+                    (it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+            } ?: false
         )
     }
 }

@@ -133,8 +133,7 @@
                 android:textSize="14sp"
                 android:textColor="#888888"
                 android:gravity="center"
-                android:paddingVertical="8dp"
-                android:typeface="monospace" />
+                android:paddingVertical="8dp"/>
         </LinearLayout>
 
         <!-- ========== CALENDAR DAYS GRID (RecyclerView) ========== -->
