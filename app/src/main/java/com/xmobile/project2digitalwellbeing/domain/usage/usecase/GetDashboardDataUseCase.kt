@@ -4,6 +4,8 @@ import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.DailyUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightInterpreter
+import com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedInsight
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import java.time.Instant
@@ -21,7 +23,7 @@ data class GetDashboardDataParams(
 data class DashboardData(
     val currentLocalDate: String,
     val dailyUsage: DailyUsage,
-    val topInsight: Insight?,
+    val topInsight: InterpretedInsight?,
     val hourlyUsage: List<HourlyUsage>,
     val topApps: List<AppUsageStat>
 )
@@ -70,7 +72,8 @@ enum class DashboardDataStage {
 
 class GetDashboardDataUseCase @Inject constructor(
     private val repository: UsageRepository,
-    private val aggregator: UsageAggregator
+    private val aggregator: UsageAggregator,
+    private val interpreter: InsightInterpreter
 ) {
 
     suspend operator fun invoke(params: GetDashboardDataParams): GetDashboardDataOutcome {
@@ -142,7 +145,7 @@ class GetDashboardDataUseCase @Inject constructor(
         val topInsight = insights.maxWithOrNull(
             compareBy<Insight> { it.score }
                 .thenBy { it.confidence }
-        )
+        )?.let(interpreter::interpret)
 
         return GetDashboardDataOutcome.Success(
             DashboardData(

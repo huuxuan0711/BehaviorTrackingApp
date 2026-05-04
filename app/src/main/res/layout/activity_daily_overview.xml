@@ -29,15 +29,15 @@
 
                 <ImageView
                     android:id="@+id/btnBack"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/arrow_left"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Daily Overview"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:layout_centerInParent="true"/>
@@ -46,8 +46,8 @@
             <!-- Date selector -->
             <androidx.cardview.widget.CardView
                 app:cardCornerRadius="16dp"
-                app:cardElevation="5dp"
-                android:layout_marginTop="20dp"
+                app:cardElevation="2dp"
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -65,13 +65,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Today"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#000000"/>
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/chevron_down"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="24dp"
+                        android:padding="20dp"
                         android:background="@drawable/bg_gradient_primary">
 
                         <!-- Title -->
@@ -116,8 +116,8 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/smartphone"
                                 app:tint="#FFFFFF" />
 
@@ -126,7 +126,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Total Screen Time"
                                 android:textColor="#FFFFFF"
-                                android:textSize="16sp"
+                                android:textSize="14sp"
                                 android:alpha="0.9"
                                 android:layout_marginStart="6dp"/>
                         </LinearLayout>
@@ -137,7 +137,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5h 42m"
-                            android:textSize="28sp"
+                            android:textSize="26sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:layout_marginTop="12dp"/>
@@ -147,7 +147,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="8% less than yesterday"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#FFFFFF"
                             android:alpha="0.8"
                             android:layout_marginTop="4dp"/>
@@ -173,8 +173,8 @@
                                     android:layout_marginEnd="10dp"
                                     android:src="@drawable/clock"
                                     app:tint="#E0E2F7"
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"/>
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"/>
 
                                 <LinearLayout
                                     android:orientation="vertical"
@@ -186,7 +186,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="12dp"
                                         android:text="Sessions"
-                                        android:textSize="16sp"
+                                        android:textSize="14sp"
                                         android:textColor="#FFFFFF"
                                         android:alpha="0.8"/>
 
@@ -195,7 +195,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="87"
-                                        android:textSize="25sp"
+                                        android:textSize="23sp"
                                         android:textStyle="bold"
                                         android:textColor="#FFFFFF"
                                         android:layout_marginTop="4dp"/>
@@ -216,8 +216,8 @@
                                     android:layout_marginEnd="10dp"
                                     android:src="@drawable/trending_up"
                                     app:tint="#E0E2F7"
-                                    android:layout_width="26dp"
-                                    android:layout_height="26dp"/>
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"/>
 
                                 <LinearLayout
                                     android:orientation="vertical"
@@ -228,7 +228,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Longest Session"
-                                        android:textSize="16sp"
+                                        android:textSize="14sp"
                                         android:textColor="#FFFFFF"
                                         android:alpha="0.8"/>
 
@@ -237,7 +237,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="42m"
-                                        android:textSize="20sp"
+                                        android:textSize="18sp"
                                         android:textStyle="bold"
                                         android:textColor="#FFFFFF"
                                         android:layout_marginTop="4dp"/>
@@ -266,14 +266,29 @@
                             android:layout_height="wrap_content"
                             android:text="Usage Timeline"
                             android:textColor="#000000"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_marginBottom="12dp"/>
 
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/barChart"
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="220dp" />
+                            android:layout_height="220dp">
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/barChart"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/txtEmptyChart"
+                                android:visibility="gone"
+                                android:gravity="center"
+                                android:text="No hourly activity for this day yet. Pick another day or check back after using your phone."
+                                android:textColor="#6B7280"
+                                android:textSize="14sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+                        </FrameLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -295,7 +310,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Most Used Apps"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="#000000"
                             android:layout_marginBottom="12dp"/>
@@ -305,6 +320,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:nestedScrollingEnabled="false"/>
+
+                        <TextView
+                            android:id="@+id/txtEmptyApps"
+                            android:visibility="gone"
+                            android:text="No app usage for this day yet."
+                            android:textColor="#6B7280"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -323,8 +349,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/lightbulb"/>
                     </LinearLayout>
 
@@ -339,7 +365,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Usage Insight"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="#7B3306"/>
 
@@ -348,7 +374,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="You used social media most frequently after 10 PM. Consider setting app limits for better sleep quality."
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="#78350F"
                             android:layout_marginTop="10dp"/>
                     </LinearLayout>

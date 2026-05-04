@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xmobile.project2digitalwellbeing.databinding.FragmentAnalysisHubBinding
+import com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory.AppCategoryActivity
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.analysis.behavior.BehaviorInsightDetailActivity
 import com.xmobile.project2digitalwellbeing.presentation.analysis.latenight.LateNightAnalysisActivity
@@ -43,7 +44,13 @@ class AnalysisHubFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvModules.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 2).apply {
+                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if (modulesAdapter.isSectionHeader(position)) 2 else 1
+                    }
+                }
+            }
             adapter = modulesAdapter
         }
         modulesAdapter.submitList(buildModules())
@@ -54,29 +61,37 @@ class AnalysisHubFragment : Fragment() {
         _binding = null
     }
 
-    private fun buildModules(): List<AnalysisModuleItem> {
+    private fun buildModules(): List<AnalysisHubItem> {
         return listOf(
-            AnalysisModuleItem(
+            AnalysisHubItem.SectionHeader("Set up first"),
+            AnalysisHubItem.Module(
+                title = "App Categories",
+                description = "Tell the app which apps help you focus and which tend to distract.",
+                iconResId = com.xmobile.project2digitalwellbeing.R.drawable.layout_grid,
+                destination = AppCategoryActivity::class.java
+            ),
+            AnalysisHubItem.SectionHeader("Explore insights"),
+            AnalysisHubItem.Module(
                 title = "Usage Patterns",
-                description = "Explore session behavior, switching, and long sessions.",
+                description = "Review long sessions, quick checks, and repeated usage habits.",
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.chart_column,
                 destination = UsagePatternDetailActivity::class.java
             ),
-            AnalysisModuleItem(
+            AnalysisHubItem.Module(
                 title = "Late Night",
-                description = "Review late-night usage intensity and after-hours peaks.",
+                description = "See how much phone use happens near bedtime and after midnight.",
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.moon,
                 destination = LateNightAnalysisActivity::class.java
             ),
-            AnalysisModuleItem(
+            AnalysisHubItem.Module(
                 title = "Transitions",
-                description = "Inspect how you move between apps across the day.",
+                description = "Follow the app-to-app flow behind distracting loops.",
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.rotate_ccw,
                 destination = AppTransitionGraphActivity::class.java
             ),
-            AnalysisModuleItem(
+            AnalysisHubItem.Module(
                 title = "Behavior Insight",
-                description = "Open the strongest synthesized behavior signal for today.",
+                description = "Open the clearest behavior signal found in today's usage.",
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.lightbulb,
                 destination = BehaviorInsightDetailActivity::class.java
             )

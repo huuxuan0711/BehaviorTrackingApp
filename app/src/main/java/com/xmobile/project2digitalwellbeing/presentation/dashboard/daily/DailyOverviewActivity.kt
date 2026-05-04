@@ -2,6 +2,7 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.daily
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.ActivityDailyOverviewBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.home.toTopAppUiModels
@@ -25,6 +27,7 @@ class DailyOverviewActivity : AppCompatActivity() {
     private val viewModel: DailyOverviewViewModel by viewModels()
     private val topAppsAdapter = DailyTopAppsAdapter()
     private val datePicker by lazy { DailyOverviewDatePicker(this) }
+    private var lastShownErrorMessage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +105,33 @@ class DailyOverviewActivity : AppCompatActivity() {
         binding.txtCompare.text = state.compareText
         binding.txtSessionCount.text = state.sessionCountText
         binding.txtValueLongestSession.text = state.longestSessionText
-        binding.txtInsights.text = state.errorMessage ?: state.insightText
+        binding.txtInsights.text = state.insightText.ifBlank {
+            "No daily insight yet. Usage patterns will appear after more activity is recorded."
+        }
 
-        topAppsAdapter.submitList(state.topApps.toTopAppUiModels(this))
-        DailyOverviewChartConfigurator.render(binding.barChart, this, state.hourlyUsage)
+        val topApps = state.topApps.toTopAppUiModels(this)
+        val hasTopApps = topApps.isNotEmpty()
+        binding.rvApps.visibility = if (hasTopApps) View.VISIBLE else View.GONE
+        binding.txtEmptyApps.visibility = if (hasTopApps) View.GONE else View.VISIBLE
+        topAppsAdapter.submitList(topApps)
+
+        val hasHourlyUsage = state.hourlyUsage.any { it.totalTimeMillis > 0L }
+        binding.barChart.visibility = if (hasHourlyUsage) View.VISIBLE else View.GONE
+        binding.txtEmptyChart.visibility = if (hasHourlyUsage) View.GONE else View.VISIBLE
+        if (hasHourlyUsage) {
+            DailyOverviewChartConfigurator.render(binding.barChart, this, state.hourlyUsage)
+        } else {
+            binding.barChart.clear()
+        }
+
+        showErrorIfNeeded(state.errorMessage)
+    }
+
+    private fun showErrorIfNeeded(errorMessage: String?) {
+        if (errorMessage.isNullOrBlank() || errorMessage == lastShownErrorMessage) {
+            return
+        }
+        lastShownErrorMessage = errorMessage
+        Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT).show()
     }
 }

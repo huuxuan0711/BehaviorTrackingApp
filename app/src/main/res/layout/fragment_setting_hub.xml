@@ -32,7 +32,7 @@
 
                 <TextView
                     android:text="Settings"
-                    android:textSize="28sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
                     android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
 
                 <TextView
                     android:text="Manage your data, preferences, and app information."
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="#6B7280"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
 
                 <TextView
                     android:text="Data Status"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="20dp"
@@ -82,8 +82,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/database"/>
                     </LinearLayout>
 
@@ -98,7 +98,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Local data"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A1A"/>
 
@@ -107,7 +107,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Active"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
@@ -143,8 +143,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/cloud"/>
                     </LinearLayout>
 
@@ -159,7 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cloud backup"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A1A"/>
 
@@ -168,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Not configured"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
@@ -208,8 +208,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/shield"/>
                     </LinearLayout>
 
@@ -224,7 +224,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Privacy &amp; Data"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A1A"/>
 
@@ -233,14 +233,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:text="Control how your usage data is stored and managed."
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/chevron_right"
                         app:tint="#9CA3AF" />
                 </LinearLayout>
@@ -268,8 +268,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             app:tint="#5C6BC0"
                             android:src="@drawable/settings"/>
                     </LinearLayout>
@@ -285,7 +285,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Preferences"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A1A"/>
 
@@ -295,13 +295,13 @@
                             android:layout_marginTop="10dp"
                             android:text="Customize behavior analysis and app settings."
                             android:textStyle="bold"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/chevron_right"
                         app:tint="#9CA3AF" />
                 </LinearLayout>
@@ -329,8 +329,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/info"/>
                     </LinearLayout>
 
@@ -345,7 +345,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="About"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A1A"/>
 
@@ -355,13 +355,13 @@
                             android:layout_marginTop="10dp"
                             android:textStyle="bold"
                             android:text="View app information, version details, and support links."
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/chevron_right"
                         app:tint="#9CA3AF" />
                 </LinearLayout>

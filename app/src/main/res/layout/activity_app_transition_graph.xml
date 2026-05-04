@@ -19,14 +19,14 @@
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:src="@drawable/arrow_left"
             app:tint="#1A1A1A" />
 
         <TextView
             android:text="App Transitions"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"
             android:layout_marginTop="8dp"
@@ -35,7 +35,7 @@
 
         <TextView
             android:text="See how you switch between apps during your phone usage."
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="#6B7280"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
                 android:text="Today"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:background="@drawable/bg_filter_selected"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="6dp"
@@ -75,7 +75,7 @@
                 android:text="Week"
                 android:textAllCaps="false"
                 android:textColor="#6B7280"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:background="@drawable/bg_filter_outline"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="6dp"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="All Apps"
                 android:textAllCaps="false"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#FFFFFF"
                 android:background="@drawable/bg_filter_selected"
                 android:paddingHorizontal="12dp"
@@ -111,7 +111,7 @@
                 android:layout_marginStart="10dp"
                 android:text="Productive"
                 android:textAllCaps="false"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#6B7280"
                 android:background="@drawable/bg_filter_outline"
                 android:paddingHorizontal="12dp"
@@ -125,7 +125,7 @@
                 android:layout_marginStart="10dp"
                 android:text="Distracting"
                 android:textAllCaps="false"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#6B7280"
                 android:background="@drawable/bg_filter_outline"
                 android:paddingHorizontal="12dp"
@@ -160,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Transition Graph"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="4dp"/>
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tap an app to highlight its connections"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#6B7280"
                     android:layout_marginBottom="12dp"/>
 
@@ -200,8 +200,8 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         android:src="@drawable/lightbulb"/>
                 </LinearLayout>
 
@@ -215,7 +215,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Insight"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"/>
 
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:text="You often switch from YouTube to TikTok during late-night sessions."
                         android:textColor="#6B7280"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
 

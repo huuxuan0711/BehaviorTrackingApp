@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center"
             android:src="@drawable/house"/>
     </FrameLayout>
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Instagram"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#000000"/>
 
             <TextView
@@ -50,14 +50,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2h 15m"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#888888"/>
         </LinearLayout>
 
         <!-- Progress -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="12dp"
+            android:layout_height="10dp"
             android:layout_marginTop="5dp"
             android:backgroundTint="#F3F4F6"
             android:background="@drawable/bg_progress_bg">

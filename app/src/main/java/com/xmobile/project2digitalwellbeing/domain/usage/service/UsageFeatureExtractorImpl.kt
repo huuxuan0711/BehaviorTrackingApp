@@ -39,6 +39,15 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
             lateNightUsageMillis / lateNightSessionCount
         }
 
+        val workHourSessions = orderedSessions.filter { it.hourOfDay in 9..16 }
+        val workHourDistractionMillis = workHourSessions
+            .filter { it.category in DISTRACTING_CATEGORIES }
+            .sumOf { it.session.durationMillis }
+
+        val morningSessions = orderedSessions.filter { it.hourOfDay in 6..8 }
+        val morningUsageMillis = morningSessions.sumOf { it.session.durationMillis }
+        val morningSessionCount = morningSessions.size
+
         val switchCount = calculateSwitchCount(orderedSessions)
         val averageSwitchIntervalMillis = calculateAverageSwitchIntervalMillis(orderedSessions)
         val switchesPerHour = if (totalScreenTimeMillis == 0L) {
@@ -61,6 +70,9 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
             lateNightSessionCount = lateNightSessionCount,
             lateNightUsageRatio = lateNightUsageRatio,
             lateNightAverageSessionLengthMillis = lateNightAverageSessionLengthMillis,
+            workHourDistractionMillis = workHourDistractionMillis,
+            morningUsageMillis = morningUsageMillis,
+            morningSessionCount = morningSessionCount,
             switchCount = switchCount,
             switchesPerHour = switchesPerHour,
             averageSessionLengthMillis = averageSessionLengthMillis,
@@ -73,7 +85,9 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
             topAppsByDuration = buildTopAppsByDuration(orderedSessions),
             topAppsByLaunchCount = buildTopAppsByLaunchCount(orderedSessions),
             topCategoriesByDuration = buildTopCategoriesByDuration(orderedSessions),
-            lateNightTopApps = buildTopAppsByDuration(lateNightSessions)
+            lateNightTopApps = buildTopAppsByDuration(lateNightSessions),
+            workHourTopApps = buildTopAppsByDuration(workHourSessions),
+            morningTopApps = buildTopAppsByDuration(morningSessions)
         )
     }
 
@@ -111,7 +125,7 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
     ): SessionLengthDistribution {
         val totalCount = sessions.size
         val normalizedLongSessionThresholdMillis = longSessionThresholdMillis
-            .coerceAtLeast(MIN_LONG_SESSION_THRESHOLD_MILLIS)
+            .coerceAtLeast(MIN_LONG_SESSION_THRESHOLD_MINUTES * 60L * 1000L)
         val shortSessionCount = sessions.count { it.session.durationMillis < SHORT_SESSION_THRESHOLD_MILLIS }
         val mediumSessionCount = sessions.count {
             it.session.durationMillis in SHORT_SESSION_THRESHOLD_MILLIS..<normalizedLongSessionThresholdMillis
@@ -186,7 +200,13 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
 
     private companion object {
         private const val SHORT_SESSION_THRESHOLD_MILLIS = 2L * 60L * 1000L
-        private const val MIN_LONG_SESSION_THRESHOLD_MILLIS = 10L * 60L * 1000L
+        private const val MIN_LONG_SESSION_THRESHOLD_MINUTES = 10L
         private const val MILLIS_PER_HOUR = 60L * 60L * 1000L
+
+        private val DISTRACTING_CATEGORIES = setOf(
+            AppCategory.SOCIAL,
+            AppCategory.VIDEO,
+            AppCategory.GAME
+        )
     }
 }

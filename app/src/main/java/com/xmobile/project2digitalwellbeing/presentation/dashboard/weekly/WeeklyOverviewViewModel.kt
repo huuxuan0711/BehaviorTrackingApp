@@ -10,11 +10,11 @@ import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOvervi
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOverviewDataParams
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOverviewDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.WeeklyOverviewDataError
+import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 import javax.inject.Inject
@@ -99,18 +99,18 @@ class WeeklyOverviewViewModel @Inject constructor(
 
                     _uiState.value = WeeklyOverviewUiState(
                         weekStartDate = normalizedWeekStart,
-                        dateRangeLabel = normalizedWeekStart.toDateRangeLabel(normalizedWeekStart.plusDays(6)),
-                        averageDailyScreenTimeText = weeklyUsage.averageDailyScreenTimeMillis.toDurationText(),
+                        dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
+                        averageDailyScreenTimeText = UsageFormatter.formatDuration(weeklyUsage.averageDailyScreenTimeMillis),
                         mostUsedDayText = if (maxDay == null || maxDay.totalScreenTimeMillis <= 0L) {
                             "No data yet"
                         } else {
-                            "${maxDay.localDate.toShortDayLabel()} - ${maxDay.totalScreenTimeMillis.toDurationText()}"
+                            "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(maxDay.totalScreenTimeMillis)}"
                         },
-                        totalScreenTimeText = weeklyUsage.totalScreenTimeMillis.toDurationText(),
+                        totalScreenTimeText = UsageFormatter.formatDuration(weeklyUsage.totalScreenTimeMillis),
                         trendText = refreshError ?: outcome.data.trend.toFriendlySummary(),
                         chartBars = dailyUsages.map { dailyUsage ->
                             WeeklyChartBarUiModel(
-                                label = dailyUsage.localDate.toShortDayLabel(),
+                                label = UsageFormatter.formatShortDay(dailyUsage.localDate),
                                 durationMinutes = dailyUsage.totalScreenTimeMillis / 60000f,
                                 isHighlighted = peakUsage > 0L && dailyUsage.totalScreenTimeMillis == peakUsage
                             )
@@ -124,7 +124,7 @@ class WeeklyOverviewViewModel @Inject constructor(
                 is GetWeeklyOverviewDataOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
-                            dateRangeLabel = normalizedWeekStart.toDateRangeLabel(normalizedWeekStart.plusDays(6)),
+                            dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
                             trendText = refreshError ?: outcome.error.toUserMessage(),
                             errorMessage = refreshError ?: outcome.error.toUserMessage(),
                             canNavigateNext = normalizedWeekStart.isBefore(currentWeekStart)
@@ -142,34 +142,6 @@ class WeeklyOverviewViewModel @Inject constructor(
     fun showNextWeek() {
         if (_uiState.value.canNavigateNext) {
             load(forceRefresh = false, weekStartDate = _uiState.value.weekStartDate.plusWeeks(1))
-        }
-    }
-
-    private fun String.toShortDayLabel(): String {
-        return LocalDate.parse(this).dayOfWeek.name
-            .lowercase()
-            .replaceFirstChar(Char::uppercaseChar)
-            .take(3)
-    }
-
-    private fun LocalDate.toDateRangeLabel(endDate: LocalDate): String {
-        val sameYear = year == endDate.year
-        val startFormatter = DateTimeFormatter.ofPattern(
-            if (sameYear) "MMM d" else "MMM d, yyyy",
-            Locale.getDefault()
-        )
-        val endFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())
-        return "${format(startFormatter)} - ${endDate.format(endFormatter)}"
-    }
-
-    private fun Long.toDurationText(): String {
-        val totalMinutes = this / (60L * 1000L)
-        val hours = totalMinutes / 60L
-        val minutes = totalMinutes % 60L
-        return when {
-            hours > 0L && minutes > 0L -> "${hours}h ${minutes}m"
-            hours > 0L -> "${hours}h"
-            else -> "${minutes}m"
         }
     }
 

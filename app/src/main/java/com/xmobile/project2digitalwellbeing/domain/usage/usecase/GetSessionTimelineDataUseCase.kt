@@ -9,9 +9,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.service.TransitionEx
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.TemporalAdjusters
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
@@ -23,6 +21,7 @@ data class GetSessionTimelineDataParams(
 data class SessionTimelineData(
     val startLocalDate: String,
     val endLocalDate: String,
+    val lateNightStartHour: Int,
     val sessions: List<EnrichedSession>,
     val insight: TransitionInsight?
 )
@@ -80,9 +79,8 @@ class GetSessionTimelineDataUseCase @Inject constructor(
             Instant.ofEpochMilli(params.nowMillis).atZone(zoneId).toLocalDate()
         }.getOrElse { return GetSessionTimelineDataOutcome.Failure(it.toSessionTimelineDataError(params.timezoneId)) }
 
-        val startDate = endDate.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
         val endMillis = endDate.plusDays(1).atStartOfDay(zoneId).toInstant().toEpochMilli()
-        val startMillis = startDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
+        val startMillis = endDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
 
         val sessions = runStage(SessionTimelineDataStage.READ_SESSIONS, params) {
             repository.getSessions(startMillis, endMillis)
@@ -115,8 +113,9 @@ class GetSessionTimelineDataUseCase @Inject constructor(
 
         return GetSessionTimelineDataOutcome.Success(
             SessionTimelineData(
-                startLocalDate = startDate.toString(),
+                startLocalDate = endDate.toString(),
                 endLocalDate = endDate.toString(),
+                lateNightStartHour = preferences.lateNightStartHour,
                 sessions = enrichedSessions,
                 insight = insight
             )

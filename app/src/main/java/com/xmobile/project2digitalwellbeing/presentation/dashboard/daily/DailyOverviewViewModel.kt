@@ -9,8 +9,8 @@ import com.xmobile.project2digitalwellbeing.domain.usage.usecase.DashboardDataEr
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataParams
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataUseCase
+import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -118,8 +118,11 @@ class DailyOverviewViewModel @Inject constructor(
                     _uiState.value = DailyOverviewUiState(
                         isLoading = false,
                         selectedDate = resolvedDate,
-                        dateLabel = todayOutcome.data.currentLocalDate.toFriendlyDate(timezoneId, today),
-                        totalScreenTimeText = todayUsage.totalScreenTimeMillis.toDurationText(),
+                        dateLabel = UsageFormatter.formatFriendlyDate(
+                            LocalDate.parse(todayOutcome.data.currentLocalDate),
+                            today
+                        ),
+                        totalScreenTimeText = UsageFormatter.formatDuration(todayUsage.totalScreenTimeMillis),
                         compareText = buildCompareText(
                             todayMillis = todayUsage.totalScreenTimeMillis,
                             yesterdayMillis = yesterdayUsage?.totalScreenTimeMillis
@@ -127,11 +130,11 @@ class DailyOverviewViewModel @Inject constructor(
                         sessionCountText = todayUsage.totalSessionCount.toString(),
                         longestSessionText = todayUsage.sessions
                             .maxOfOrNull { it.durationMillis }
-                            ?.toDurationText()
+                            ?.let { UsageFormatter.formatDuration(it) }
                             ?: "0m",
                         hourlyUsage = todayOutcome.data.hourlyUsage,
                         topApps = todayOutcome.data.topApps,
-                        insightText = topInsight?.let { "${it.type.toFriendlyLabel()} (${it.score}/100)" }
+                        insightText = topInsight?.let { "${it.description} (${it.score}/100)" }
                             ?: "No insights are available yet for today.",
                         errorMessage = refreshError
                     )
@@ -142,7 +145,7 @@ class DailyOverviewViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             selectedDate = resolvedDate,
-                            dateLabel = nowMillis.toFriendlyDate(timezoneId, today),
+                            dateLabel = UsageFormatter.formatFriendlyDate(nowMillis, timezoneId, today),
                             errorMessage = refreshError ?: todayOutcome.error.toUserMessage()
                         )
                     }
@@ -162,45 +165,6 @@ class DailyOverviewViewModel @Inject constructor(
             deltaPercent < 0 -> "${kotlin.math.abs(deltaPercent)}% less than yesterday"
             else -> "Same as yesterday"
         }
-    }
-
-    private fun Long.toFriendlyDate(timezoneId: String, today: LocalDate): String {
-        val localDate = Instant.ofEpochMilli(this)
-            .atZone(ZoneId.of(timezoneId))
-            .toLocalDate()
-        return localDate.toFriendlyDate(today)
-    }
-
-    private fun String.toFriendlyDate(timezoneId: String, today: LocalDate): String {
-        return java.time.LocalDate.parse(this).toFriendlyDate(today)
-    }
-
-    private fun LocalDate.toFriendlyDate(today: LocalDate): String {
-        return if (this == today) {
-            "Today"
-        } else {
-            format(
-                DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-                    .withLocale(Locale.getDefault())
-            )
-        }
-    }
-
-    private fun Long.toDurationText(): String {
-        val totalMinutes = this / (60L * 1000L)
-        val hours = totalMinutes / 60L
-        val minutes = totalMinutes % 60L
-        return when {
-            hours > 0L && minutes > 0L -> "${hours}h ${minutes}m"
-            hours > 0L -> "${hours}h"
-            else -> "${minutes}m"
-        }
-    }
-
-    private fun com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType.toFriendlyLabel(): String {
-        return name.lowercase()
-            .split('_')
-            .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
     }
 
     private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(): String {

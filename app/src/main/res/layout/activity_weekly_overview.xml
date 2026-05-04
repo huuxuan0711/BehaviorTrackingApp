@@ -123,11 +123,26 @@
                     android:textSize="@dimen/weekly_chart_title_size"
                     android:textStyle="bold" />
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChart"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/weekly_chart_height"
-                    android:contentDescription="@string/cd_weekly_bar_chart" />
+                    android:layout_height="@dimen/weekly_chart_height">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/cd_weekly_bar_chart" />
+
+                    <TextView
+                        android:id="@+id/txtEmptyChart"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:text="No usage has been recorded for this week yet."
+                        android:textColor="@color/weekly_overview_text_secondary"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -265,8 +280,8 @@
                 android:padding="@dimen/weekly_trend_icon_container_padding">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:contentDescription="@null"
                     android:src="@drawable/trending_up"
                     app:tint="@color/white" />
@@ -312,6 +327,17 @@
                     android:nestedScrollingEnabled="false"
                     tools:itemCount="4"
                     tools:listitem="@layout/item_top_app_week" />
+
+                <TextView
+                    android:id="@+id/txtEmptyApps"
+                    android:visibility="gone"
+                    android:text="No top apps for this week yet."
+                    android:textColor="@color/weekly_overview_text_secondary"
+                    android:textSize="@dimen/weekly_body_text_size"
+                    android:gravity="center"
+                    android:padding="@dimen/weekly_card_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

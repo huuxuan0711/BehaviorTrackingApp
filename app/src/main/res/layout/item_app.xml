@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/house"
             android:layout_gravity="center" />
     </FrameLayout>
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Instagram"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -46,8 +46,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 app:tint="#A8AFB9"
                 android:src="@drawable/clock"/>
 
@@ -58,7 +58,7 @@
                 android:layout_marginStart="5dp"
                 android:text="2h 15m today"
                 android:textColor="#9CA3B7"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -85,15 +85,15 @@
             android:text="Productive"
             android:textColor="#407D32"
             android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imgArrow"
             android:src="@drawable/chevron_down"
             app:tint="#407D32"
             android:layout_marginStart="6dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
+            android:layout_width="18dp"
+            android:layout_height="18dp"/>
     </LinearLayout>
 
 </LinearLayout>

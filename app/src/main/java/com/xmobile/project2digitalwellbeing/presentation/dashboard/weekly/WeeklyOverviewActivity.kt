@@ -2,6 +2,7 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.ActivityWeeklyOverviewBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.home.toTopAppUiModels
@@ -24,6 +26,7 @@ class WeeklyOverviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeeklyOverviewBinding
     private val viewModel: WeeklyOverviewViewModel by viewModels()
     private val topAppsAdapter = WeeklyTopAppsAdapter()
+    private var lastShownErrorMessage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,9 +91,35 @@ class WeeklyOverviewActivity : AppCompatActivity() {
         binding.tvAvg.text = state.averageDailyScreenTimeText
         binding.tvMax.text = state.mostUsedDayText
         binding.tvTotal.text = state.totalScreenTimeText
-        binding.tvTrend.text = state.errorMessage ?: state.trendText
+        binding.tvTrend.text = state.trendText.ifBlank {
+            "No weekly trend yet. Patterns become clearer after a few active days."
+        }
         binding.btnNextWeek.isEnabled = state.canNavigateNext
-        topAppsAdapter.submitList(state.topApps.toTopAppUiModels(this))
-        WeeklyOverviewChartConfigurator.render(binding.barChart, this, state.chartBars)
+        binding.btnNextWeek.alpha = if (state.canNavigateNext) 1f else 0.35f
+
+        val topApps = state.topApps.toTopAppUiModels(this)
+        val hasTopApps = topApps.isNotEmpty()
+        binding.rvApps.visibility = if (hasTopApps) View.VISIBLE else View.GONE
+        binding.txtEmptyApps.visibility = if (hasTopApps) View.GONE else View.VISIBLE
+        topAppsAdapter.submitList(topApps)
+
+        val hasChartData = state.chartBars.any { it.durationMinutes > 0f }
+        binding.barChart.visibility = if (hasChartData) View.VISIBLE else View.GONE
+        binding.txtEmptyChart.visibility = if (hasChartData) View.GONE else View.VISIBLE
+        if (hasChartData) {
+            WeeklyOverviewChartConfigurator.render(binding.barChart, this, state.chartBars)
+        } else {
+            binding.barChart.clear()
+        }
+
+        showErrorIfNeeded(state.errorMessage)
+    }
+
+    private fun showErrorIfNeeded(errorMessage: String?) {
+        if (errorMessage.isNullOrBlank() || errorMessage == lastShownErrorMessage) {
+            return
+        }
+        lastShownErrorMessage = errorMessage
+        Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT).show()
     }
 }

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F6F7FB"
     tools:context=".presentation.dashboard.home.DashboardFragment">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F7FB">
 
     <!-- HEADER -->
     <LinearLayout
@@ -26,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Friday, March 13"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#6B7280"/>
 
         <TextView
@@ -34,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Today"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"/>
     </LinearLayout>
@@ -74,8 +79,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:src="@drawable/moon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:tint="#5C6BC0" />
 
                 <TextView
@@ -83,7 +88,7 @@
                     app:layout_constraintStart_toEndOf="@id/imgInsight"
                     app:layout_constraintTop_toTopOf="@id/imgInsight"
                     app:layout_constraintBottom_toBottomOf="@id/imgInsight"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:text="Key Insight"
                     android:textColor="#5C6BCC"
                     android:layout_marginStart="20dp"
@@ -101,7 +106,7 @@
                     android:layout_marginTop="10dp"
                     android:text="You tend to use social media more frequently after 11 PM."
                     android:textColor="#1A1A1A"
-                    android:textSize="20sp"/>
+                    android:textSize="16sp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Quick Stats -->
@@ -116,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quick Stats"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
@@ -140,8 +145,8 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/smartphone"
                                 android:layout_marginBottom="6dp"
                                 app:tint="#5C6BC0" />
@@ -152,7 +157,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/valueScreenTime"
                                 android:text="5h 42m"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textColor="#1A1A1A"/>
 
                             <TextView
@@ -162,7 +167,7 @@
                                 android:layout_marginTop="4dp"
                                 android:text="Screen time"
                                 android:textColor="#6B7280"
-                                android:textSize="14sp"/>
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -175,15 +180,15 @@
 
                         <LinearLayout
                             android:paddingTop="12dp"
-                            android:paddingBottom="3dp"
+                            android:paddingBottom="6dp"
                             android:orientation="vertical"
                             android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:layout_marginBottom="6dp"
                                 android:src="@drawable/clock"
                                 app:tint="#5C6BC0" />
@@ -193,7 +198,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/valueLongestSession"
                                 android:gravity="center"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:text="42m"
                                 android:textColor="#1A1A1A"/>
 
@@ -204,7 +209,7 @@
                                 android:layout_marginTop="4dp"
                                 android:text="Longest\nsession"
                                 android:textColor="#6B7280"
-                                android:textSize="14sp"/>
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -224,8 +229,8 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:layout_marginBottom="6dp"
                                 android:src="@drawable/moon"
                                 app:tint="#5C6BC0" />
@@ -236,7 +241,7 @@
                                 android:id="@+id/valueLateNight"
                                 android:layout_gravity="center"
                                 android:text="32%"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textColor="#1A1A1A"/>
 
                             <TextView
@@ -246,7 +251,7 @@
                                 android:gravity="center"
                                 android:text="Late night"
                                 android:textColor="#6B7280"
-                                android:textSize="14sp"/>
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
@@ -270,14 +275,29 @@
                         android:layout_height="wrap_content"
                         android:text="Usage Distribution"
                         android:textStyle="bold"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:layout_marginBottom="10dp"/>
 
-                    <!-- Chart -->
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/chart"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"/>
+                        android:layout_height="200dp">
+
+                        <!-- Chart -->
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                        <TextView
+                            android:id="@+id/txtEmptyChart"
+                            android:visibility="gone"
+                            android:gravity="center"
+                            android:text="No hourly activity yet. Pull to refresh after using your phone."
+                            android:textColor="#6B7280"
+                            android:textSize="14sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    </FrameLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -292,13 +312,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Top Apps"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewTopApps"
                     android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/txtEmptyTopApps"
+                    android:visibility="gone"
+                    android:text="No top apps yet. Pull to refresh once usage data is available."
+                    android:textColor="#6B7280"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:background="@drawable/bg_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -315,7 +346,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quick Access"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
@@ -345,8 +376,8 @@
 
                             <ImageView
                                 android:src="@drawable/calendar"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 app:tint="#5C6BC0" />
 
                             <TextView
@@ -356,7 +387,7 @@
                                 android:text="Daily"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A1A"
-                                android:textSize="16sp"/>
+                                android:textSize="14sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -379,8 +410,8 @@
 
                             <ImageView
                                 android:src="@drawable/trending_up"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 app:tint="#5C6BC0" />
 
                             <TextView
@@ -390,7 +421,7 @@
                                 android:text="Weekly"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A1A"
-                                android:textSize="16sp" />
+                                android:textSize="14sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -413,18 +444,18 @@
 
                             <ImageView
                                 android:src="@drawable/chart_column"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 app:tint="#5C6BC0" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="8dp"
                                 android:text="Timeline"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A1A"
-                                android:textSize="16sp"/>
+                                android:textSize="14sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
@@ -432,3 +463,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

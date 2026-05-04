@@ -88,7 +88,7 @@ class DashboardViewModel @Inject constructor(
             )) {
                 is GetDashboardDataOutcome.Success -> {
                     hasLoadedData = true
-                    _uiState.value = DashboardUiState(
+                    val state = DashboardUiState(
                         isLoading = false,
                         currentDateLabel = outcome.data.currentLocalDate.toFriendlyDate(timezoneId),
                         dailyUsage = outcome.data.dailyUsage,
@@ -96,6 +96,10 @@ class DashboardViewModel @Inject constructor(
                         hourlyUsage = outcome.data.hourlyUsage,
                         topApps = outcome.data.topApps,
                         errorMessage = refreshErrorMessage
+                    )
+                    _uiState.value = state.copy(
+                        insightSummaryText = state.toInsightSummaryText(),
+                        lateNightRatioText = state.hourlyUsage.toLateNightRatioText()
                     )
                 }
 

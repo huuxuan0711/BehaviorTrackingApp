@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.home
 
+import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
 import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 
 fun DashboardUiState.toInsightSummaryText(): String {
@@ -8,11 +9,7 @@ fun DashboardUiState.toInsightSummaryText(): String {
             errorMessage
 
         topInsight != null -> {
-            val insightLabel = topInsight.type.name
-                .lowercase()
-                .split('_')
-                .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
-            "$insightLabel (${topInsight.score}/100)"
+            "${topInsight.description} (${topInsight.score}/100)"
         }
 
         else ->

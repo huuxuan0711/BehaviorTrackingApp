@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.FragmentDashboardBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.analysis.behavior.BehaviorInsightDetailActivity
@@ -29,6 +30,7 @@ class DashboardFragment : Fragment() {
 
     private val viewModel: DashboardViewModel by viewModels()
     private val topAppsAdapter = DashboardTopAppsAdapter()
+    private var lastShownErrorMessage: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,6 +85,14 @@ class DashboardFragment : Fragment() {
         binding.cardKeyInsight.setOnClickListener {
             viewModel.onAction(DashboardAction.OpenBehaviorInsight, hasUsagePermission())
         }
+        binding.refreshLayout.setOnRefreshListener {
+            if (hasUsagePermission()) {
+                viewModel.load(forceRefresh = true)
+            } else {
+                binding.refreshLayout.isRefreshing = false
+                viewModel.onPermissionMissing()
+            }
+        }
     }
 
     private fun observeUi() {
@@ -123,7 +133,10 @@ class DashboardFragment : Fragment() {
 
     private fun render(state: DashboardUiState) {
         binding.txtTime.text = state.currentDateLabel.ifBlank { "Today" }
-        binding.txtKeyInsight.text = state.toInsightSummaryText()
+        binding.txtKeyInsight.text = state.insightSummaryText.ifBlank {
+            "No clear pattern yet. Use your phone normally, then pull to refresh."
+        }
+        binding.refreshLayout.isRefreshing = state.isLoading
 
         binding.valueScreenTime.text = (state.dailyUsage?.totalScreenTimeMillis ?: 0L).toDashboardDurationText()
         binding.valueLongestSession.text = state.dailyUsage
@@ -131,13 +144,35 @@ class DashboardFragment : Fragment() {
             ?.maxOfOrNull { it.durationMillis }
             ?.toDashboardDurationText()
             ?: "0m"
-        binding.valueLateNight.text = state.hourlyUsage.toLateNightRatioText()
+        binding.valueLateNight.text = state.lateNightRatioText
 
-        topAppsAdapter.submitList(state.topApps.toTopAppUiModels(requireContext()))
-        DashboardChartConfigurator.render(
-            chart = binding.chart,
-            context = requireContext(),
-            hourlyUsage = state.hourlyUsage
-        )
+        val topApps = state.topApps.toTopAppUiModels(requireContext())
+        val hasTopApps = topApps.isNotEmpty()
+        binding.recyclerViewTopApps.visibility = if (hasTopApps) View.VISIBLE else View.GONE
+        binding.txtEmptyTopApps.visibility = if (hasTopApps) View.GONE else View.VISIBLE
+        topAppsAdapter.submitList(topApps)
+
+        val hasHourlyUsage = state.hourlyUsage.any { it.totalTimeMillis > 0L }
+        binding.chart.visibility = if (hasHourlyUsage) View.VISIBLE else View.GONE
+        binding.txtEmptyChart.visibility = if (hasHourlyUsage) View.GONE else View.VISIBLE
+        if (hasHourlyUsage) {
+            DashboardChartConfigurator.render(
+                chart = binding.chart,
+                context = requireContext(),
+                hourlyUsage = state.hourlyUsage
+            )
+        } else {
+            binding.chart.clear()
+        }
+
+        showErrorIfNeeded(state.errorMessage)
+    }
+
+    private fun showErrorIfNeeded(errorMessage: String?) {
+        if (errorMessage.isNullOrBlank() || errorMessage == lastShownErrorMessage) {
+            return
+        }
+        lastShownErrorMessage = errorMessage
+        Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT).show()
     }
 }

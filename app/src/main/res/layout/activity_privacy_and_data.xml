@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Privacy &amp; Data"
-                android:textSize="28sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"/>
 
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your privacy matters. All usage data is analyzed locally on your device."
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#6B7280"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
@@ -64,8 +64,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:src="@drawable/chart_column"
                         app:tint="#5C6BC0" />
@@ -81,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Data We Use"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="#1A1A1A"
                         android:textStyle="bold"/>
 
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="To help you understand your digital habits"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
             </LinearLayout>
@@ -103,8 +103,8 @@
                 android:layout_marginBottom="10dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/clock"
                     app:tint="#5C6BC0" />
 
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="App usage statistics"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#1A1A1A"/>
             </LinearLayout>
 
@@ -124,8 +124,8 @@
                 android:layout_marginBottom="10dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/chart_column"
                     app:tint="#5C6BC0" />
 
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="Session duration"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#1A1A1A"/>
             </LinearLayout>
 
@@ -144,8 +144,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/trending_up"
                     app:tint="#5C6BC0" />
 
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="App transition patterns"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#1A1A1A"/>
             </LinearLayout>
 
@@ -184,8 +184,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:src="@drawable/shield"
                          app:tint="#4CAF50" />
@@ -201,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="What We Don't Collect"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="#1A1A1A"
                         android:textStyle="bold"/>
 
@@ -210,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="This app only analyzes anonymous usage statistics to understand digital habits."
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
             </LinearLayout>
@@ -223,8 +223,8 @@
                 android:layout_marginBottom="10dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/message_circle"
                     app:tint="#9E9E9E" />
 
@@ -233,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="Messages"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#6B7280"/>
             </LinearLayout>
 
@@ -244,8 +244,8 @@
                 android:layout_marginBottom="10dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/file_text"
                     app:tint="#9E9E9E" />
 
@@ -254,7 +254,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="Personal content"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#6B7280"/>
             </LinearLayout>
 
@@ -264,8 +264,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/globe"
                     app:tint="#9E9E9E" />
 
@@ -274,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="Browsing history"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#6B7280"/>
             </LinearLayout>
 
@@ -295,7 +295,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Data Control"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
                 android:layout_marginBottom="12dp"/>
@@ -314,8 +314,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:src="@drawable/download"
                          app:tint="#5C6BC0" />
@@ -333,14 +333,14 @@
                         android:text="Export usage data"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:text="Download your data as a file"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
             </LinearLayout>
@@ -359,8 +359,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:src="@drawable/trash_2"
                          app:tint="#E53935" />
@@ -377,7 +377,7 @@
                         android:layout_height="wrap_content"
                         android:text="Delete all stored data"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textColor="#1A1A1A"/>
 
                     <TextView
@@ -385,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:text="Permanently remove all usage data"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
             </LinearLayout>
@@ -404,8 +404,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:src="@drawable/rotate_ccw"
                         app:tint="#FB8C00" />
@@ -422,7 +422,7 @@
                         android:layout_height="wrap_content"
                         android:text="Reset behavior analysis"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textColor="#1A1A1A"/>
 
                     <TextView
@@ -430,7 +430,7 @@
                         android:layout_height="wrap_content"
                         android:text="Clear insights and start fresh"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
             </LinearLayout>
@@ -461,8 +461,8 @@
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:src="@drawable/cloud"
                         app:tint="#2196F3" />
@@ -475,7 +475,7 @@
                     android:layout_weight="1"
                     android:text="Enable Cloud Backup"
                     android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="#1A1A1A"/>
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -499,7 +499,7 @@
                 android:layout_marginStart="52dp"
                 android:layout_marginTop="8dp"
                 android:text="Securely back up your usage insights to your account."
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#6B7280"/>
         </LinearLayout>
 

@@ -10,22 +10,23 @@
         android:id="@+id/layoutAppTransition"
         android:visibility="gone"
         android:orientation="horizontal"
-        android:layout_marginStart="80dp"
-        android:layout_marginBottom="20dp"
+        android:alpha="0.72"
+        android:layout_marginStart="72dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
             android:src="@drawable/arrow_down"
-            android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:layout_width="12dp"
+            android:layout_height="12dp"/>
 
         <TextView
             android:id="@+id/txtAppTransition"
             android:textColor="#6B7280"
-            android:textSize="18sp"
+            android:textSize="12sp"
             android:text="YouTube → TikTok"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -58,8 +59,8 @@
                 android:background="@drawable/bg_app_icon">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:id="@+id/imgIcon"
                     android:src="@drawable/house"
                     android:layout_gravity="center" />
@@ -78,7 +79,7 @@
                 <TextView
                     android:id="@+id/tvAppName"
                     android:text="Instagram"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
                     android:layout_width="wrap_content"
@@ -86,7 +87,7 @@
 
                 <TextView
                     android:id="@+id/tvTime"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:text="07:30 - 07:45"
                     android:textColor="#6B7280"
                     android:layout_marginTop="4dp"
@@ -105,15 +106,17 @@
                         android:id="@+id/tvDuration"
                         android:textColor="#5C6BC0"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="15 minutes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="10dp"
+                        android:layout_height="8dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="2dp"
                         android:backgroundTint="#F3F4F6"
                         android:background="@drawable/bg_progress_bg">
 

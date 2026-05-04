@@ -11,8 +11,8 @@
     <ImageView
         android:id="@+id/imgIcon"
         android:background="@drawable/bg_image_onboarding"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="198dp"
+        android:layout_height="198dp"
         android:layout_marginBottom="50dp"
         android:padding="48dp"
         android:scaleType="centerInside"/>
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#111827"
         android:gravity="center"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Description"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textColor="#6B7280"
         android:gravity="center"
         android:lineSpacingExtra="2dp"/>

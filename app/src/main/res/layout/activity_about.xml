@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="Digital Wellbeing Assistant"
                 android:textColor="#1A1A1A"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:paddingHorizontal="24dp"/>
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Understand your digital habits and build healthier phone usage patterns."
                 android:textColor="#6B7280"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:gravity="center"
                 android:paddingHorizontal="32dp"
                 android:layout_marginTop="10dp"/>
@@ -87,7 +87,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="Version"
                         android:textColor="#1A1A1A"/>
 
@@ -95,7 +95,7 @@
                         android:id="@+id/txtVersion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="1.2.4"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
@@ -111,7 +111,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="Last Updated"
                         android:textColor="#1A1A1A"/>
 
@@ -119,7 +119,7 @@
                         android:id="@+id/txtLastUpdate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="March 10, 2026"
                         android:textColor="#6B7280"/>
                 </LinearLayout>
@@ -146,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Our Mission"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="10dp"
                     android:textStyle="bold"/>
@@ -154,7 +154,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:text="Our goal is to help users understand their digital behavior and make mindful decisions about phone usage."
                     android:textColor="#6B7280"/>
 
@@ -185,8 +185,8 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:tint="#5C6BC0"
                         android:src="@drawable/shield"/>
 
@@ -196,7 +196,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="Privacy Policy"
                         android:textColor="#1A1A1A"/>
 
@@ -223,8 +223,8 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:tint="#5C6BC0"
                         android:src="@drawable/file_text"/>
 
@@ -233,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:text="Terms of Service"
                         android:textColor="#1A1A1A"/>
@@ -261,8 +261,8 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:tint="#5C6BC0"
                         android:src="@drawable/book"/>
 
@@ -272,7 +272,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="Open Source Licenses"
                         android:textColor="#1A1A1A"/>
 
@@ -308,8 +308,8 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:tint="#5C6BC0"
                         android:src="@drawable/mail"/>
 
@@ -319,7 +319,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="Contact Support"
                         android:textColor="#1A1A1A"/>
 
@@ -346,8 +346,8 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:tint="#5C6BC0"
                         android:src="@drawable/message_square"/>
 
@@ -356,7 +356,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:text="Send Feedback"
                         android:textColor="#1A1A1A"/>

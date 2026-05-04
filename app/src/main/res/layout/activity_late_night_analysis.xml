@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/btnBack"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:layout_marginTop="10dp"
                 android:padding="8dp"
                 android:src="@drawable/arrow_left"
@@ -32,7 +32,7 @@
 
             <TextView
                 android:text="Late Night Usage"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
                 android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
 
             <TextView
                 android:text="Understand how your phone usage affects your sleep habits."
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#6B7280"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
@@ -75,8 +75,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/clock"/>
                     </LinearLayout>
 
@@ -84,7 +84,7 @@
                     <TextView
                         android:text="Tonight's Summary"
                         android:textStyle="bold"
-                        android:textSize="22sp"
+                        android:textSize="20sp"
                         android:layout_marginStart="10dp"
                         android:textColor="#1A1A1A"
                         android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
                             android:id="@+id/txtTotalScreenTime"
                             android:text="2h 23m"
                             android:textColor="#5C6BC0"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
@@ -117,7 +117,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Total screen time"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
@@ -132,14 +132,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="18"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:textColor="#1A1A1A"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sessions"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
@@ -154,14 +154,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="8m"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:textColor="#1A1A1A"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Avg. duration"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#6B7280"/>
                     </LinearLayout>
 
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Late Night Timeline"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"/>
 
@@ -204,7 +204,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Peak usage between 11 PM - 1 AM"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="#6B7280"
                     android:layout_marginTop="8dp"/>
             </LinearLayout>
@@ -229,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Most Used Apps"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"/>
 
@@ -267,7 +267,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Behavior Insight"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"/>
 
@@ -277,7 +277,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="You tend to switch between short-form social media apps after midnight."
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="#6B7280"/>
             </LinearLayout>
         </LinearLayout>
@@ -296,7 +296,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recommendation"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"/>
 
@@ -306,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Reducing phone use after midnight may improve sleep quality."
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#6B7280"/>
         </LinearLayout>
 

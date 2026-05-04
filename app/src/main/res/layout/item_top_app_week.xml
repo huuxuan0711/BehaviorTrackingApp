@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/house"
             android:layout_gravity="center" />
     </FrameLayout>
@@ -34,7 +34,7 @@
             android:text="Instagram"
             android:textStyle="bold"
             android:textColor="#1A1A1A"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -42,7 +42,7 @@
             android:id="@+id/tvTime"
             android:text="2h 45m"
             android:textColor="#6B7280"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

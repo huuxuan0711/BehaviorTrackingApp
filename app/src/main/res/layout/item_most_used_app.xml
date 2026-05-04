@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/imgIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/clock"/>
         </LinearLayout>
 
@@ -34,7 +34,7 @@
             android:layout_marginStart="14dp"
             android:textColor="#1A1A1A"
             android:text="Instagram"
-            android:textSize="18sp"/>
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <TextView
@@ -43,5 +43,5 @@
         android:layout_height="wrap_content"
         android:text="45 min"
         android:textColor="#6B7280"
-        android:textSize="18sp"/>
+        android:textSize="16sp"/>
 </LinearLayout>

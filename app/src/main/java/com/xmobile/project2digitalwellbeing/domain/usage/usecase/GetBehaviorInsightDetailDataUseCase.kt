@@ -285,6 +285,18 @@ class GetBehaviorInsightDetailDataUseCase @Inject constructor(
 
             InsightType.LATE_NIGHT_SWITCHING ->
                 "Your late-night sessions include rapid switching between apps."
+
+            InsightType.WORK_HOUR_DISTRACTION ->
+                "You spend significant time on non-productive apps during standard work hours."
+
+            InsightType.MORNING_ROUTINE ->
+                "Your day often begins with heavy phone usage shortly after waking up."
+
+            InsightType.CONSTANT_CHECKING ->
+                "You frequently open your phone for very brief moments throughout the day."
+
+            InsightType.APP_RELIANCE ->
+                "A single application accounts for the majority of your digital activity today."
         }
     }
 
@@ -301,6 +313,18 @@ class GetBehaviorInsightDetailDataUseCase @Inject constructor(
 
             InsightType.LATE_NIGHT_SWITCHING ->
                 "Late-night switching combines delayed bedtime with fragmented attention, which is usually a worse recovery pattern than a single long session."
+
+            InsightType.WORK_HOUR_DISTRACTION ->
+                "This suggests difficulty maintaining focus on tasks during the period when you are likely most productive."
+
+            InsightType.MORNING_ROUTINE ->
+                "Heavy morning usage can lead to 'reactive' behavior and increased stress throughout the remainder of your day."
+
+            InsightType.CONSTANT_CHECKING ->
+                "This high frequency of short sessions indicates a 'checking habit' that can fragment your attention span."
+
+            InsightType.APP_RELIANCE ->
+                "High dependence on one app may indicate that your digital habits are unbalanced or that one service is absorbing too much of your focus."
         }
     }
 
@@ -317,6 +341,18 @@ class GetBehaviorInsightDetailDataUseCase @Inject constructor(
 
             InsightType.LATE_NIGHT_SWITCHING ->
                 "Use app limits or a simplified bedtime screen setup to reduce fast switching late at night."
+
+            InsightType.WORK_HOUR_DISTRACTION ->
+                "Try using app timers or a focus mode to limit distracting categories during your work or study blocks."
+
+            InsightType.MORNING_ROUTINE ->
+                "Establish a 30-minute screen-free window after waking up to start your day with more intentionality."
+
+            InsightType.CONSTANT_CHECKING ->
+                "Turn off non-essential notifications to reduce the urge to check your phone and practice 'batching' your updates."
+
+            InsightType.APP_RELIANCE ->
+                "Identify the primary source of this usage and consider setting a daily time limit for that specific application."
         }
     }
 

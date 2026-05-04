@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/btnBack"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 app:tint="#1A1A1A"
                 android:src="@drawable/chevron_left"/>
 
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Usage Patterns"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
                 android:layout_marginStart="12dp"/>
@@ -48,7 +48,7 @@
             android:layout_marginStart="10dp"
             android:text="Understand how you interact with your phone throughout the day."
             android:textColor="#6B7280"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:text="Session Behavior"
                         android:textStyle="bold"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="#1A1A1A"
                         android:layout_marginBottom="12dp"/>
 
@@ -94,14 +94,14 @@
                         <TextView
                             android:text="Average session length"
                             android:textColor="#6B7280"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"/>
 
                         <TextView
                             android:text="4m 32s"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                         <TextView
                             android:text="Longest session"
                             android:textColor="#6B7280"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"/>
@@ -133,7 +133,7 @@
                         <TextView
                             android:id="@+id/tvLongestSession"
                             android:text="18m 45s"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -156,14 +156,14 @@
                             android:layout_height="wrap_content"
                             android:text="Total sessions today"
                             android:textColor="#6B7280"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_weight="1"
                             android:layout_width="0dp"/>
 
                         <TextView
                             android:id="@+id/tvTotalSessions"
                             android:text="47"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
                         android:text="Switching Behavior"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:layout_marginBottom="12dp"/>
 
                     <LinearLayout
@@ -204,7 +204,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="Number of app switches"
                             android:textColor="#6B7280"
@@ -213,7 +213,7 @@
 
                         <TextView
                             android:text="132"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -234,7 +234,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="Avg. time between switches"
                             android:textColor="#6B7280"
@@ -243,7 +243,7 @@
 
                         <TextView
                             android:text="2m 15s"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Usage Distribution"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"
                         android:layout_marginBottom="12dp"/>
@@ -294,13 +294,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:text="Short (0-2 min)"
                                 android:textColor="#6B7280"/>
 
                             <TextView
                                 android:id="@+id/tvShortSessions"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="28 sessions"
@@ -339,14 +339,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:text="Medium (2-10 min)"
                                 android:textColor="#6B7280"/>
                             <TextView
                                 android:id="@+id/tvMediumSessions"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:text="15 sessions"
                                 android:textColor="#1A1A1A"/>
                         </LinearLayout>
@@ -381,13 +381,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:text="Long (10+ min)"
                                 android:textColor="#6B7280"/>
 
                             <TextView
                                 android:id="@+id/tvLongSessions"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="4 sessions"
@@ -428,7 +428,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Most Frequently Opened"
@@ -462,8 +462,8 @@
 
                     <ImageView
                         android:id="@+id/imgIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         app:tint="#D4D8EE"
                         android:src="@drawable/chart_column"/>
                 </LinearLayout>
@@ -475,7 +475,7 @@
                     android:layout_marginStart="12dp">
 
                     <TextView
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Behavior Insight"
@@ -488,7 +488,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You often open social media apps in short sessions throughout the evening."
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#E0E0E0"/>
                 </LinearLayout>
 
