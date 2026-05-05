@@ -91,9 +91,7 @@ class WeeklyOverviewActivity : AppCompatActivity() {
         binding.tvAvg.text = state.averageDailyScreenTimeText
         binding.tvMax.text = state.mostUsedDayText
         binding.tvTotal.text = state.totalScreenTimeText
-        binding.tvTrend.text = state.trendText.ifBlank {
-            "No weekly trend yet. Patterns become clearer after a few active days."
-        }
+        binding.tvTrend.text = state.trendText
         binding.btnNextWeek.isEnabled = state.canNavigateNext
         binding.btnNextWeek.alpha = if (state.canNavigateNext) 1f else 0.35f
 

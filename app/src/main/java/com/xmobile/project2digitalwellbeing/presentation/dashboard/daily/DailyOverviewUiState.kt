@@ -14,6 +14,6 @@ data class DailyOverviewUiState(
     val longestSessionText: String = "0m",
     val hourlyUsage: List<HourlyUsage> = emptyList(),
     val topApps: List<AppUsageStat> = emptyList(),
-    val insightText: String = "No insights are available yet.",
+    val insightText: String = "No daily insight yet. Usage patterns will appear after more activity is recorded.",
     val errorMessage: String? = null
 )

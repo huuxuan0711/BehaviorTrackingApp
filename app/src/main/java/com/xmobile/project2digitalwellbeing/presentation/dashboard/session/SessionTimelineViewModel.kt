@@ -103,8 +103,8 @@ class SessionTimelineViewModel @Inject constructor(
                     _uiState.value = SessionTimelineUiState(
                         selectedDate = normalizedDate,
                         dateRangeLabel = normalizedDate.formatDateLabel(),
-                        insightText = refreshError ?: outcome.data.insight?.summary
-                        ?: "No session insight available yet.",
+                        insightText = refreshError ?: outcome.data.insight?.summary?.takeIf { it.isNotBlank() }
+                        ?: "No session insight yet. Meaningful patterns will appear after more usage is recorded.",
                         sessions = sessions.mapIndexed { index, session ->
                             session.toTimelineItem(
                                 previousSession = sessions.getOrNull(index - 1),

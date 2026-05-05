@@ -11,7 +11,7 @@ data class WeeklyOverviewUiState(
     val averageDailyScreenTimeText: String = "0m",
     val mostUsedDayText: String = "No data yet",
     val totalScreenTimeText: String = "0m",
-    val trendText: String = "No weekly trend available yet.",
+    val trendText: String = "No weekly trend yet. Patterns become clearer after a few active days.",
     val chartBars: List<WeeklyChartBarUiModel> = emptyList(),
     val topApps: List<AppUsageStat> = emptyList(),
     val errorMessage: String? = null,

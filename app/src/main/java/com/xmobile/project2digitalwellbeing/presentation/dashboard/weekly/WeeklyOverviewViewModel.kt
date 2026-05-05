@@ -107,7 +107,8 @@ class WeeklyOverviewViewModel @Inject constructor(
                             "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(maxDay.totalScreenTimeMillis)}"
                         },
                         totalScreenTimeText = UsageFormatter.formatDuration(weeklyUsage.totalScreenTimeMillis),
-                        trendText = refreshError ?: outcome.data.trend.toFriendlySummary(),
+                        trendText = refreshError ?: outcome.data.trend.toFriendlySummary().takeIf { it.isNotBlank() }
+                        ?: "No weekly trend yet. Patterns become clearer after a few active days.",
                         chartBars = dailyUsages.map { dailyUsage ->
                             WeeklyChartBarUiModel(
                                 label = UsageFormatter.formatShortDay(dailyUsage.localDate),

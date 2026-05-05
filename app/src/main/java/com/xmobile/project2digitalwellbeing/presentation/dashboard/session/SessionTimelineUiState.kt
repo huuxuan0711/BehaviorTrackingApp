@@ -5,7 +5,7 @@ import java.time.LocalDate
 data class SessionTimelineUiState(
     val selectedDate: LocalDate = LocalDate.now(),
     val dateRangeLabel: String = "",
-    val insightText: String = "No session insight available yet.",
+    val insightText: String = "No session insight yet. Meaningful patterns will appear after more usage is recorded.",
     val sessions: List<SessionTimelineItemUiModel> = emptyList(),
     val errorMessage: String? = null,
     val canNavigateNext: Boolean = false

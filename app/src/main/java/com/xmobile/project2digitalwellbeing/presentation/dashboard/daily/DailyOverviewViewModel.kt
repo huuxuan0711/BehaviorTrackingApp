@@ -134,8 +134,8 @@ class DailyOverviewViewModel @Inject constructor(
                             ?: "0m",
                         hourlyUsage = todayOutcome.data.hourlyUsage,
                         topApps = todayOutcome.data.topApps,
-                        insightText = topInsight?.let { "${it.description} (${it.score}/100)" }
-                            ?: "No insights are available yet for today.",
+                        insightText = topInsight?.description?.takeIf { it.isNotBlank() }
+                            ?: "No daily insight yet. Usage patterns will appear after more activity is recorded.",
                         errorMessage = refreshError
                     )
                 }

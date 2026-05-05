@@ -105,10 +105,12 @@ class DashboardViewModel @Inject constructor(
 
                 is GetDashboardDataOutcome.Failure -> {
                     _uiState.update {
+                        val error = refreshErrorMessage ?: outcome.error.toUserMessage()
                         it.copy(
                             isLoading = false,
                             currentDateLabel = nowMillis.toFriendlyDate(timezoneId),
-                            errorMessage = refreshErrorMessage ?: outcome.error.toUserMessage()
+                            errorMessage = error,
+                            insightSummaryText = error
                         )
                     }
                 }

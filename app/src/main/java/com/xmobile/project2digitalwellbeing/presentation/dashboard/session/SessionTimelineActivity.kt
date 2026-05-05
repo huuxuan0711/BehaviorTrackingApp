@@ -91,9 +91,7 @@ class SessionTimelineActivity : AppCompatActivity() {
 
     private fun render(state: SessionTimelineUiState) {
         binding.txtDate.text = state.dateRangeLabel
-        binding.tvInsight.text = state.insightText.ifBlank {
-            "No session insight yet. Meaningful patterns will appear after more usage is recorded."
-        }
+        binding.tvInsight.text = state.insightText
         binding.btnNextWeek.isEnabled = state.canNavigateNext
         binding.btnNextWeek.alpha = if (state.canNavigateNext) 1f else 0.35f
 

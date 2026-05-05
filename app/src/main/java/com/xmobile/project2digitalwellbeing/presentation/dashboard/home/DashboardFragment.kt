@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
@@ -132,10 +132,8 @@ class DashboardFragment : Fragment() {
     }
 
     private fun render(state: DashboardUiState) {
-        binding.txtTime.text = state.currentDateLabel.ifBlank { "Today" }
-        binding.txtKeyInsight.text = state.insightSummaryText.ifBlank {
-            "No clear pattern yet. Use your phone normally, then pull to refresh."
-        }
+        binding.txtTime.text = state.currentDateLabel
+        binding.txtKeyInsight.text = state.insightSummaryText
         binding.refreshLayout.isRefreshing = state.isLoading
 
         binding.valueScreenTime.text = (state.dailyUsage?.totalScreenTimeMillis ?: 0L).toDashboardDurationText()
@@ -169,7 +167,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showErrorIfNeeded(errorMessage: String?) {
-        if (errorMessage.isNullOrBlank() || errorMessage == lastShownErrorMessage) {
+        if (errorMessage.isNullOrBlank() || (errorMessage == lastShownErrorMessage)) {
             return
         }
         lastShownErrorMessage = errorMessage

@@ -9,11 +9,11 @@ fun DashboardUiState.toInsightSummaryText(): String {
             errorMessage
 
         topInsight != null -> {
-            "${topInsight.description} (${topInsight.score}/100)"
+            topInsight.description
         }
 
         else ->
-            "No insights are available yet. Open your apps normally and check back again."
+            "No clear pattern yet. Use your phone normally, then pull to refresh."
     }
 }
 

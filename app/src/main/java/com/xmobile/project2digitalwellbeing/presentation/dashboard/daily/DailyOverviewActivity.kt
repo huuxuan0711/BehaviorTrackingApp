@@ -105,9 +105,7 @@ class DailyOverviewActivity : AppCompatActivity() {
         binding.txtCompare.text = state.compareText
         binding.txtSessionCount.text = state.sessionCountText
         binding.txtValueLongestSession.text = state.longestSessionText
-        binding.txtInsights.text = state.insightText.ifBlank {
-            "No daily insight yet. Usage patterns will appear after more activity is recorded."
-        }
+        binding.txtInsights.text = state.insightText
 
         val topApps = state.topApps.toTopAppUiModels(this)
         val hasTopApps = topApps.isNotEmpty()
