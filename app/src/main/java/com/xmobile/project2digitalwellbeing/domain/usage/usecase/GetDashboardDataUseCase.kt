@@ -89,22 +89,11 @@ class GetDashboardDataUseCase @Inject constructor(
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val windowStartMillis = runStage(DashboardDataStage.RESOLVE_DATE, params) {
-            Instant.ofEpochMilli(params.nowMillis)
-                .atZone(zoneId)
-                .toLocalDate()
-                .atStartOfDay(zoneId)
-                .toInstant()
-                .toEpochMilli()
+            params.nowMillis - 24L * 60 * 60 * 1000
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val windowEndMillis = runStage(DashboardDataStage.RESOLVE_DATE, params) {
-            Instant.ofEpochMilli(windowStartMillis)
-                .atZone(zoneId)
-                .toLocalDate()
-                .plusDays(1)
-                .atStartOfDay(zoneId)
-                .toInstant()
-                .toEpochMilli()
+            params.nowMillis
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val sessions = runStage(DashboardDataStage.READ_SESSIONS, params) {

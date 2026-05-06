@@ -4,4 +4,5 @@ import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
 
 interface AppMetadataDataSource {
     suspend fun getAppMetadata(packageNames: Set<String>): Map<String, AppMetadata>
+    suspend fun getAllInstalledAppsMetadata(): List<AppMetadata>
 }

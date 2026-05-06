@@ -54,7 +54,7 @@ internal object AppCategoryClassifier {
         return null
     }
 
-    private fun isUserFacingGoogleApp(packageName: String): Boolean {
+    internal fun isUserFacingGoogleApp(packageName: String): Boolean {
         return packageName == "com.android.chrome" ||
             packageName == "com.google.android.youtube" ||
             packageName == "com.google.android.gm" ||

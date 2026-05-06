@@ -38,7 +38,7 @@ object TrackingDatabaseModule {
             AnalyticsDatabase::class.java,
             "usage_database"
         )
-            .fallbackToDestructiveMigration(dropAllTables = true)
+            .fallbackToDestructiveMigration()
             .build()
     }
 

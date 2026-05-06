@@ -6,18 +6,29 @@ import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ViewDashboardUsageMarkerBinding
 
-internal class DashboardUsageMarkerView(context: Context) : MarkerView(
+internal class DashboardUsageMarkerView(
+    context: Context,
+    private val rollingCurrentHour: Int? = null
+) : MarkerView(
     context,
-    com.xmobile.project2digitalwellbeing.R.layout.view_dashboard_usage_marker
+    R.layout.view_dashboard_usage_marker
 ) {
 
-    private val binding = ViewDashboardUsageMarkerBinding.bind(getChildAt(0))
+    private val binding: ViewDashboardUsageMarkerBinding by lazy {
+        ViewDashboardUsageMarkerBinding.bind(findViewById(R.id.marker_root))
+    }
     private val chartBounds = RectF()
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
-        val hour = e?.x?.toInt() ?: 0
+        val x = e?.x?.toInt() ?: 0
+        val hour = if (rollingCurrentHour != null) {
+            (rollingCurrentHour - 23 + x + 24) % 24
+        } else {
+            x
+        }
         val minutes = e?.y?.toInt() ?: 0
         binding.tvHour.text = hour.toMarkerHourLabel()
         binding.tvUsage.text = "Usage : ${minutes} min"

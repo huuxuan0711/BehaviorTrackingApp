@@ -13,25 +13,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="App Categories"
-            android:textSize="26sp"
-            android:textColor="#1A1A1A"
-            android:textStyle="bold"/>
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/arrow_left"
+            android:contentDescription="Back"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Classify apps to help the app better understand your digital habits."
-            android:textSize="16sp"
-            android:textColor="#6B7280"
-            android:layout_marginTop="10dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="App Categories"
+                android:textSize="22sp"
+                android:textColor="#1A1A1A"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Classify apps to help the app better understand your digital habits."
+        android:textSize="14sp"
+        android:textColor="#6B7280"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"/>
 
     <!-- Search -->
     <EditText
@@ -47,11 +67,32 @@
         android:textColorHint="#8C8C8C"/>
 
     <!-- Category list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCategory"
-        android:layout_marginTop="10dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipToPadding="false"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="No apps found"
+            android:textColor="#6B7280"
+            android:visibility="gone"/>
+    </FrameLayout>
 
 </LinearLayout>

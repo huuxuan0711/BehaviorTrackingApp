@@ -1,4 +1,4 @@
-package com.xmobile.project2digitalwellbeing.presentation.analysis.model
+package com.xmobile.project2digitalwellbeing.presentation.analysis.hub
 
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 

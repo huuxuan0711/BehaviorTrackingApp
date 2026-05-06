@@ -44,7 +44,7 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
     }
 
     private companion object {
-        private const val FULL_REFRESH_WINDOW_MILLIS = 24L * 60L * 60L * 1000L
+        private const val FULL_REFRESH_WINDOW_MILLIS = 8L * 24L * 60L * 60L * 1000L
         private const val SAFETY_WINDOW_MILLIS = 5L * 60L * 1000L
         private const val COOLDOWN_MILLIS = 60L * 1000L
     }

@@ -44,6 +44,28 @@ class AppMetadataDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllInstalledAppsMetadata(): List<AppMetadata> {
+        return try {
+            val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getInstalledApplications(0)
+            }
+
+            installedApps
+                .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 || (it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0 || isUserFacingGoogleApp(it.packageName) }
+                .map { buildAppMetadata(it.packageName) }
+        } catch (exception: Exception) {
+            throw UsageDataLayerException(
+                UsageDataLayerError.SystemReadFailed(
+                    source = UsageDataLayerSource.APP_METADATA,
+                    cause = exception
+                )
+            )
+        }
+    }
+
     private fun buildAppMetadata(packageName: String): AppMetadata {
         val applicationInfo = getApplicationInfoOrNull(packageName)
         val appName = applicationInfo?.let { packageManager.getApplicationLabel(it).toString() }
@@ -93,5 +115,20 @@ class AppMetadataDataSourceImpl @Inject constructor(
                     (it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
             } ?: false
         )
+    }
+
+    private fun isUserFacingGoogleApp(packageName: String): Boolean {
+        val knownApps = setOf(
+            "com.android.chrome",
+            "com.google.android.youtube",
+            "com.google.android.apps.maps",
+            "com.google.android.gm",
+            "com.android.vending",
+            "com.google.android.apps.docs",
+            "com.google.android.apps.photos",
+            "com.google.android.calendar",
+            "com.google.android.keep"
+        )
+        return packageName in knownApps
     }
 }

@@ -5,8 +5,8 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
     <application
@@ -19,6 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project2DigitalWellbeing">
+        <activity
+            android:name=".presentation.analysis.usagedetailapp.UsageDetailAppActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.settings.about.AboutActivity"
             android:exported="false" />
@@ -61,7 +64,6 @@
         <activity
             android:name=".presentation.onboarding.splash.SplashActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,9 +72,18 @@
         </activity>
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="true">
+            android:exported="true"></activity>
 
-        </activity>
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
     </application>
 
 </manifest>

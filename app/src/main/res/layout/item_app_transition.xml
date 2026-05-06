@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="12dp">
+
+    <ImageView
+        android:id="@+id/ivFromAppIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@android:drawable/sym_def_app_icon" />
+
+    <TextView
+        android:id="@+id/tvFromAppName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        tools:text="Instagram"
+        android:textColor="#111827"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/shuffle"
+        app:tint="#9CA3AF" />
+
+    <ImageView
+        android:id="@+id/ivToAppIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@android:drawable/sym_def_app_icon" />
+
+
+    <TextView
+        android:id="@+id/tvToAppName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        tools:text="TikTok"
+        android:textColor="#111827"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvTransitionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="12×"
+        android:textColor="#9CA3AF"
+        android:textSize="12sp" />
+</LinearLayout>

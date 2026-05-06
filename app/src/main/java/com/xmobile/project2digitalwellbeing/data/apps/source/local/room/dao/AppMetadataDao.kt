@@ -8,6 +8,9 @@ import com.xmobile.project2digitalwellbeing.data.apps.source.local.room.entity.A
 
 @Dao
 interface AppMetadataDao {
+    @Query("SELECT * FROM app_metadata")
+    suspend fun getAll(): List<AppMetadataEntity>
+
     @Query("SELECT * FROM app_metadata WHERE packageName IN (:packageNames)")
     suspend fun getByPackageNames(packageNames: List<String>): List<AppMetadataEntity>
 

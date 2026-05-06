@@ -17,7 +17,8 @@ fun List<AppUsageStat>.toTopAppUiModels(context: Context): List<TopAppUiModel> {
                 app.totalTimeMillis.toFloat() / totalDurationMillis.toFloat()
             },
             icon = context.packageManager.getApplicationIconOrNull(app.packageName)
-                ?: ContextCompat.getDrawable(context, R.drawable.smartphone)
+                ?: ContextCompat.getDrawable(context, R.drawable.smartphone),
+            category = app.category
         )
     }
 }

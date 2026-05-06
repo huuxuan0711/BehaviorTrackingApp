@@ -4,12 +4,17 @@ import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 
 interface UsageRepository {
     suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long): List<AppUsageEvent>
 
     suspend fun getAppMetadata(packageNames: Set<String>): Map<String, AppMetadata>
+
+    suspend fun getAllAppMetadata(): List<AppMetadata>
+
+    suspend fun updateAppCategory(packageName: String, category: AppCategory)
 
     suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession>
 

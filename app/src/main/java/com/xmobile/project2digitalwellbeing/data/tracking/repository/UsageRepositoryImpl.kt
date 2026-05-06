@@ -19,7 +19,9 @@ import com.xmobile.project2digitalwellbeing.data.analytics.source.local.room.Ana
 import com.xmobile.project2digitalwellbeing.data.tracking.source.local.room.dao.SessionDao
 import com.xmobile.project2digitalwellbeing.data.tracking.source.local.room.dao.SyncStateDao
 import com.xmobile.project2digitalwellbeing.data.tracking.source.system.UsageStatsDataSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
@@ -97,6 +99,68 @@ class UsageRepositoryImpl @Inject constructor(
         } catch (exception: Exception) {
             throw UsageDataLayerException(
                 UsageDataLayerError.CacheReadFailed(
+                    source = UsageDataLayerSource.METADATA_CACHE,
+                    cause = exception
+                )
+            )
+        }
+    }
+
+    override suspend fun getAllAppMetadata(): List<AppMetadata> {
+        return try {
+            // First get locally cached metadata to preserve manual overrides
+            val cachedMetadata = appMetadataDao.getAll()
+            val cachedMap = cachedMetadata.associateBy { it.packageName }
+
+            // Get installed apps from system
+            appMetadataDataSource.getAllInstalledAppsMetadata().also { freshMetadata ->
+                if (freshMetadata.isNotEmpty()) {
+                    val toUpdate = freshMetadata.map { metadata ->
+                        // If it exists in cache and has a manual override, preserve the overridden fields
+                        val existing = cachedMap[metadata.packageName]
+                        if (existing != null && existing.classificationSource == ClassificationSource.MANUAL_OVERRIDE.name) {
+                            metadata.toEntity(System.currentTimeMillis()).copy(
+                                reportingCategory = existing.reportingCategory,
+                                classificationSource = existing.classificationSource,
+                                confidence = existing.confidence
+                            )
+                        } else {
+                            metadata.toEntity(System.currentTimeMillis())
+                        }
+                    }
+                    appMetadataDao.upsertAll(toUpdate)
+                }
+            }
+
+            appMetadataDao.getAll().map { it.toDomain() }
+        } catch (exception: Exception) {
+            throw UsageDataLayerException(
+                UsageDataLayerError.SystemReadFailed(
+                    source = UsageDataLayerSource.APP_METADATA,
+                    cause = exception
+                )
+            )
+        }
+    }
+
+    override suspend fun updateAppCategory(packageName: String, category: AppCategory) {
+        try {
+            val existing = appMetadataDao.getByPackageNames(listOf(packageName)).firstOrNull()
+            if (existing != null) {
+                appMetadataDao.upsertAll(
+                    listOf(
+                        existing.copy(
+                            reportingCategory = category.name,
+                            classificationSource = ClassificationSource.MANUAL_OVERRIDE.name,
+                            confidence = 1.0f,
+                            updatedAtMillis = System.currentTimeMillis()
+                        )
+                    )
+                )
+            }
+        } catch (exception: Exception) {
+            throw UsageDataLayerException(
+                UsageDataLayerError.CacheWriteFailed(
                     source = UsageDataLayerSource.METADATA_CACHE,
                     cause = exception
                 )
