@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrend
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
@@ -65,6 +66,7 @@ enum class WeeklyOverviewDataStage {
 
 class GetWeeklyOverviewDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val aggregator: UsageAggregator,
     private val trendAnalyzer: UsageTrendAnalyzer
 ) {
@@ -122,7 +124,7 @@ class GetWeeklyOverviewDataUseCase @Inject constructor(
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
 
         val appMetadata = runStage(WeeklyOverviewDataStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(currentWeekSessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(currentWeekSessions.map { it.packageName }.toSet())
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
 
         val topApps = runStage(WeeklyOverviewDataStage.BUILD_TOP_APPS, params) {

@@ -1,21 +1,22 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerError
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerException
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppMetadata
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.ClassificationSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.SourceAppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.TransitionFilter
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerError
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerException
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.SourceAppCategory
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageSyncState
-import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsagePreferencesRepository
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
-import com.xmobile.project2digitalwellbeing.domain.usage.service.SessionEnricherImpl
-import com.xmobile.project2digitalwellbeing.domain.usage.service.TransitionExtractorImpl
-import com.xmobile.project2digitalwellbeing.domain.usage.service.TransitionInsightGeneratorImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricherImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.TransitionExtractorImpl
+import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGeneratorImpl
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -36,6 +37,7 @@ class GetTransitionGraphDataUseCaseTest {
 
         val useCase = GetTransitionGraphDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeTransitionPreferencesRepository(),
             sessionEnricher = SessionEnricherImpl(),
             transitionExtractor = TransitionExtractorImpl(),
@@ -65,6 +67,7 @@ class GetTransitionGraphDataUseCaseTest {
     fun `maps preference read failure to data access error`() = runBlocking {
         val useCase = GetTransitionGraphDataUseCase(
             repository = FakeTransitionRepository(),
+            appRepository = FakeTransitionRepository(),
             usagePreferencesRepository = FakeTransitionPreferencesRepository(
                 error = UsageDataLayerException(
                     UsageDataLayerError.CacheReadFailed(
@@ -94,8 +97,8 @@ class GetTransitionGraphDataUseCaseTest {
 
     private class FakeTransitionRepository(
         private val sessions: List<AppSession> = emptyList()
-    ) : UsageRepository {
-        override suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageEvent>()
+    ) : UsageRepository, AppRepository {
+        override suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent>()
 
         override suspend fun getAppMetadata(packageNames: Set<String>): Map<String, AppMetadata> {
             return packageNames.associateWith { packageName ->
@@ -116,11 +119,15 @@ class GetTransitionGraphDataUseCaseTest {
             }
         }
 
+        override suspend fun getAllAppMetadata(): List<AppMetadata> = getAppMetadata(emptySet()).values.toList()
+
+        override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
+
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> = sessions
         override suspend fun saveSessions(sessions: List<AppSession>) = Unit
         override suspend fun deleteSessionsInRange(startTimeMillis: Long, endTimeMillis: Long) = Unit
-        override suspend fun getInsights(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.usage.model.Insight>()
-        override suspend fun saveInsights(insights: List<com.xmobile.project2digitalwellbeing.domain.usage.model.Insight>, windowStartMillis: Long, windowEndMillis: Long) = Unit
+        override suspend fun getInsights(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.insights.model.Insight>()
+        override suspend fun saveInsights(insights: List<com.xmobile.project2digitalwellbeing.domain.insights.model.Insight>, windowStartMillis: Long, windowEndMillis: Long) = Unit
         override suspend fun deleteInsightsInRange(startTimeMillis: Long, endTimeMillis: Long) = Unit
         override suspend fun getSyncState(): UsageSyncState = UsageSyncState(null, null, null, false)
         override suspend fun saveSyncState(state: UsageSyncState) = Unit
@@ -128,7 +135,7 @@ class GetTransitionGraphDataUseCaseTest {
             windowStartMillis: Long,
             windowEndMillis: Long,
             sessions: List<AppSession>,
-            insights: List<com.xmobile.project2digitalwellbeing.domain.usage.model.Insight>,
+            insights: List<com.xmobile.project2digitalwellbeing.domain.insights.model.Insight>,
             newSyncState: UsageSyncState
         ) = Unit
     }

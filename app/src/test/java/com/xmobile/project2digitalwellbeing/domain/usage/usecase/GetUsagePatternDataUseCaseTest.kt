@@ -1,20 +1,21 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerError
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerException
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppMetadata
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.ClassificationSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.Insight
-import com.xmobile.project2digitalwellbeing.domain.usage.model.InsightType
-import com.xmobile.project2digitalwellbeing.domain.usage.model.SourceAppCategory
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerError
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerException
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
+import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
+import com.xmobile.project2digitalwellbeing.domain.apps.model.SourceAppCategory
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageSyncState
-import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsagePreferencesRepository
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
-import com.xmobile.project2digitalwellbeing.domain.usage.service.SessionEnricherImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricherImpl
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractorImpl
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -39,6 +40,7 @@ class GetUsagePatternDataUseCaseTest {
 
         val useCase = GetUsagePatternDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             sessionEnricher = SessionEnricherImpl(),
             featureExtractor = UsageFeatureExtractorImpl()
@@ -72,6 +74,7 @@ class GetUsagePatternDataUseCaseTest {
 
         val useCase = GetUsagePatternDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             sessionEnricher = SessionEnricherImpl(),
             featureExtractor = UsageFeatureExtractorImpl()
@@ -93,8 +96,8 @@ class GetUsagePatternDataUseCaseTest {
         private val sessions: List<AppSession> = emptyList(),
         private val insights: List<Insight> = emptyList(),
         private val metadataError: Throwable? = null
-    ) : UsageRepository {
-        override suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageEvent>()
+    ) : UsageRepository, AppRepository {
+        override suspend fun getUsageEvents(startTimeMillis: Long, endTimeMillis: Long) = emptyList<com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent>()
 
         override suspend fun getAppMetadata(packageNames: Set<String>): Map<String, AppMetadata> {
             metadataError?.let { throw it }
@@ -109,6 +112,10 @@ class GetUsagePatternDataUseCaseTest {
                 )
             }
         }
+
+        override suspend fun getAllAppMetadata(): List<AppMetadata> = getAppMetadata(emptySet()).values.toList()
+
+        override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> = sessions
         override suspend fun saveSessions(sessions: List<AppSession>) = Unit

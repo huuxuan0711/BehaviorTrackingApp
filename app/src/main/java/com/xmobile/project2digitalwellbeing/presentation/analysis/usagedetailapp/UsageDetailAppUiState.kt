@@ -1,11 +1,10 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
 
-import android.graphics.drawable.Drawable
-
 data class UsageDetailAppUiState(
+    val isLoading: Boolean = true,
+    val errorMessage: String? = null,
     val appName: String = "",
     val packageName: String = "",
-    val appIcon: Drawable? = null,
     val todayTotalFormatted: String = "0m",
     val todayVsYesterdayPercent: Int = 0,
     val weekLineChartData: List<Float> = emptyList(),
@@ -27,9 +26,7 @@ data class UsageDetailAppUiState(
 data class AppTransitionUiModel(
     val fromPackage: String,
     val fromAppName: String,
-    val fromAppIcon: Drawable?,
     val toPackage: String,
     val toAppName: String,
-    val toAppIcon: Drawable?,
     val count: Int
 )

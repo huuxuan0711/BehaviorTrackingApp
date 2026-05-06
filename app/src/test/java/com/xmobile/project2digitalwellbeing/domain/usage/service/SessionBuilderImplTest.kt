@@ -1,8 +1,9 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageEvent
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageEventType
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionBuilderImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageEventType
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

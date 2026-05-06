@@ -6,6 +6,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightInterpreter
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedInsight
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import java.time.Instant
@@ -72,6 +73,7 @@ enum class DashboardDataStage {
 
 class GetDashboardDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val aggregator: UsageAggregator,
     private val interpreter: InsightInterpreter
 ) {
@@ -113,7 +115,7 @@ class GetDashboardDataUseCase @Inject constructor(
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val appMetadataByPackage = runStage(DashboardDataStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(dailyUsage.sessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(dailyUsage.sessions.map { it.packageName }.toSet())
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val hourlyUsage = runStage(DashboardDataStage.BUILD_HOURLY_USAGE, params) {

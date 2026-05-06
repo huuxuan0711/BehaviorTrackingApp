@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppTransitionStat
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
 import com.xmobile.project2digitalwellbeing.domain.insights.model.TransitionInsight
@@ -69,6 +70,7 @@ enum class TransitionGraphDataStage {
 
 class GetTransitionGraphDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val usagePreferencesRepository: UsagePreferencesRepository,
     private val sessionEnricher: SessionEnricher,
     private val transitionExtractor: TransitionExtractor,
@@ -92,7 +94,7 @@ class GetTransitionGraphDataUseCase @Inject constructor(
         }.getOrElse { return GetTransitionGraphDataOutcome.Failure(it.toTransitionGraphError(params.timezoneId)) }
 
         val appMetadataByPackage = runStage(TransitionGraphDataStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(sessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(sessions.map { it.packageName }.toSet())
         }.getOrElse { return GetTransitionGraphDataOutcome.Failure(it.toTransitionGraphError(params.timezoneId)) }
 
         val enrichedSessions = runStage(TransitionGraphDataStage.ENRICH_SESSIONS, params) {

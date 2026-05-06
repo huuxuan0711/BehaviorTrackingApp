@@ -1,8 +1,9 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppTransitionStat
-import com.xmobile.project2digitalwellbeing.domain.usage.model.TransitionFilter
+import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGeneratorImpl
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppTransitionStat
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull

@@ -2,23 +2,23 @@ package com.xmobile.project2digitalwellbeing.domain.apps.usecase
 
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
-import java.time.Instant
-import java.time.ZoneId
 import javax.inject.Inject
 
 class GetAppCategoryDataUseCase @Inject constructor(
-    private val repository: UsageRepository,
+    private val usageRepository: UsageRepository,
+    private val appRepository: AppRepository,
     private val aggregator: UsageAggregator
 ) {
     suspend operator fun invoke(): Map<AppFocusGroup, List<AppUsageStat>> {
         val nowMillis = System.currentTimeMillis()
         val startOfDayMillis = nowMillis - 24L * 60 * 60 * 1000
 
-        val sessions = repository.getSessions(startOfDayMillis, nowMillis)
-        val allAppMetadataList = repository.getAllAppMetadata()
+        val sessions = usageRepository.getSessions(startOfDayMillis, nowMillis)
+        val allAppMetadataList = appRepository.getAllAppMetadata()
         val allAppMetadataMap = allAppMetadataList.associateBy { it.packageName }
 
         val usageStats = aggregator.buildAppUsageStats(sessions, allAppMetadataMap)

@@ -309,7 +309,7 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
+                            android:layout_height="10dp"
                             android:layout_marginTop="5dp"
                             android:backgroundTint="#F3F4F6"
                             android:background="@drawable/bg_progress_bg">
@@ -353,7 +353,7 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
+                            android:layout_height="10dp"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/bg_progress_bg">
 
@@ -396,7 +396,7 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
+                            android:layout_height="10dp"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/bg_progress_bg">
 

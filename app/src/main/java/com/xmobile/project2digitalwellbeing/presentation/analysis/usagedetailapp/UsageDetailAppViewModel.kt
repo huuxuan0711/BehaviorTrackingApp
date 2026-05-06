@@ -1,15 +1,13 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
 
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.domain.apps.usecase.GetAppMetadataUseCase
+import com.xmobile.project2digitalwellbeing.domain.apps.usecase.ResolveAppNameUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,15 +16,14 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class UsageDetailAppViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val usageRepository: UsageRepository,
-    @ApplicationContext private val context: Context
+    private val getAppMetadataUseCase: GetAppMetadataUseCase,
+    private val resolveAppNameUseCase: ResolveAppNameUseCase
 ) : ViewModel() {
 
     private val packageName: String = savedStateHandle.get<String>("PACKAGE_NAME") ?: ""
@@ -39,40 +36,48 @@ class UsageDetailAppViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        if (packageName.isBlank()) return
+        if (packageName.isBlank()) {
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = "Missing app package. Unable to load usage detail."
+                )
+            }
+            return
+        }
 
         viewModelScope.launch {
-            val zoneId = ZoneId.systemDefault()
-            val todayDate = LocalDate.now(zoneId)
-            val sevenDaysAgoDate = todayDate.minusDays(6)
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            try {
+                val zoneId = ZoneId.systemDefault()
+                val todayDate = LocalDate.now(zoneId)
+                val sevenDaysAgoDate = todayDate.minusDays(6)
 
-            val nowMillis = System.currentTimeMillis()
-            val past24hMillis = nowMillis - 24L * 60 * 60 * 1000
-            val past48hMillis = nowMillis - 48L * 60 * 60 * 1000
-            val sevenDaysAgoMillis = sevenDaysAgoDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
+                val nowMillis = System.currentTimeMillis()
+                val past24hMillis = nowMillis - 24L * 60 * 60 * 1000
+                val past48hMillis = nowMillis - 48L * 60 * 60 * 1000
+                val sevenDaysAgoMillis = sevenDaysAgoDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
 
             // Read from database to ensure we have data even if the system has deleted old events.
             // The 8-day sync policy ensures this data is persisted in Room via background worker or dashboard refresh.
-            val sessions = usageRepository.getSessions(sevenDaysAgoMillis, nowMillis)
+                val sessions = usageRepository.getSessions(sevenDaysAgoMillis, nowMillis)
 
             // Resolve App Info
-            val appMetadataMap = usageRepository.getAppMetadata(setOf(packageName))
-            val appName = appMetadataMap[packageName]?.appName ?: getAppNameFromPackage(packageName)
-            val appIcon = getAppIconFromPackage(packageName)
+                val appMetadataMap = getAppMetadataUseCase(setOf(packageName))
+                val appName = appMetadataMap[packageName]?.appName ?: resolveAppNameUseCase(packageName)
 
             // Aggregate data
-            var todayTotalMillis = 0L
-            var yesterdayTotalMillis = 0L
+                var todayTotalMillis = 0L
+                var yesterdayTotalMillis = 0L
 
-            val dailyTotals = FloatArray(7) { 0f } // 0 = 6 days ago, ..., 6 = today
-            val globalDailyTotals = FloatArray(7) { 0f }
-            val hourlyTotals = FloatArray(24) { 0f }
-            val todaySessions = mutableListOf<AppSession>()
-            val allTodaySessionsGlobally = mutableListOf<AppSession>()
-            
-            val currentHour = Instant.ofEpochMilli(nowMillis).atZone(zoneId).hour
+                val dailyTotals = FloatArray(7) { 0f } // 0 = 6 days ago, ..., 6 = today
+                val globalDailyTotals = FloatArray(7) { 0f }
+                val hourlyTotals = FloatArray(24) { 0f }
+                val todaySessions = mutableListOf<AppSession>()
+                val allTodaySessionsGlobally = mutableListOf<AppSession>()
+                val currentHour = Instant.ofEpochMilli(nowMillis).atZone(zoneId).hour
 
-            for (session in sessions) {
+                for (session in sessions) {
                 val sessionLocalDate = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).toLocalDate()
                 val daysSinceSevenDaysAgo = java.time.temporal.ChronoUnit.DAYS.between(sevenDaysAgoDate, sessionLocalDate).toInt()
 
@@ -104,50 +109,50 @@ class UsageDetailAppViewModel @Inject constructor(
                 if (session.startTimeMillis in past24hMillis..nowMillis) {
                     allTodaySessionsGlobally.add(session)
                 }
-            }
+                }
 
-            val dailyPercentages = dailyTotals.mapIndexed { index, appTotal ->
-                if (globalDailyTotals[index] > 0) (appTotal / globalDailyTotals[index]) * 100f else 0f
-            }
+                val dailyPercentages = dailyTotals.mapIndexed { index, appTotal ->
+                    if (globalDailyTotals[index] > 0) (appTotal / globalDailyTotals[index]) * 100f else 0f
+                }
 
             // Stats
-            val todayTotalFormatted = formatDuration(todayTotalMillis)
-            val vsYesterdayPercent = if (yesterdayTotalMillis > 0) {
-                (((todayTotalMillis - yesterdayTotalMillis).toFloat() / yesterdayTotalMillis.toFloat()) * 100).toInt()
-            } else 0
+                val todayTotalFormatted = formatDuration(todayTotalMillis)
+                val vsYesterdayPercent = if (yesterdayTotalMillis > 0) {
+                    (((todayTotalMillis - yesterdayTotalMillis).toFloat() / yesterdayTotalMillis.toFloat()) * 100).toInt()
+                } else 0
 
-            var mostActiveHour = 0
-            var peakUsage = 0f
-            for (i in hourlyTotals.indices) {
-                if (hourlyTotals[i] > peakUsage) {
-                    peakUsage = hourlyTotals[i]
-                    mostActiveHour = i
+                var mostActiveHour = 0
+                var peakUsage = 0f
+                for (i in hourlyTotals.indices) {
+                    if (hourlyTotals[i] > peakUsage) {
+                        peakUsage = hourlyTotals[i]
+                        mostActiveHour = i
+                    }
                 }
-            }
 
-            val endHour = (mostActiveHour + 1)
-            val mostActivePeriod = "${String.format("%02d:00", mostActiveHour)} - ${String.format("%02d:00", endHour)}"
+                val endHour = (mostActiveHour + 1)
+                val mostActivePeriod = "${String.format("%02d:00", mostActiveHour)} - ${String.format("%02d:00", endHour)}"
 
-            val peakUsageLabel = when (mostActiveHour) {
-                in 0..5 -> "Peak usage after midnight"
-                in 6..11 -> "Peak usage in morning"
-                in 12..16 -> "Peak usage in afternoon"
-                else -> "Peak usage at night"
-            }
+                val peakUsageLabel = when (mostActiveHour) {
+                    in 0..5 -> "Peak usage after midnight"
+                    in 6..11 -> "Peak usage in morning"
+                    in 12..16 -> "Peak usage in afternoon"
+                    else -> "Peak usage at night"
+                }
 
-            val totalSessionsCount = todaySessions.size
-            val avgSessionMillis = if (totalSessionsCount > 0) todayTotalMillis / totalSessionsCount else 0L
-            val longestSessionMillis = todaySessions.maxOfOrNull { it.durationMillis } ?: 0L
-            val shortestSessionMillis = todaySessions.minOfOrNull { it.durationMillis } ?: 0L
+                val totalSessionsCount = todaySessions.size
+                val avgSessionMillis = if (totalSessionsCount > 0) todayTotalMillis / totalSessionsCount else 0L
+                val longestSessionMillis = todaySessions.maxOfOrNull { it.durationMillis } ?: 0L
+                val shortestSessionMillis = todaySessions.minOfOrNull { it.durationMillis } ?: 0L
 
-            val timeStartLabel = String.format("%02d:00", (currentHour + 1) % 24)
-            val timeMidLabel = String.format("%02d:00", (currentHour + 13) % 24)
-            val timeEndLabel = String.format("%02d:00", currentHour)
+                val timeStartLabel = String.format("%02d:00", (currentHour + 1) % 24)
+                val timeMidLabel = String.format("%02d:00", (currentHour + 13) % 24)
+                val timeEndLabel = String.format("%02d:00", currentHour)
 
             // App Transitions
-            allTodaySessionsGlobally.sortBy { it.startTimeMillis }
-            val transitionCounts = mutableMapOf<Pair<String, String>, Int>()
-            for (i in 0 until allTodaySessionsGlobally.size - 1) {
+                allTodaySessionsGlobally.sortBy { it.startTimeMillis }
+                val transitionCounts = mutableMapOf<Pair<String, String>, Int>()
+                for (i in 0 until allTodaySessionsGlobally.size - 1) {
                 val current = allTodaySessionsGlobally[i]
                 val next = allTodaySessionsGlobally[i+1]
 
@@ -161,81 +166,70 @@ class UsageDetailAppViewModel @Inject constructor(
                         }
                     }
                 }
-            }
-
-            val allRequiredPackages = transitionCounts.keys.flatMap { listOf(it.first, it.second) }.toSet()
-            val metaMap = usageRepository.getAppMetadata(allRequiredPackages)
-
-            val topTransitionsSorted = transitionCounts.entries.sortedByDescending { it.value }
-                .take(3)
-                .map { (pair, count) ->
-                    val fromPkg = pair.first
-                    val toPkg = pair.second
-                    AppTransitionUiModel(
-                        fromPackage = fromPkg,
-                        fromAppName = metaMap[fromPkg]?.appName ?: getAppNameFromPackage(fromPkg),
-                        fromAppIcon = getAppIconFromPackage(fromPkg),
-                        toPackage = toPkg,
-                        toAppName = metaMap[toPkg]?.appName ?: getAppNameFromPackage(toPkg),
-                        toAppIcon = getAppIconFromPackage(toPkg),
-                        count = count
-                    )
                 }
 
-            val insightSummary = "You tend to use $appName mostly " + when (mostActiveHour) {
-                in 0..5 -> "late at night."
-                in 6..11 -> "in the morning."
-                in 12..16 -> "in the afternoon."
-                else -> "in the evening."
+                val allRequiredPackages = transitionCounts.keys.flatMap { listOf(it.first, it.second) }.toSet()
+                val metaMap = getAppMetadataUseCase(allRequiredPackages)
+
+                val topTransitionsSorted = transitionCounts.entries.sortedByDescending { it.value }
+                    .take(3)
+                    .map { (pair, count) ->
+                        val fromPkg = pair.first
+                        val toPkg = pair.second
+                        AppTransitionUiModel(
+                            fromPackage = fromPkg,
+                            fromAppName = metaMap[fromPkg]?.appName ?: resolveAppNameUseCase(fromPkg),
+                            toPackage = toPkg,
+                            toAppName = metaMap[toPkg]?.appName ?: resolveAppNameUseCase(toPkg),
+                            count = count
+                        )
+                    }
+
+                val insightSummary = "You tend to use $appName mostly " + when (mostActiveHour) {
+                    in 0..5 -> "late at night."
+                    in 6..11 -> "in the morning."
+                    in 12..16 -> "in the afternoon."
+                    else -> "in the evening."
+                }
+
+                val tipSummary = when (mostActiveHour) {
+                    in 0..5 -> "You used $appName most frequently after midnight. Consider setting app limits for better sleep quality."
+                    in 6..11 -> "Morning usage detected. Ensure it does not distract you from your main daytime tasks."
+                    in 12..16 -> "Afternoon usage is high. A short screen break might boost your focus."
+                    else -> "Evening usage detected. Try winding down screen time an hour before bed."
+                }
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null,
+                        appName = appName,
+                        todayTotalFormatted = todayTotalFormatted,
+                        todayVsYesterdayPercent = vsYesterdayPercent,
+                        weekLineChartData = dailyPercentages,
+                        mostActivePeriod = mostActivePeriod,
+                        avgSessionFormatted = formatDurationVerbose(avgSessionMillis),
+                        peakUsageLabel = peakUsageLabel,
+                        todayHourlyBarChartData = hourlyTotals.toList(),
+                        totalSessionsToday = totalSessionsCount,
+                        longestSessionFormatted = formatDurationVerbose(longestSessionMillis),
+                        shortestSessionFormatted = formatDurationVerbose(shortestSessionMillis),
+                        timeStartLabel = timeStartLabel,
+                        timeMidLabel = timeMidLabel,
+                        timeEndLabel = timeEndLabel,
+                        topTransitions = topTransitionsSorted,
+                        insightSummary = insightSummary,
+                        tipSummary = tipSummary
+                    )
+                }
+            } catch (_: Throwable) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Unable to load app usage details right now."
+                    )
+                }
             }
-
-            val tipSummary = when (mostActiveHour) {
-                in 0..5 -> "You used $appName most frequently after midnight. Consider setting app limits for better sleep quality."
-                in 6..11 -> "Morning usage detected. Ensure it does not distract you from your main daytime tasks."
-                in 12..16 -> "Afternoon usage is high. A short screen break might boost your focus."
-                else -> "Evening usage detected. Try winding down screen time an hour before bed."
-            }
-
-            _uiState.update {
-                it.copy(
-                    appName = appName,
-                    appIcon = appIcon,
-                    todayTotalFormatted = todayTotalFormatted,
-                    todayVsYesterdayPercent = vsYesterdayPercent,
-                    weekLineChartData = dailyPercentages,
-                    mostActivePeriod = mostActivePeriod,
-                    avgSessionFormatted = formatDurationVerbose(avgSessionMillis),
-                    peakUsageLabel = peakUsageLabel,
-                    todayHourlyBarChartData = hourlyTotals.toList(),
-                    totalSessionsToday = totalSessionsCount,
-                    longestSessionFormatted = formatDurationVerbose(longestSessionMillis),
-                    shortestSessionFormatted = formatDurationVerbose(shortestSessionMillis),
-                    timeStartLabel = timeStartLabel,
-                    timeMidLabel = timeMidLabel,
-                    timeEndLabel = timeEndLabel,
-                    topTransitions = topTransitionsSorted,
-                    insightSummary = insightSummary,
-                    tipSummary = tipSummary
-                )
-            }
-        }
-    }
-
-    private fun getAppNameFromPackage(pkg: String): String {
-        return try {
-            val pm = context.packageManager
-            val info = pm.getApplicationInfo(pkg, 0)
-            pm.getApplicationLabel(info).toString()
-        } catch (e: Exception) {
-            pkg
-        }
-    }
-
-    private fun getAppIconFromPackage(pkg: String): Drawable? {
-        return try {
-            context.packageManager.getApplicationIcon(pkg)
-        } catch (e: Exception) {
-            null
         }
     }
 

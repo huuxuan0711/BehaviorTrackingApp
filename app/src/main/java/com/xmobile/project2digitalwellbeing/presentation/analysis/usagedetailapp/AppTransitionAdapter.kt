@@ -29,14 +29,24 @@ class AppTransitionAdapter : RecyclerView.Adapter<AppTransitionAdapter.ViewHolde
     class ViewHolder(private val binding: ItemAppTransitionBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppTransitionUiModel) {
             binding.tvFromAppName.text = item.fromAppName
-            if (item.fromAppIcon != null) {
-                binding.ivFromAppIcon.setImageDrawable(item.fromAppIcon)
+            val fromIcon = try {
+                binding.root.context.packageManager.getApplicationIcon(item.fromPackage)
+            } catch (_: Throwable) {
+                null
+            }
+            if (fromIcon != null) {
+                binding.ivFromAppIcon.setImageDrawable(fromIcon)
             } else {
                 binding.ivFromAppIcon.setImageResource(android.R.drawable.sym_def_app_icon)
             }
             binding.tvToAppName.text = item.toAppName
-            if (item.toAppIcon != null) {
-                binding.ivToAppIcon.setImageDrawable(item.toAppIcon)
+            val toIcon = try {
+                binding.root.context.packageManager.getApplicationIcon(item.toPackage)
+            } catch (_: Throwable) {
+                null
+            }
+            if (toIcon != null) {
+                binding.ivToAppIcon.setImageDrawable(toIcon)
             } else {
                 binding.ivToAppIcon.setImageResource(android.R.drawable.sym_def_app_icon)
             }

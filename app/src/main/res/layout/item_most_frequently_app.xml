@@ -15,7 +15,8 @@
 
         <LinearLayout
             android:id="@+id/layoutIcon"
-            android:background="@drawable/bg_circle_amber"
+            android:background="@drawable/bg_app_icon"
+            android:backgroundTint="#F6F7FB"
             android:padding="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

@@ -1,26 +1,38 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerError
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerException
-import com.xmobile.project2digitalwellbeing.data.usage.error.UsageDataLayerSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppMetadata
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageEvent
-import com.xmobile.project2digitalwellbeing.domain.usage.model.ClassificationSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.Insight
-import com.xmobile.project2digitalwellbeing.domain.usage.model.InsightType
-import com.xmobile.project2digitalwellbeing.domain.usage.model.SourceAppCategory
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerError
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerException
+import com.xmobile.project2digitalwellbeing.data.tracking.error.UsageDataLayerSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
+import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
+import com.xmobile.project2digitalwellbeing.domain.apps.model.SourceAppCategory
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageEventType
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageEventType
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
-import com.xmobile.project2digitalwellbeing.domain.usage.service.InsightEngine
-import com.xmobile.project2digitalwellbeing.domain.usage.service.SessionBuilder
-import com.xmobile.project2digitalwellbeing.domain.usage.service.SessionEnricher
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshMode
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataResult
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageErrorMapperImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsagePipelineStage
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageRefreshPolicy
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageRefreshPolicyImpl
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageRefreshWindow
+import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngine
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionBuilder
+import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricher
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractor
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.CategoryUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.model.DailyUsage
@@ -33,7 +45,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatureTopAp
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.flowOf
-import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsagePreferencesRepository
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNull
@@ -64,6 +76,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -101,7 +114,7 @@ class RefreshUsageDataUseCaseTest {
 
     @Test
     fun `incremental refresh reprocesses safety window`() = runBlocking {
-        val nowMillis = 200_000L
+        val nowMillis = 300_000L
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = 180_000L,
@@ -114,6 +127,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -152,6 +166,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -189,6 +204,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -228,6 +244,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -268,6 +285,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -309,6 +327,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -344,6 +363,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -356,7 +376,7 @@ class RefreshUsageDataUseCaseTest {
 
         useCase(
             RefreshUsageDataParams(
-                nowMillis = 60_000L,
+                nowMillis = 120_000L,
                 timezoneId = "Asia/Bangkok"
             )
         )
@@ -378,6 +398,7 @@ class RefreshUsageDataUseCaseTest {
 
         val useCase = RefreshUsageDataUseCase(
             repository = repository,
+            appRepository = repository,
             usagePreferencesRepository = FakeUsagePreferencesRepository(),
             refreshPolicy = DefaultRefreshPolicy,
             sessionEnricher = DefaultSessionEnricher,
@@ -436,7 +457,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     private object DefaultSessionEnricher : SessionEnricher {
-        private val delegate = com.xmobile.project2digitalwellbeing.domain.usage.service.SessionEnricherImpl()
+        private val delegate = com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricherImpl()
 
         override fun enrichSessions(
             sessions: List<AppSession>,
@@ -451,7 +472,7 @@ class RefreshUsageDataUseCaseTest {
         private val usageEvents: List<AppUsageEvent>,
         private val usageEventsError: Throwable? = null,
         private val replaceError: Throwable? = null
-    ) : UsageRepository {
+    ) : UsageRepository, AppRepository {
         var deletedSessionsStart: Long? = null
         var deletedSessionsEnd: Long? = null
         val savedSessions = mutableListOf<AppSession>()
@@ -475,6 +496,10 @@ class RefreshUsageDataUseCaseTest {
                 )
             }
         }
+
+        override suspend fun getAllAppMetadata(): List<AppMetadata> = getAppMetadata(emptySet()).values.toList()
+
+        override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> {
             return emptyList()
@@ -587,6 +612,9 @@ class RefreshUsageDataUseCaseTest {
                 lateNightSessionCount = 0,
                 lateNightUsageRatio = 0f,
                 lateNightAverageSessionLengthMillis = 0L,
+                workHourDistractionMillis = 0L,
+                morningUsageMillis = 0L,
+                morningSessionCount = 0,
                 switchCount = 0,
                 switchesPerHour = 0f,
                 averageSessionLengthMillis = 0L,
@@ -603,7 +631,9 @@ class RefreshUsageDataUseCaseTest {
                 topAppsByDuration = emptyList<UsageFeatureTopApp>(),
                 topAppsByLaunchCount = emptyList<UsageFeatureTopApp>(),
                 topCategoriesByDuration = emptyList<TopCategoryFeature>(),
-                lateNightTopApps = emptyList<UsageFeatureTopApp>()
+                lateNightTopApps = emptyList<UsageFeatureTopApp>(),
+                workHourTopApps = emptyList<UsageFeatureTopApp>(),
+                morningTopApps = emptyList<UsageFeatureTopApp>()
             )
         }
     }

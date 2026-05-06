@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.model.TransitionInsight
 import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGenerator
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
@@ -64,6 +65,7 @@ enum class SessionTimelineDataStage {
 
 class GetSessionTimelineDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val usagePreferencesRepository: UsagePreferencesRepository,
     private val sessionEnricher: SessionEnricher,
     private val transitionExtractor: TransitionExtractor,
@@ -91,7 +93,7 @@ class GetSessionTimelineDataUseCase @Inject constructor(
         }.getOrElse { return GetSessionTimelineDataOutcome.Failure(it.toSessionTimelineDataError(params.timezoneId)) }
 
         val appMetadata = runStage(SessionTimelineDataStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(sessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(sessions.map { it.packageName }.toSet())
         }.getOrElse { return GetSessionTimelineDataOutcome.Failure(it.toSessionTimelineDataError(params.timezoneId)) }
 
         val enrichedSessions = runStage(SessionTimelineDataStage.ENRICH_SESSIONS, params) {

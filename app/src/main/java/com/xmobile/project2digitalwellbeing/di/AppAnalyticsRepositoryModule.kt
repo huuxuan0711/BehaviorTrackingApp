@@ -1,7 +1,9 @@
 package com.xmobile.project2digitalwellbeing.di
 
+import com.xmobile.project2digitalwellbeing.data.apps.repository.AppRepositoryImpl
 import com.xmobile.project2digitalwellbeing.data.tracking.repository.UsageRepositoryImpl
 import com.xmobile.project2digitalwellbeing.data.preferences.repository.UsagePreferencesRepositoryImpl
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import dagger.Binds
@@ -16,6 +18,11 @@ abstract class AppAnalyticsRepositoryModule {
     abstract fun bindUsageRepository(
         implementation: UsageRepositoryImpl
     ): UsageRepository
+
+    @Binds
+    abstract fun bindAppRepository(
+        implementation: AppRepositoryImpl
+    ): AppRepository
 
     @Binds
     abstract fun bindUsagePreferencesRepository(

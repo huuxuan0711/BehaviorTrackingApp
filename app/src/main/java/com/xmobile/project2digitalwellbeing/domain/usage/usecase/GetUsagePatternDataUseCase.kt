@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.usage.model.SessionLengthDistribution
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatureTopApp
@@ -69,6 +70,7 @@ enum class UsagePatternDataStage {
 
 class GetUsagePatternDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val usagePreferencesRepository: UsagePreferencesRepository,
     private val sessionEnricher: SessionEnricher,
     private val featureExtractor: UsageFeatureExtractor
@@ -114,7 +116,7 @@ class GetUsagePatternDataUseCase @Inject constructor(
         }.getOrElse { return GetUsagePatternDataOutcome.Failure(it.toUsagePatternError(params.timezoneId)) }
 
         val appMetadataByPackage = runStage(UsagePatternDataStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(sessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(sessions.map { it.packageName }.toSet())
         }.getOrElse { return GetUsagePatternDataOutcome.Failure(it.toUsagePatternError(params.timezoneId)) }
 
         val enrichedSessions = runStage(UsagePatternDataStage.ENRICH_SESSIONS, params) {

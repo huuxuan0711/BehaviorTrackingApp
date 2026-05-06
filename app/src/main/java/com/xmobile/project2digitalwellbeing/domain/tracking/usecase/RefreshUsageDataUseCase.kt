@@ -2,6 +2,7 @@ package com.xmobile.project2digitalwellbeing.domain.tracking.usecase
 
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngine
@@ -34,6 +35,7 @@ data class RefreshUsageDataResult(
 
 class RefreshUsageDataUseCase @Inject constructor(
     private val repository: UsageRepository,
+    private val appRepository: AppRepository,
     private val usagePreferencesRepository: UsagePreferencesRepository,
     private val refreshPolicy: UsageRefreshPolicy,
     private val sessionEnricher: SessionEnricher,
@@ -93,7 +95,7 @@ class RefreshUsageDataUseCase @Inject constructor(
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
         val appMetadataByPackage = runStage(UsagePipelineStage.READ_APP_METADATA, params) {
-            repository.getAppMetadata(
+            appRepository.getAppMetadata(
                 sessions.map { it.packageName }.toSet()
             )
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }

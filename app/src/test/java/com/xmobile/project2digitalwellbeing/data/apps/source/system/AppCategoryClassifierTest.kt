@@ -1,8 +1,8 @@
-package com.xmobile.project2digitalwellbeing.data.usage.source.system
+package com.xmobile.project2digitalwellbeing.data.apps.source.system
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.ClassificationSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.SourceAppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.SourceAppCategory
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

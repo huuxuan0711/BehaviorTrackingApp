@@ -1,9 +1,10 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngineImpl
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.DailyUsage
-import com.xmobile.project2digitalwellbeing.domain.usage.model.InsightType
+import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
 import com.xmobile.project2digitalwellbeing.domain.usage.model.SessionLengthDistribution
 import com.xmobile.project2digitalwellbeing.domain.usage.model.TopCategoryFeature
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
@@ -58,7 +59,7 @@ class InsightEngineImplTest {
         )
 
         val insight = insights.first { it.type == InsightType.FREQUENT_SWITCHING }
-        assertEquals("42", insight.evidence["switchCount"])
+        assertEquals("18.00", insight.evidence["switchesPerHour"])
         assertEquals(listOf("app.a", "app.b"), insight.relatedPackages)
     }
 
@@ -116,6 +117,9 @@ class InsightEngineImplTest {
         lateNightSessionCount: Int = 0,
         lateNightUsageRatio: Float = 0f,
         lateNightAverageSessionLengthMillis: Long = 0L,
+        workHourDistractionMillis: Long = 0L,
+        morningUsageMillis: Long = 0L,
+        morningSessionCount: Int = 0,
         switchCount: Int = 0,
         switchesPerHour: Float = 0f,
         averageSessionLengthMillis: Long = 5L * 60L * 1000L,
@@ -124,7 +128,9 @@ class InsightEngineImplTest {
         topAppsByDuration: List<UsageFeatureTopApp> = emptyList(),
         topAppsByLaunchCount: List<UsageFeatureTopApp> = emptyList(),
         topCategoriesByDuration: List<TopCategoryFeature> = emptyList(),
-        lateNightTopApps: List<UsageFeatureTopApp> = emptyList()
+        lateNightTopApps: List<UsageFeatureTopApp> = emptyList(),
+        workHourTopApps: List<UsageFeatureTopApp> = emptyList(),
+        morningTopApps: List<UsageFeatureTopApp> = emptyList()
     ): UsageFeatures {
         return UsageFeatures(
             totalScreenTimeMillis = totalScreenTimeMillis,
@@ -134,6 +140,9 @@ class InsightEngineImplTest {
             lateNightSessionCount = lateNightSessionCount,
             lateNightUsageRatio = lateNightUsageRatio,
             lateNightAverageSessionLengthMillis = lateNightAverageSessionLengthMillis,
+            workHourDistractionMillis = workHourDistractionMillis,
+            morningUsageMillis = morningUsageMillis,
+            morningSessionCount = morningSessionCount,
             switchCount = switchCount,
             switchesPerHour = switchesPerHour,
             averageSessionLengthMillis = averageSessionLengthMillis,
@@ -150,7 +159,9 @@ class InsightEngineImplTest {
             topAppsByDuration = topAppsByDuration,
             topAppsByLaunchCount = topAppsByLaunchCount,
             topCategoriesByDuration = topCategoriesByDuration,
-            lateNightTopApps = lateNightTopApps
+            lateNightTopApps = lateNightTopApps,
+            workHourTopApps = workHourTopApps,
+            morningTopApps = morningTopApps
         )
     }
 

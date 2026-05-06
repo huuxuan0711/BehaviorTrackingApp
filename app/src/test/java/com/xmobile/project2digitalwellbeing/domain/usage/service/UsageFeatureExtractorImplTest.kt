@@ -1,7 +1,7 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
 import org.junit.Assert.assertEquals

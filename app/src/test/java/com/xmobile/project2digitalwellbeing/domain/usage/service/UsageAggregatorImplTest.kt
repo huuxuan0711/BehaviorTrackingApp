@@ -1,10 +1,10 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppMetadata
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.model.ClassificationSource
-import com.xmobile.project2digitalwellbeing.domain.usage.model.SourceAppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
+import com.xmobile.project2digitalwellbeing.domain.apps.model.ClassificationSource
+import com.xmobile.project2digitalwellbeing.domain.apps.model.SourceAppCategory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -33,7 +33,7 @@ class UsageAggregatorImplTest {
     }
 
     @Test
-    fun `buildDailyUsage merges adjacent sessions of the same package`() {
+    fun `buildDailyUsage keeps adjacent sessions as separate sessions`() {
         val sessions = listOf(
             session("app.a", "2026-04-28T10:00:00+07:00", "2026-04-28T10:05:00+07:00"),
             session("app.a", "2026-04-28T10:05:00+07:00", "2026-04-28T10:10:00+07:00")
@@ -45,8 +45,8 @@ class UsageAggregatorImplTest {
             localDate = "2026-04-28"
         )
 
-        assertEquals(1, dailyUsage.totalSessionCount)
-        assertEquals(1, dailyUsage.sessions.size)
+        assertEquals(2, dailyUsage.totalSessionCount)
+        assertEquals(2, dailyUsage.sessions.size)
         assertEquals(10L * 60L * 1000L, dailyUsage.totalScreenTimeMillis)
     }
 

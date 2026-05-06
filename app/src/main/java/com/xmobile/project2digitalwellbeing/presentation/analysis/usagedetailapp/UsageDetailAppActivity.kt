@@ -2,8 +2,6 @@ package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailap
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.LineChart
+import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.ActivityUsageDetailAppBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +22,7 @@ class UsageDetailAppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUsageDetailAppBinding
     private val viewModel: UsageDetailAppViewModel by viewModels()
     private val transitionAdapter = AppTransitionAdapter()
+    private var lastShownErrorMessage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +68,26 @@ class UsageDetailAppActivity : AppCompatActivity() {
                     binding.txtInsight.text = state.insightSummary
                     binding.txtTip.text = state.tipSummary
 
-                    if (state.appIcon != null) {
-                        binding.appIcon.setImageDrawable(state.appIcon)
+                    val headerIcon = try {
+                        packageManager.getApplicationIcon(state.packageName)
+                    } catch (_: Throwable) {
+                        null
+                    }
+                    if (headerIcon != null) {
+                        binding.appIcon.setImageDrawable(headerIcon)
+                    } else {
+                        binding.appIcon.setImageResource(android.R.drawable.sym_def_app_icon)
                     }
 
                     if (state.weekLineChartData.isNotEmpty()) {
                         UsageDetailChartConfigurator.renderLineChart(binding.lineChart, this@UsageDetailAppActivity, state.weekLineChartData)
+                    } else {
+                        binding.lineChart.clear()
                     }
                     if (state.todayHourlyBarChartData.isNotEmpty()) {
                         UsageDetailChartConfigurator.renderBarChart(binding.barChart, this@UsageDetailAppActivity, state.todayHourlyBarChartData)
+                    } else {
+                        binding.barChart.clear()
                     }
 
                     if (state.topTransitions.isEmpty()) {
@@ -87,8 +96,20 @@ class UsageDetailAppActivity : AppCompatActivity() {
                         binding.cvAppTransitions.visibility = View.VISIBLE
                         transitionAdapter.submitList(state.topTransitions)
                     }
+
+                    binding.contentScroll.visibility = if (state.isLoading) View.GONE else View.VISIBLE
+                    binding.progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+                    showErrorIfNeeded(state.errorMessage)
                 }
             }
         }
+    }
+
+    private fun showErrorIfNeeded(errorMessage: String?) {
+        if (errorMessage.isNullOrBlank() || errorMessage == lastShownErrorMessage) {
+            return
+        }
+        lastShownErrorMessage = errorMessage
+        Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT).show()
     }
 }

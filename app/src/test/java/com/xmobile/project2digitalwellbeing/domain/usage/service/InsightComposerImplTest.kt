@@ -1,11 +1,12 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.service
 
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.usage.model.AppTransitionStat
-import com.xmobile.project2digitalwellbeing.domain.usage.model.Insight
-import com.xmobile.project2digitalwellbeing.domain.usage.model.InsightType
-import com.xmobile.project2digitalwellbeing.domain.usage.model.TransitionFilter
-import com.xmobile.project2digitalwellbeing.domain.usage.model.TransitionInsight
+import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightComposerImpl
+import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppTransitionStat
+import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
+import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
+import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
+import com.xmobile.project2digitalwellbeing.domain.insights.model.TransitionInsight
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
