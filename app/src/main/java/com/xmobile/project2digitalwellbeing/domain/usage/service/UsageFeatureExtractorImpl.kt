@@ -15,7 +15,9 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
         sessions: List<EnrichedSession>,
         preferences: UsageAnalysisPreferences
     ): UsageFeatures {
-        val orderedSessions = sessions.sortedBy { it.session.startTimeMillis }
+        val orderedSessions = sessions
+            .filter { it.session.durationMillis > 0 } // Loại bỏ các phiên có thời lượng bằng 0
+            .sortedBy { it.session.startTimeMillis }
         val totalSessionCount = orderedSessions.size
         val totalScreenTimeMillis = orderedSessions.sumOf { it.session.durationMillis }
         val longestSessionMillis = orderedSessions.maxOfOrNull { it.session.durationMillis } ?: 0L
@@ -37,14 +39,17 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
         }
 
         val lateNightUsageMillis = lateNightSessions.sumOf { it.session.durationMillis }
-        val lateNightSessionCount = lateNightSessions.size
+        // Chỉ đếm các phiên trên 30 giây để tính trung bình thực tế hơn
+        val meaningfulLateNightSessions = lateNightSessions.filter { it.session.durationMillis >= 30 * 1000L }
+        val lateNightSessionCount = meaningfulLateNightSessions.size
+        
         val lateNightUsageRatio = if (totalScreenTimeMillis == 0L) {
             0f
         } else {
             lateNightUsageMillis.toFloat() / totalScreenTimeMillis.toFloat()
         }
         val lateNightAverageSessionLengthMillis = if (lateNightSessionCount == 0) {
-            0L
+            if (lateNightSessions.isNotEmpty()) lateNightUsageMillis / lateNightSessions.size else 0L
         } else {
             lateNightUsageMillis / lateNightSessionCount
         }

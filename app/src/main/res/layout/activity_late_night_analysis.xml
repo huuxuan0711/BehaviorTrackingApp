@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,11 +8,23 @@
     android:background="#F6F7FB"
     tools:context=".presentation.analysis.latenight.LateNightAnalysisActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/contentScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <!-- Header -->
         <LinearLayout
@@ -101,6 +113,7 @@
                     <!-- Item -->
                     <LinearLayout
                         android:orientation="vertical"
+                        android:gravity="center"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
@@ -308,9 +321,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Reducing phone use after midnight may improve sleep quality."
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="#6B7280"/>
         </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
+</RelativeLayout>
