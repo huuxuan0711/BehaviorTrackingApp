@@ -25,7 +25,17 @@ class UsageFeatureExtractorImpl @Inject constructor() : UsageFeatureExtractor {
             totalScreenTimeMillis / totalSessionCount
         }
 
-        val lateNightSessions = orderedSessions.filter { it.isLateNight }
+        // Để tránh "tính thừa" (overcounting) do cửa sổ 24h chứa mảnh của 2 đêm khác nhau,
+        // chúng ta chỉ trích xuất đặc trưng cho chu kỳ đêm gần nhất.
+        val lateNightSessions = orderedSessions.filter { it.isLateNight }.let { allLateNight ->
+            val lastSession = allLateNight.lastOrNull() ?: return@let emptyList<EnrichedSession>()
+            // Lấy tất cả các session đêm thuộc cùng một khối thời gian liên tục với session cuối cùng
+            // (Không bị ngăn cách bởi các session ban ngày)
+            allLateNight.filter { 
+                it.session.startTimeMillis >= lastSession.session.startTimeMillis - 12 * MILLIS_PER_HOUR 
+            }
+        }
+
         val lateNightUsageMillis = lateNightSessions.sumOf { it.session.durationMillis }
         val lateNightSessionCount = lateNightSessions.size
         val lateNightUsageRatio = if (totalScreenTimeMillis == 0L) {

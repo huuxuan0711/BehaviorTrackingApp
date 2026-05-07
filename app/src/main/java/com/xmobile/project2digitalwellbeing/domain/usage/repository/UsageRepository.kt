@@ -32,7 +32,14 @@ interface UsageRepository {
         windowStartMillis: Long,
         windowEndMillis: Long,
         sessions: List<AppSession>,
-        insights: List<Insight>,
+        insights: List<InsightRefreshGroup>,
         newSyncState: UsageSyncState
     )
 }
+
+data class InsightRefreshGroup(
+    val windowStartMillis: Long,
+    val windowEndMillis: Long,
+    val insights: List<Insight>
+)
+

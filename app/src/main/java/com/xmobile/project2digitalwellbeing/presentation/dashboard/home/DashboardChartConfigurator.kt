@@ -27,7 +27,7 @@ internal object DashboardChartConfigurator {
             setPinchZoom(false)
             setDrawGridBackground(false)
             minOffset = 0f
-            extraLeftOffset = 12f
+            extraLeftOffset = 8f
             extraTopOffset = 8f
             extraRightOffset = 12f
             extraBottomOffset = 12f
@@ -48,34 +48,46 @@ internal object DashboardChartConfigurator {
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
+                isGranularityEnabled = true // Đảm bảo luôn nhảy theo từng đơn vị giờ
                 axisMinimum = 0f
                 axisMaximum = 23f
-                labelCount = 24
+                labelCount = 24 // Cho phép hệ thống xem xét tất cả các vị trí
                 textSize = 12f
                 textColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
-                setAvoidFirstLastClipping(false)
-                yOffset = 8f
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        val rounded = value.toInt()
-                        return when (rounded) {
-                            0 -> "12AM"
-                            9 -> "9AM"
-                            18 -> "6PM"
-                            else -> ""
-                        }
-                    }
-                }
+                yOffset = 12f
             }
         }
     }
 
     fun render(chart: LineChart, context: Context, hourlyUsage: List<HourlyUsage>) {
-        val usageByHour = hourlyUsage.associateBy { it.hourOfDay }
-        val entries = (0..23).map { hour ->
-            Entry(hour.toFloat(), (usageByHour[hour]?.totalTimeMillis ?: 0L) / (60f * 1000f))
+        val currentHour = hourlyUsage.lastOrNull()?.hourOfDay
+        chart.marker = DashboardUsageMarkerView(context, currentHour)
+
+        val entries = hourlyUsage.mapIndexed { index, usage ->
+            Entry(index.toFloat(), usage.totalTimeMillis / (60f * 1000f))
+        }
+
+        chart.xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val index = value.toInt()
+                if (index < 0 || index >= hourlyUsage.size) return ""
+                
+                // Hiển thị nhãn tại mốc bắt đầu (index 0), mốc kết thúc (index cuối) 
+                // và các mốc cách nhau 6 tiếng (6, 12, 18)
+                val isMajorTick = index == 0 || index == hourlyUsage.size - 1 || index % 6 == 0
+                
+                if (!isMajorTick) return ""
+
+                val hour = hourlyUsage[index].hourOfDay
+                return when {
+                    hour == 0 -> "12AM"
+                    hour == 12 -> "12PM"
+                    hour > 12 -> "${hour - 12}PM"
+                    else -> "${hour}AM"
+                }
+            }
         }
 
         chart.axisLeft.axisMaximum = entries.resolveAxisMaximum()
@@ -88,9 +100,8 @@ internal object DashboardChartConfigurator {
     private fun buildDataSet(context: Context, entries: List<Entry>): LineDataSet {
         return LineDataSet(entries, "").apply {
             color = ContextCompat.getColor(context, R.color.weekly_trend_icon_background)
-            lineWidth = 2f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.2f
+            lineWidth = 2.5f
+            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
             setDrawCircles(false)
             setDrawCircleHole(false)
             setDrawHighlightIndicators(true)

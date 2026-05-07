@@ -74,9 +74,8 @@ internal object UsageDetailChartConfigurator {
         val entries = values.mapIndexed { index, value -> Entry(index.toFloat(), value) }
         val dataSet = LineDataSet(entries, "").apply {
             color = ContextCompat.getColor(context, R.color.weekly_trend_icon_background)
-            lineWidth = 2f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.2f
+            lineWidth = 2.5f
+            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
             setDrawCircles(false)
             setDrawValues(false)
             setDrawFilled(true)

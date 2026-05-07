@@ -12,6 +12,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDat
 import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -63,7 +64,9 @@ class DailyOverviewViewModel @Inject constructor(
         val nowMillis = if (resolvedDate == today) {
             System.currentTimeMillis()
         } else {
-            resolvedDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
+            // For historical days, use the end of that day to ensure we get the full day's usage
+            // instead of just up to 00:00:00 (which would be empty)
+            resolvedDate.atTime(LocalTime.MAX).atZone(zoneId).toInstant().toEpochMilli()
         }
         val shouldRefreshCurrentDay = resolvedDate == today
 

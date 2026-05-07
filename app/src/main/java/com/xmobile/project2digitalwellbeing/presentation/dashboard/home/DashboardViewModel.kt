@@ -83,7 +83,8 @@ class DashboardViewModel @Inject constructor(
             when (val outcome = getDashboardDataUseCase(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
-                    timezoneId = timezoneId
+                    timezoneId = timezoneId,
+                    isSlidingWindow = true
                 )
             )) {
                 is GetDashboardDataOutcome.Success -> {

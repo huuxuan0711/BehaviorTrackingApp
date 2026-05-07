@@ -41,6 +41,28 @@ class UsageAggregatorImpl @Inject constructor() : UsageAggregator {
         )
     }
 
+    override fun buildSlidingUsage(
+        sessions: List<AppSession>,
+        timezoneId: String,
+        windowStartMillis: Long,
+        windowEndMillis: Long
+    ): DailyUsage {
+        val clippedSessions = sessions.mapNotNull { session ->
+            session.clipToRange(
+                startMillis = windowStartMillis,
+                endMillis = windowEndMillis
+            )
+        }
+
+        return DailyUsage(
+            localDate = "SlidingWindow",
+            timezoneId = timezoneId,
+            totalScreenTimeMillis = clippedSessions.sumOf { it.durationMillis },
+            totalSessionCount = clippedSessions.size,
+            sessions = clippedSessions
+        )
+    }
+
     override fun buildAppUsageStats(
         sessions: List<AppSession>,
         appMetadataByPackage: Map<String, AppMetadata>
@@ -96,6 +118,51 @@ class UsageAggregatorImpl @Inject constructor() : UsageAggregator {
             HourlyUsage(
                 hourOfDay = hourOfDay,
                 totalTimeMillis = totalTimeMillis
+            )
+        }
+    }
+
+    override fun buildSlidingHourlyUsage(
+        sessions: List<AppSession>,
+        timezoneId: String,
+        windowStartMillis: Long,
+        windowEndMillis: Long
+    ): List<HourlyUsage> {
+        val zoneId = ZoneId.of(timezoneId)
+        val startZoned = Instant.ofEpochMilli(windowStartMillis).atZone(zoneId)
+        
+        // Tạo 24 buckets tương ứng với 24 giờ liên tiếp từ windowStart
+        val hourBuckets = LongArray(24)
+
+        sessions.forEach { session ->
+            val effectiveSession = session.clipToRange(windowStartMillis, windowEndMillis)
+            if (effectiveSession != null) {
+                var currentStart = effectiveSession.startTimeMillis
+                val sessionEnd = effectiveSession.endTimeMillis
+
+                while (currentStart < sessionEnd) {
+                    val currentZoned = Instant.ofEpochMilli(currentStart).atZone(zoneId)
+                    
+                    // Tính index dựa trên khoảng cách giờ so với mốc bắt đầu
+                    val hourIndex = java.time.Duration.between(
+                        startZoned.withMinute(0).withSecond(0).withNano(0),
+                        currentZoned.withMinute(0).withSecond(0).withNano(0)
+                    ).toHours().toInt().coerceIn(0, 23)
+
+                    val nextHourMillis = currentZoned.plusHours(1).withMinute(0).withSecond(0).withNano(0).toInstant().toEpochMilli()
+                    val sliceEnd = minOf(sessionEnd, nextHourMillis)
+                    
+                    hourBuckets[hourIndex] += (sliceEnd - currentStart)
+                    currentStart = sliceEnd
+                }
+            }
+        }
+
+        return hourBuckets.mapIndexed { index, totalTime ->
+            val hourOfDay = startZoned.plusHours(index.toLong()).hour
+            HourlyUsage(
+                hourOfDay = hourOfDay,
+                totalTimeMillis = totalTime
             )
         }
     }

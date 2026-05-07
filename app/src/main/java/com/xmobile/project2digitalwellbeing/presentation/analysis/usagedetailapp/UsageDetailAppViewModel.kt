@@ -7,6 +7,7 @@ import com.xmobile.project2digitalwellbeing.domain.apps.usecase.GetAppMetadataUs
 import com.xmobile.project2digitalwellbeing.domain.apps.usecase.ResolveAppNameUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
+import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,8 @@ class UsageDetailAppViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val usageRepository: UsageRepository,
     private val getAppMetadataUseCase: GetAppMetadataUseCase,
-    private val resolveAppNameUseCase: ResolveAppNameUseCase
+    private val resolveAppNameUseCase: ResolveAppNameUseCase,
+    private val aggregator: UsageAggregator
 ) : ViewModel() {
 
     private val packageName: String = savedStateHandle.get<String>("PACKAGE_NAME") ?: ""
@@ -54,8 +56,15 @@ class UsageDetailAppViewModel @Inject constructor(
                 val sevenDaysAgoDate = todayDate.minusDays(6)
 
                 val nowMillis = System.currentTimeMillis()
-                val past24hMillis = nowMillis - 24L * 60 * 60 * 1000
-                val past48hMillis = nowMillis - 48L * 60 * 60 * 1000
+                val past24hMillis = Instant.ofEpochMilli(nowMillis)
+                    .atZone(zoneId)
+                    .withMinute(0)
+                    .withSecond(0)
+                    .withNano(0)
+                    .minusHours(23)
+                    .toInstant()
+                    .toEpochMilli()
+                val past48hMillis = past24hMillis - 24L * 60 * 60 * 1000
                 val sevenDaysAgoMillis = sevenDaysAgoDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
 
             // Read from database to ensure we have data even if the system has deleted old events.
@@ -67,48 +76,51 @@ class UsageDetailAppViewModel @Inject constructor(
                 val appName = appMetadataMap[packageName]?.appName ?: resolveAppNameUseCase(packageName)
 
             // Aggregate data
+                val appSessions = sessions.filter { it.packageName == packageName }
+                val slidingHourlyUsage = aggregator.buildSlidingHourlyUsage(
+                    sessions = appSessions,
+                    timezoneId = zoneId.id,
+                    windowStartMillis = past24hMillis,
+                    windowEndMillis = nowMillis
+                )
+                val hourlyTotals = slidingHourlyUsage.map { it.totalTimeMillis / (60f * 1000f) }.toFloatArray()
+
                 var todayTotalMillis = 0L
                 var yesterdayTotalMillis = 0L
 
                 val dailyTotals = FloatArray(7) { 0f } // 0 = 6 days ago, ..., 6 = today
                 val globalDailyTotals = FloatArray(7) { 0f }
-                val hourlyTotals = FloatArray(24) { 0f }
                 val todaySessions = mutableListOf<AppSession>()
                 val allTodaySessionsGlobally = mutableListOf<AppSession>()
                 val currentHour = Instant.ofEpochMilli(nowMillis).atZone(zoneId).hour
 
                 for (session in sessions) {
-                val sessionLocalDate = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).toLocalDate()
-                val daysSinceSevenDaysAgo = java.time.temporal.ChronoUnit.DAYS.between(sevenDaysAgoDate, sessionLocalDate).toInt()
+                    val sessionLocalDate = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).toLocalDate()
+                    val daysSinceSevenDaysAgo = java.time.temporal.ChronoUnit.DAYS.between(sevenDaysAgoDate, sessionLocalDate).toInt()
 
-                if (daysSinceSevenDaysAgo in 0..6) {
-                    globalDailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
+                    if (daysSinceSevenDaysAgo in 0..6) {
+                        globalDailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
+                        if (session.packageName == packageName) {
+                            dailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
+                        }
+                    }
+
                     if (session.packageName == packageName) {
-                        dailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
-                    }
-                }
-
-                if (session.packageName == packageName) {
-                    if (session.startTimeMillis in past24hMillis..nowMillis) {
-                        todayTotalMillis += session.durationMillis
-                        todaySessions.add(session)
-                        val startHour = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).hour
-                        val hourIndex = if (startHour <= currentHour) {
-                            23 - (currentHour - startHour)
-                        } else {
-                            23 - (currentHour + 24 - startHour)
+                        if (session.endTimeMillis > past24hMillis && session.startTimeMillis < nowMillis) {
+                            val clipped = maxOf(session.startTimeMillis, past24hMillis)
+                            val endClipped = minOf(session.endTimeMillis, nowMillis)
+                            todayTotalMillis += (endClipped - clipped)
+                            todaySessions.add(session)
+                        } else if (session.endTimeMillis > past48hMillis && session.startTimeMillis < past24hMillis) {
+                            val clipped = maxOf(session.startTimeMillis, past48hMillis)
+                            val endClipped = minOf(session.endTimeMillis, past24hMillis)
+                            yesterdayTotalMillis += (endClipped - clipped)
                         }
-                        if (hourIndex in 0..23) {
-                            hourlyTotals[hourIndex] += session.durationMillis / (60f * 1000f)
-                        }
-                    } else if (session.startTimeMillis in past48hMillis until past24hMillis) {
-                        yesterdayTotalMillis += session.durationMillis
                     }
-                }
 
-                if (session.startTimeMillis in past24hMillis..nowMillis) {
-                    allTodaySessionsGlobally.add(session)
-                }
+                    if (session.endTimeMillis > past24hMillis && session.startTimeMillis < nowMillis) {
+                        allTodaySessionsGlobally.add(session)
+                    }
                 }
 
                 val dailyPercentages = dailyTotals.mapIndexed { index, appTotal ->

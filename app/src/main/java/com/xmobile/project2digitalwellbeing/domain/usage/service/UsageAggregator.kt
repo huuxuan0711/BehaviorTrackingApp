@@ -15,6 +15,13 @@ interface UsageAggregator {
         localDate: String
     ): DailyUsage
 
+    fun buildSlidingUsage(
+        sessions: List<AppSession>,
+        timezoneId: String,
+        windowStartMillis: Long,
+        windowEndMillis: Long
+    ): DailyUsage
+
     fun buildAppUsageStats(
         sessions: List<AppSession>,
         appMetadataByPackage: Map<String, AppMetadata> = emptyMap()
@@ -24,6 +31,13 @@ interface UsageAggregator {
         sessions: List<AppSession>,
         timezoneId: String,
         localDate: String? = null
+    ): List<HourlyUsage>
+
+    fun buildSlidingHourlyUsage(
+        sessions: List<AppSession>,
+        timezoneId: String,
+        windowStartMillis: Long,
+        windowEndMillis: Long
     ): List<HourlyUsage>
 
     fun buildWeeklyUsage(

@@ -11,6 +11,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnric
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractor
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -111,38 +112,41 @@ class RefreshUsageDataUseCase @Inject constructor(
                 .toString()
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
-        val dailyUsage = runStage(UsagePipelineStage.BUILD_DAILY_USAGE, params) {
-            aggregator.buildDailyUsage(
-                sessions = filteredSessions,
-                timezoneId = params.timezoneId,
-                localDate = currentLocalDate
-            )
-        }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
+        val dailyInsightGroups = runStage(UsagePipelineStage.GENERATE_INSIGHTS, params) {
+            val zoneId = ZoneId.of(params.timezoneId)
+            val startLocalDate = Instant.ofEpochMilli(refreshWindow.startTimeMillis).atZone(zoneId).toLocalDate()
+            val endLocalDate = Instant.ofEpochMilli(params.nowMillis).atZone(zoneId).toLocalDate()
 
-        val enrichedSessions = runStage(UsagePipelineStage.ENRICH_SESSIONS, params) {
-            sessionEnricher.enrichSessions(
-                sessions = dailyUsage.sessions,
-                timezoneId = params.timezoneId,
-                appMetadataByPackage = appMetadataByPackage,
-                preferences = preferences
-            )
-        }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
+            val groups = mutableListOf<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>()
+            var date = startLocalDate
+            while (!date.isAfter(endLocalDate)) {
+                val dateStr = date.toString()
+                val dayStart = date.atStartOfDay(zoneId).toInstant().toEpochMilli()
+                val dayEnd = date.plusDays(1).atStartOfDay(zoneId).toInstant().toEpochMilli()
 
-        val features = runStage(UsagePipelineStage.EXTRACT_FEATURES, params) {
-            withContext(Dispatchers.Default) {
-                featureExtractor.extractFeatures(
-                    sessions = enrichedSessions,
-                    preferences = preferences
-                )
+                val dailyUsage = aggregator.buildDailyUsage(filteredSessions, params.timezoneId, dateStr)
+                if (dailyUsage.sessions.isNotEmpty()) {
+                    val enriched = sessionEnricher.enrichSessions(
+                        sessions = dailyUsage.sessions,
+                        timezoneId = params.timezoneId,
+                        appMetadataByPackage = appMetadataByPackage,
+                        preferences = preferences
+                    )
+                    val features = featureExtractor.extractFeatures(enriched, preferences)
+                    val generatedInsights = insightEngine.generateInsights(features, dailyUsage, preferences)
+                    if (generatedInsights.isNotEmpty()) {
+                        groups.add(
+                            com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup(
+                                windowStartMillis = dayStart,
+                                windowEndMillis = dayEnd,
+                                insights = generatedInsights
+                            )
+                        )
+                    }
+                }
+                date = date.plusDays(1)
             }
-        }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
-
-        val insights = runStage(UsagePipelineStage.GENERATE_INSIGHTS, params) {
-            insightEngine.generateInsights(
-                features = features,
-                dailyUsage = dailyUsage,
-                preferences = preferences
-            )
+            groups
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
         val newSyncState = buildNextSyncState(
@@ -157,7 +161,7 @@ class RefreshUsageDataUseCase @Inject constructor(
                 windowStartMillis = refreshWindow.startTimeMillis,
                 windowEndMillis = refreshWindow.endTimeMillis,
                 sessions = filteredSessions,
-                insights = insights,
+                insights = dailyInsightGroups,
                 newSyncState = newSyncState
             )
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
@@ -170,7 +174,7 @@ class RefreshUsageDataUseCase @Inject constructor(
                 currentLocalDate = currentLocalDate,
                 eventsFetched = usageEvents.size,
                 sessionsAffected = filteredSessions.size,
-                insightsGenerated = insights.size
+                insightsGenerated = dailyInsightGroups.sumOf { it.insights.size }
             )
         )
     }

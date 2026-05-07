@@ -35,6 +35,7 @@ class UsageRepositoryImpl @Inject constructor(
 ) : UsageRepository {
 
     private val logTag = "UsageSessions"
+    private val insightLogTag = "UsageInsights"
 
     override suspend fun getUsageEvents(
         startTimeMillis: Long,
@@ -195,7 +196,7 @@ class UsageRepositoryImpl @Inject constructor(
         windowStartMillis: Long,
         windowEndMillis: Long,
         sessions: List<AppSession>,
-        insights: List<Insight>,
+        insights: List<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>,
         newSyncState: UsageSyncState
     ) {
         try {
@@ -206,14 +207,15 @@ class UsageRepositoryImpl @Inject constructor(
                 }
                 insightDao.deleteInsightsInRange(windowStartMillis, windowEndMillis)
                 if (insights.isNotEmpty()) {
-                    insightDao.insertInsights(
-                        insights.map { insight ->
+                    val insightEntities = insights.flatMap { group ->
+                        group.insights.map { insight ->
                             insight.toEntity(
-                                windowStartMillis = windowStartMillis,
-                                windowEndMillis = windowEndMillis
+                                windowStartMillis = group.windowStartMillis,
+                                windowEndMillis = group.windowEndMillis
                             )
                         }
-                    )
+                    }
+                    insightDao.insertInsights(insightEntities)
                 }
                 syncStateDao.upsertSyncState(newSyncState.toEntity())
             }
@@ -222,6 +224,10 @@ class UsageRepositoryImpl @Inject constructor(
                 startTimeMillis = windowStartMillis,
                 endTimeMillis = windowEndMillis,
                 sessions = sessions
+            )
+            logInsights(
+                stage = "COMMIT",
+                groups = insights
             )
         } catch (exception: Exception) {
             throw UsageDataLayerException(
@@ -283,6 +289,29 @@ class UsageRepositoryImpl @Inject constructor(
                 append(sampleSessions)
             }
         )
+    }
+
+    private fun logInsights(
+        stage: String,
+        groups: List<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>
+    ) {
+        if (!BuildConfig.DEBUG) return
+
+        if (groups.isEmpty()) {
+            Log.d(insightLogTag, "[$stage] No insights generated in this refresh.")
+            return
+        }
+
+        groups.forEach { group ->
+            val dateLabel = group.windowStartMillis.toDebugTime()
+            val insightSummary = group.insights.joinToString(separator = " | ") { insight ->
+                "${insight.type.name}(score=${insight.score}, conf=${String.format("%.2f", insight.confidence)})"
+            }
+            Log.d(
+                insightLogTag,
+                "[$stage] Date=$dateLabel count=${group.insights.size} insights=[$insightSummary]"
+            )
+        }
     }
 
     private fun Long.toDebugTime(): String {

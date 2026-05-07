@@ -18,7 +18,8 @@ import kotlin.collections.map
 data class GetDashboardDataParams(
     val nowMillis: Long,
     val timezoneId: String,
-    val topAppsLimit: Int = 5
+    val topAppsLimit: Int = 5,
+    val isSlidingWindow: Boolean = false
 )
 
 data class DashboardData(
@@ -91,7 +92,20 @@ class GetDashboardDataUseCase @Inject constructor(
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val windowStartMillis = runStage(DashboardDataStage.RESOLVE_DATE, params) {
-            params.nowMillis - 24L * 60 * 60 * 1000
+            if (params.isSlidingWindow) {
+                // Căn chỉnh về đầu giờ hiện tại và lùi lại 23 tiếng để có tổng 24 khung giờ
+                // Kết quả là index 23 luôn tương ứng với giờ hiện tại.
+                Instant.ofEpochMilli(params.nowMillis)
+                    .atZone(zoneId)
+                    .withMinute(0)
+                    .withSecond(0)
+                    .withNano(0)
+                    .minusHours(23)
+                    .toInstant()
+                    .toEpochMilli()
+            } else {
+                params.nowMillis - 24L * 60 * 60 * 1000
+            }
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val windowEndMillis = runStage(DashboardDataStage.RESOLVE_DATE, params) {
@@ -107,11 +121,20 @@ class GetDashboardDataUseCase @Inject constructor(
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val dailyUsage = runStage(DashboardDataStage.BUILD_DAILY_USAGE, params) {
-            aggregator.buildDailyUsage(
-                sessions = sessions,
-                timezoneId = params.timezoneId,
-                localDate = currentLocalDate
-            )
+            if (params.isSlidingWindow) {
+                aggregator.buildSlidingUsage(
+                    sessions = sessions,
+                    timezoneId = params.timezoneId,
+                    windowStartMillis = windowStartMillis,
+                    windowEndMillis = windowEndMillis
+                )
+            } else {
+                aggregator.buildDailyUsage(
+                    sessions = sessions,
+                    timezoneId = params.timezoneId,
+                    localDate = currentLocalDate
+                )
+            }
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val appMetadataByPackage = runStage(DashboardDataStage.READ_APP_METADATA, params) {
@@ -119,11 +142,20 @@ class GetDashboardDataUseCase @Inject constructor(
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val hourlyUsage = runStage(DashboardDataStage.BUILD_HOURLY_USAGE, params) {
-            aggregator.buildHourlyUsage(
-                sessions = dailyUsage.sessions,
-                timezoneId = params.timezoneId,
-                localDate = currentLocalDate
-            )
+            if (params.isSlidingWindow) {
+                aggregator.buildSlidingHourlyUsage(
+                    sessions = sessions,
+                    timezoneId = params.timezoneId,
+                    windowStartMillis = windowStartMillis,
+                    windowEndMillis = windowEndMillis
+                )
+            } else {
+                aggregator.buildHourlyUsage(
+                    sessions = dailyUsage.sessions,
+                    timezoneId = params.timezoneId,
+                    localDate = currentLocalDate
+                )
+            }
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
         val topApps = runStage(DashboardDataStage.BUILD_TOP_APPS, params) {

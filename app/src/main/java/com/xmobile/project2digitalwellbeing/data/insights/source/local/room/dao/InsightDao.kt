@@ -11,8 +11,8 @@ interface InsightDao {
     @Query(
         """
         SELECT * FROM insights
-        WHERE windowStartMillis >= :startTimeMillis
-        AND windowEndMillis <= :endTimeMillis
+        WHERE windowEndMillis > :startTimeMillis
+        AND windowStartMillis < :endTimeMillis
         ORDER BY score DESC
         """
     )
