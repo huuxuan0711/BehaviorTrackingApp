@@ -2,6 +2,7 @@ package com.xmobile.project2digitalwellbeing.domain.insights.service
 
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
+import com.xmobile.project2digitalwellbeing.domain.apps.model.toFocusGroup
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppTransitionStat
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
 import com.xmobile.project2digitalwellbeing.domain.insights.model.TransitionInsight
@@ -169,26 +170,6 @@ class TransitionInsightGeneratorImpl @Inject constructor() : TransitionInsightGe
 
         return ((enoughVolume * 0.45f) + (dominantWeight * 0.35f) + (filterWeight * 0.2f))
             .coerceIn(0f, 1f)
-    }
-
-    private fun AppCategory.toFocusGroup(): AppFocusGroup {
-        return when (this) {
-            AppCategory.PRODUCTIVITY,
-            AppCategory.EDUCATION,
-            AppCategory.TOOLS -> AppFocusGroup.PRODUCTIVE
-
-            AppCategory.SOCIAL,
-            AppCategory.VIDEO,
-            AppCategory.GAME,
-            AppCategory.MUSIC -> AppFocusGroup.DISTRACTING
-
-            AppCategory.COMMUNICATION,
-            AppCategory.BROWSER,
-            AppCategory.SYSTEM,
-            AppCategory.OTHER,
-            AppCategory.UNKNOWN -> AppFocusGroup.NEUTRAL
-
-        }
     }
 
     private fun safeRatio(numerator: Int, denominator: Int): Float {

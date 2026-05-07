@@ -1,6 +1,5 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.xmobile.project2digitalwellbeing.databinding.ItemAppBinding
-import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
 import android.view.View
 
 class AppItemAdapter(
@@ -33,10 +30,9 @@ class AppItemAdapter(
             binding.tvUsage.visibility = View.VISIBLE
             binding.tvUsage.text = item.usageText
 
-            val groupName = item.focusGroup.name.lowercase().replaceFirstChar { it.uppercase() }
-            binding.tvCategory.text = groupName
+            binding.tvCategory.text = item.category.toDisplayName()
 
-            val color = item.focusGroup.toColor()
+            val color = item.category.toBadgeColor()
             binding.tvCategory.setTextColor(color)
             binding.imgArrow.setColorFilter(color)
 
@@ -60,14 +56,6 @@ class AppItemAdapter(
 
             binding.layoutCategory.setOnClickListener { onCategoryClick(item, binding.layoutCategory, binding.imgArrow) }
             binding.root.setOnClickListener { onItemClick(item) }
-        }
-
-        private fun AppFocusGroup.toColor(): Int {
-            return when (this) {
-                AppFocusGroup.PRODUCTIVE -> Color.parseColor("#2E7D32") // Green
-                AppFocusGroup.DISTRACTING -> Color.parseColor("#E65100") // Orange
-                AppFocusGroup.NEUTRAL -> Color.parseColor("#424242") // Grey
-            }
         }
     }
 

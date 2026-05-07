@@ -20,6 +20,5 @@ data class AppItemUiModel(
     val packageName: String,
     val appName: String,
     val category: AppCategory,
-    val focusGroup: AppFocusGroup,
     val usageText: String
 )

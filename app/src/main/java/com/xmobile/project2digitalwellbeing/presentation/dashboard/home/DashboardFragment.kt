@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.FragmentDashboardBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
-import com.xmobile.project2digitalwellbeing.presentation.analysis.behavior.BehaviorInsightDetailActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.daily.DailyOverviewActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.session.SessionTimelineActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly.WeeklyOverviewActivity
@@ -82,9 +81,7 @@ class DashboardFragment : Fragment() {
         binding.cardSessionTimeline.setOnClickListener {
             viewModel.onAction(DashboardAction.OpenSessionTimeline, hasUsagePermission())
         }
-        binding.cardKeyInsight.setOnClickListener {
-            viewModel.onAction(DashboardAction.OpenBehaviorInsight, hasUsagePermission())
-        }
+        binding.cardKeyInsight.isEnabled = false
         binding.refreshLayout.setOnRefreshListener {
             if (hasUsagePermission()) {
                 viewModel.load(forceRefresh = true)
@@ -118,9 +115,6 @@ class DashboardFragment : Fragment() {
 
             DashboardEffect.OpenSessionTimeline ->
                 startActivity(Intent(requireContext(), SessionTimelineActivity::class.java))
-
-            DashboardEffect.OpenBehaviorInsight ->
-                startActivity(Intent(requireContext(), BehaviorInsightDetailActivity::class.java))
 
             DashboardEffect.RequestPermission ->
                 startActivity(Intent(requireContext(), PermissionActivity::class.java))

@@ -32,9 +32,6 @@
             android:name=".presentation.settings.privacy.PrivacyAndDataActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.analysis.behavior.BehaviorInsightDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.analysis.usagepattern.UsagePatternDetailActivity"
             android:exported="false" />
         <activity

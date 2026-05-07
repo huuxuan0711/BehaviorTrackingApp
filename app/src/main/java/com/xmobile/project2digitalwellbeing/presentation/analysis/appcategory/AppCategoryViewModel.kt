@@ -50,7 +50,6 @@ class AppCategoryViewModel @Inject constructor(
                                 packageName = it.packageName,
                                 appName = it.appName ?: it.packageName,
                                 category = it.category,
-                                focusGroup = category,
                                 usageText = durationText
                             )
                         }

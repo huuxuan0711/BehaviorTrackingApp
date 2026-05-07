@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ItemCategoryBinding
-import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
-
 class CategoryAdapter(
     private val onCategoryHeaderClick: (CategoryGroupUiModel) -> Unit,
     private val onAppCategoryClick: (AppItemUiModel, View, android.widget.ImageView) -> Unit,
@@ -40,10 +38,10 @@ class CategoryAdapter(
         }
 
         fun bind(item: CategoryGroupUiModel) {
-            binding.tvCategory.text = item.category.name.lowercase().replaceFirstChar { it.uppercase() }
+            binding.tvCategory.text = item.category.toDisplayName()
             binding.tvCount.text = "${item.apps.size} apps"
             
-            val color = item.category.toColor()
+            val color = item.category.toBadgeColor()
             binding.tvCategory.setTextColor(color)
             val bg = binding.tvCategory.background?.mutate()
             if (bg is GradientDrawable) {
@@ -64,14 +62,6 @@ class CategoryAdapter(
 
             binding.layoutHeader.setOnClickListener {
                 onCategoryHeaderClick(item)
-            }
-        }
-
-        private fun AppFocusGroup.toColor(): Int {
-            return when (this) {
-                AppFocusGroup.PRODUCTIVE -> Color.parseColor("#2E7D32") // Green
-                AppFocusGroup.DISTRACTING -> Color.parseColor("#E65100") // Orange
-                AppFocusGroup.NEUTRAL -> Color.parseColor("#424242") // Grey
             }
         }
     }

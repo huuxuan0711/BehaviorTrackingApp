@@ -3,9 +3,6 @@ package com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.PopupWindow
-import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ActivityAppCategoryBinding
-import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
-import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
 import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp.UsageDetailAppActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,18 +27,14 @@ class AppCategoryActivity : AppCompatActivity() {
     private val categoryAdapter by lazy {
         CategoryAdapter(
             onCategoryHeaderClick = { viewModel.toggleCategoryExpansion(it.category) },
-            onAppCategoryClick = { app, anchorView, imgArrow -> 
+            onAppCategoryClick = { app, anchorView, imgArrow ->
                 AppCategoryPopup(
                     context = this,
                     anchorView = anchorView,
                     imgArrow = imgArrow,
-                    onCategorySelected = { focus ->
-                        val categoryToSave = when (focus) {
-                            AppFocusGroup.PRODUCTIVE -> AppCategory.PRODUCTIVITY
-                            AppFocusGroup.DISTRACTING -> AppCategory.SOCIAL
-                            AppFocusGroup.NEUTRAL -> AppCategory.OTHER
-                        }
-                        viewModel.updateAppCategory(app.packageName, categoryToSave)
+                    selectedCategory = app.category,
+                    onCategorySelected = { category ->
+                        viewModel.updateAppCategory(app.packageName, category)
                     }
                 ).show() 
             },

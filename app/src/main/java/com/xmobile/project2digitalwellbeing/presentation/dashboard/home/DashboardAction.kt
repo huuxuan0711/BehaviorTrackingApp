@@ -4,5 +4,4 @@ sealed interface DashboardAction {
     data object OpenDailyOverview : DashboardAction
     data object OpenWeeklyOverview : DashboardAction
     data object OpenSessionTimeline : DashboardAction
-    data object OpenBehaviorInsight : DashboardAction
 }

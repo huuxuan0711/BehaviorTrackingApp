@@ -7,6 +7,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsage
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataParams
+import com.xmobile.project2digitalwellbeing.domain.usage.usecase.DashboardQueryMode
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -42,7 +43,6 @@ class DashboardViewModel @Inject constructor(
             DashboardAction.OpenDailyOverview -> DashboardEffect.OpenDailyOverview
             DashboardAction.OpenWeeklyOverview -> DashboardEffect.OpenWeeklyOverview
             DashboardAction.OpenSessionTimeline -> DashboardEffect.OpenSessionTimeline
-            DashboardAction.OpenBehaviorInsight -> DashboardEffect.OpenBehaviorInsight
         }
         emitNavigationEffect(hasPermission, grantedEffect)
     }
@@ -84,7 +84,7 @@ class DashboardViewModel @Inject constructor(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
                     timezoneId = timezoneId,
-                    isSlidingWindow = true
+                    queryMode = DashboardQueryMode.Sliding24Hours
                 )
             )) {
                 is GetDashboardDataOutcome.Success -> {

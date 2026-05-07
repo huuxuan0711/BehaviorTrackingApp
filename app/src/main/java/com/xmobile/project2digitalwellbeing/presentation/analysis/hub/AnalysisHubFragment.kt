@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.xmobile.project2digitalwellbeing.databinding.FragmentAnalysisHubBinding
 import com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory.AppCategoryActivity
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
-import com.xmobile.project2digitalwellbeing.presentation.analysis.behavior.BehaviorInsightDetailActivity
 import com.xmobile.project2digitalwellbeing.presentation.analysis.latenight.LateNightAnalysisActivity
 import com.xmobile.project2digitalwellbeing.presentation.analysis.transition.AppTransitionGraphActivity
 import com.xmobile.project2digitalwellbeing.presentation.analysis.usagepattern.UsagePatternDetailActivity
@@ -89,12 +88,6 @@ class AnalysisHubFragment : Fragment() {
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.rotate_ccw,
                 destination = AppTransitionGraphActivity::class.java
             ),
-            AnalysisHubItem.Module(
-                title = "Behavior Insight",
-                description = "Open the clearest behavior signal found in today's usage.",
-                iconResId = com.xmobile.project2digitalwellbeing.R.drawable.lightbulb,
-                destination = BehaviorInsightDetailActivity::class.java
-            )
         )
     }
 }
