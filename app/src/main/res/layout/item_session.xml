@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="@dimen/weekly_title_spacing_small"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,30 +11,30 @@
         android:visibility="gone"
         android:orientation="horizontal"
         android:alpha="0.72"
-        android:layout_marginStart="72dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/auto_dp_72"
+        android:layout_marginBottom="@dimen/weekly_small_icon_padding"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
             android:src="@drawable/arrow_down"
-            android:layout_width="12dp"
-            android:layout_height="12dp"/>
+            android:layout_width="@dimen/weekly_title_spacing_small"
+            android:layout_height="@dimen/weekly_title_spacing_small"/>
 
         <TextView
             android:id="@+id/txtAppTransition"
-            android:textColor="#6B7280"
-            android:textSize="12sp"
-            android:text="YouTube → TikTok"
-            android:layout_marginStart="6dp"
+            android:textColor="@color/weekly_overview_text_secondary"
+            android:textSize="@dimen/auto_sp_12"
+            android:text="@string/auto_youtube_tiktok"
+            android:layout_marginStart="@dimen/auto_dp_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <!-- Card -->
     <androidx.cardview.widget.CardView
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="@dimen/weekly_title_spacing_small"
+        app:cardElevation="@dimen/weekly_card_elevation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -45,22 +45,22 @@
 
             <View
                 android:id="@+id/viewLeftBorder"
-                android:background="#5C6BC0"
-                android:layout_width="6dp"
+                android:background="@color/primary"
+                android:layout_width="@dimen/auto_dp_6"
                 android:layout_height="match_parent"/>
 
             <!-- Icon -->
             <FrameLayout
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:backgroundTint="#F6F7FB"
+                android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                android:layout_marginTop="@dimen/weekly_title_spacing_small"
+                android:layout_width="@dimen/auto_dp_50"
+                android:layout_height="@dimen/auto_dp_50"
+                android:backgroundTint="@color/weekly_overview_background"
                 android:background="@drawable/bg_app_icon">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="@dimen/auto_dp_28"
+                    android:layout_height="@dimen/auto_dp_28"
                     android:id="@+id/imgIcon"
                     android:src="@drawable/house"
                     android:layout_gravity="center" />
@@ -68,29 +68,29 @@
 
             <!-- Info -->
             <LinearLayout
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/weekly_title_spacing_small"
+                android:layout_marginBottom="@dimen/weekly_title_spacing_small"
                 android:orientation="vertical"
-                android:layout_marginStart="12dp"
-                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/tvAppName"
-                    android:text="Instagram"
-                    android:textSize="18sp"
+                    android:text="@string/auto_instagram"
+                    android:textSize="@dimen/weekly_section_title_size"
                     android:textStyle="bold"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/weekly_overview_text_primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/tvTime"
-                    android:textSize="14sp"
-                    android:text="07:30 - 07:45"
-                    android:textColor="#6B7280"
-                    android:layout_marginTop="4dp"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:text="@string/auto_text_07_30_07_45"
+                    android:textColor="@color/weekly_overview_text_secondary"
+                    android:layout_marginTop="@dimen/auto_dp_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -98,31 +98,31 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/auto_dp_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/tvDuration"
-                        android:textColor="#5C6BC0"
+                        android:textColor="@color/primary"
                         android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:text="15 minutes"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:text="@string/auto_text_15_minutes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginTop="2dp"
-                        android:backgroundTint="#F3F4F6"
+                        android:layout_height="@dimen/weekly_small_icon_padding"
+                        android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
+                        android:layout_marginEnd="@dimen/weekly_trend_top_spacing"
+                        android:layout_marginTop="@dimen/weekly_card_elevation"
+                        android:backgroundTint="@color/theme_surface_subtle"
                         android:background="@drawable/bg_progress_bg">
 
                         <View
                             android:id="@+id/viewProgress"
-                            android:layout_width="100dp"
+                            android:layout_width="@dimen/auto_dp_100"
                             android:layout_height="match_parent"
                             android:background="@drawable/bg_progress_fill"/>
                     </FrameLayout>
@@ -134,3 +134,5 @@
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
+
+

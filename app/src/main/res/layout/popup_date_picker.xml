@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
-    android:backgroundTint="@android:color/white">
+    android:layout_margin="@dimen/weekly_row_spacing"
+    app:cardCornerRadius="@dimen/weekly_trend_top_spacing"
+    app:cardElevation="@dimen/weekly_small_icon_padding"
+    android:backgroundTint="@color/auto_color_ffffff">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:background="@android:color/white">
+        android:padding="@dimen/weekly_trend_top_spacing"
+        android:background="@color/auto_color_ffffff">
 
         <!-- ========== MONTH NAVIGATION ========== -->
         <LinearLayout
@@ -21,40 +21,40 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="@dimen/weekly_trend_top_spacing">
 
             <!-- Previous Month Button -->
             <ImageView
                 android:id="@+id/btnPrevMonth"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                app:tint="@color/black"
+                android:layout_width="@dimen/auto_dp_34"
+                android:layout_height="@dimen/auto_dp_34"
+                app:tint="@color/weekly_overview_text_primary"
                 android:src="@drawable/chevron_left"
-                android:contentDescription="Previous month"
+                android:contentDescription="@string/auto_previous_month"
                 android:scaleType="centerInside" />
 
             <!-- Month and Year Display -->
             <TextView
                 android:id="@+id/txtMonthYear"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="May 2026"
-                android:textSize="16sp"
+                android:text="@string/auto_may_2026"
+                android:textSize="@dimen/weekly_body_text_size"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="@color/auto_color_000000"
                 android:gravity="center"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp" />
+                android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                android:layout_marginEnd="@dimen/weekly_title_spacing_small" />
 
             <!-- Next Month Button -->
             <ImageView
                 android:id="@+id/btnNextMonth"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                app:tint="@color/black"
+                android:layout_width="@dimen/auto_dp_34"
+                android:layout_height="@dimen/auto_dp_34"
+                app:tint="@color/weekly_overview_text_primary"
                 android:src="@drawable/chevron_right"
-                android:contentDescription="Next month"
+                android:contentDescription="@string/auto_next_month"
                 android:scaleType="centerInside" />
         </LinearLayout>
 
@@ -63,77 +63,77 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="@dimen/weekly_title_spacing_small">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sun"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_sun"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp"/>
+                android:paddingVertical="@dimen/weekly_small_icon_padding"/>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mon"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_mon"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp" />
+                android:paddingVertical="@dimen/weekly_small_icon_padding" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tue"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_tue"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp" />
+                android:paddingVertical="@dimen/weekly_small_icon_padding" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Wed"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_wed"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp" />
+                android:paddingVertical="@dimen/weekly_small_icon_padding" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Thu"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_thu"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp" />
+                android:paddingVertical="@dimen/weekly_small_icon_padding" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Fri"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_fri"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp"/>
+                android:paddingVertical="@dimen/weekly_small_icon_padding"/>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sat"
-                android:textSize="12sp"
-                android:textColor="#888888"
+                android:text="@string/auto_sat"
+                android:textSize="@dimen/auto_sp_12"
+                android:textColor="@color/auto_color_888888"
                 android:gravity="center"
-                android:paddingVertical="8dp"/>
+                android:paddingVertical="@dimen/weekly_small_icon_padding"/>
         </LinearLayout>
 
         <!-- ========== CALENDAR DAYS GRID (RecyclerView) ========== -->
@@ -148,4 +148,6 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
+
 

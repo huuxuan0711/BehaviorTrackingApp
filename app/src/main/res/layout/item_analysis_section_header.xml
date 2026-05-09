@@ -3,11 +3,13 @@
     android:id="@+id/tvSectionTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="14dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="6dp"
-    android:text="Explore insights"
-    android:textColor="#1A1A1A"
-    android:textSize="16sp"
+    android:layout_marginStart="@dimen/weekly_small_icon_padding"
+    android:layout_marginTop="@dimen/auto_dp_14"
+    android:layout_marginEnd="@dimen/weekly_small_icon_padding"
+    android:layout_marginBottom="@dimen/auto_dp_6"
+    android:text="@string/auto_explore_insights"
+    android:textColor="@color/weekly_overview_text_primary"
+    android:textSize="@dimen/weekly_body_text_size"
     android:textStyle="bold" />
+
+

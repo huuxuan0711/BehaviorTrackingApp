@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Project2DigitalWellbeing" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary_light</item>
+        <item name="colorOnPrimaryContainer">@color/weekly_overview_text_primary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/weekly_overview_background</item>
+        <item name="android:windowBackground">@color/weekly_overview_background</item>
     </style>
 
     <style name="Theme.Project2DigitalWellbeing" parent="Base.Theme.Project2DigitalWellbeing" />

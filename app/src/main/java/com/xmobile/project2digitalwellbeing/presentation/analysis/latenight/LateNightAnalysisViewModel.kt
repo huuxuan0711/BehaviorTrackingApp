@@ -1,6 +1,7 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.latenight
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetLateNightAnalysisDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetLateNightAnalysisDataParams
@@ -17,8 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LateNightAnalysisViewModel @Inject constructor(
+    application: Application,
     private val getLateNightAnalysisDataUseCase: GetLateNightAnalysisDataUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context get() = getApplication<Application>()
 
     private val _uiState = MutableStateFlow(LateNightAnalysisUiState())
     val uiState: StateFlow<LateNightAnalysisUiState> = _uiState.asStateFlow()
@@ -51,7 +55,7 @@ class LateNightAnalysisViewModel @Inject constructor(
                         LateNightAppUiModel(
                             packageName = app.packageName,
                             appName = app.appName ?: app.packageName,
-                            durationText = UsageFormatter.formatDuration(app.totalTimeMillis)
+                            durationText = UsageFormatter.formatDuration(context, app.totalTimeMillis)
                         )
                     }
 
@@ -64,7 +68,7 @@ class LateNightAnalysisViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            totalScreenTime = UsageFormatter.formatDuration(data.totalScreenTimeMillis),
+                            totalScreenTime = UsageFormatter.formatDuration(context, data.totalScreenTimeMillis),
                             sessionCount = data.totalSessionCount.toString(),
                             avgDuration = formatDurationPrecise(data.averageSessionLengthMillis),
                             hourlyUsage = chartValues,

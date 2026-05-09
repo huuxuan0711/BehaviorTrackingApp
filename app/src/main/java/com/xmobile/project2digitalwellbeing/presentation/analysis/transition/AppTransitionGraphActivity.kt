@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.transition
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ActivityAppTransitionGraphBinding
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.AnalysisTimeRange
+import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
+import com.xmobile.project2digitalwellbeing.presentation.onboarding.permission.PermissionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
@@ -43,7 +46,16 @@ class AppTransitionGraphActivity : AppCompatActivity() {
 
         setupViews()
         observeUi()
-        viewModel.load()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (UsageAccessPermissionHelper.hasUsageAccessPermission(this)) {
+            viewModel.load()
+        } else {
+            startActivity(Intent(this, PermissionActivity::class.java))
+            finish()
+        }
     }
 
     private fun setupViews() {
@@ -82,7 +94,7 @@ class AppTransitionGraphActivity : AppCompatActivity() {
         val iconDataByNodeId = state.nodes.associate { node ->
             node.id to resolveIconDataUrl(node.id)
         }
-        val html = AppTransitionGraphHtmlRenderer.render(state.nodes, state.edges, iconDataByNodeId)
+        val html = AppTransitionGraphHtmlRenderer.render(this, state.nodes, state.edges, iconDataByNodeId)
         binding.webGraph.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
         showErrorIfNeeded(state.errorMessage)
     }
@@ -107,6 +119,9 @@ class AppTransitionGraphActivity : AppCompatActivity() {
     private fun resolveIconDataUrl(packageName: String): String {
         return try {
             val drawable = packageManager.getApplicationIcon(packageName)
+            if (isSystemDefaultIcon(drawable)) {
+                return ""
+            }
             val bitmap = drawable.toBitmap(width = 48, height = 48)
             val stream = ByteArrayOutputStream()
             bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
@@ -115,6 +130,12 @@ class AppTransitionGraphActivity : AppCompatActivity() {
         } catch (_: Throwable) {
             ""
         }
+    }
+
+    private fun isSystemDefaultIcon(drawable: android.graphics.drawable.Drawable): Boolean {
+        val defaultState = packageManager.defaultActivityIcon.constantState
+        val currentState = drawable.constantState
+        return defaultState != null && currentState != null && defaultState == currentState
     }
 
     override fun onDestroy() {

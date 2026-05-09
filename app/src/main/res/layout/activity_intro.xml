@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#F6F7FB"
+    android:background="@color/weekly_overview_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.onboarding.intro.IntroActivity">
@@ -11,8 +11,8 @@
     <!-- ViewPager -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/auto_dp_0"
+        android:layout_height="@dimen/auto_dp_0"
         android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layoutBottom"
@@ -22,12 +22,12 @@
     <!-- Bottom controls -->
     <LinearLayout
         android:id="@+id/layoutBottom"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="50dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:paddingBottom="@dimen/auto_dp_50"
+        android:paddingStart="@dimen/weekly_screen_bottom_padding"
+        android:paddingEnd="@dimen/weekly_screen_bottom_padding"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,25 +38,25 @@
             android:id="@+id/dotsIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            app:dotsColor="#D1D5DB"
-            app:selectedDotColor="#5C6BC0"
-            app:dotsSize="14dp"
-            app:dotsSpacing="12dp"
-            app:dotsCornerRadius="6dp"
+            android:layout_marginBottom="@dimen/auto_dp_30"
+            app:dotsColor="@color/theme_border_subtle"
+            app:selectedDotColor="@color/primary"
+            app:dotsSize="@dimen/auto_dp_14"
+            app:dotsSpacing="@dimen/weekly_title_spacing_small"
+            app:dotsCornerRadius="@dimen/auto_dp_6"
             app:dotsWidthFactor="2.8" />
 
         <!-- Next button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnNext"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:text="Next"
+            android:layout_height="@dimen/auto_dp_66"
+            android:text="@string/auto_next"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:backgroundTint="#5C6BC0"
-            android:layout_marginBottom="12dp"
+            android:textColor="@color/theme_surface_card"
+            android:textSize="@dimen/weekly_header_title_size"
+            android:backgroundTint="@color/primary"
+            android:layout_marginBottom="@dimen/weekly_title_spacing_small"
             android:background="@drawable/bg_button_rounded"/>
 
         <!-- Skip button -->
@@ -65,11 +65,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="Skip"
+            android:layout_marginTop="@dimen/weekly_trend_top_spacing"
+            android:text="@string/auto_skip"
             android:textStyle="bold"
-            android:textColor="#6B7280"
-            android:textSize="22sp"/>
+            android:textColor="@color/weekly_overview_text_secondary"
+            android:textSize="@dimen/weekly_header_title_size"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

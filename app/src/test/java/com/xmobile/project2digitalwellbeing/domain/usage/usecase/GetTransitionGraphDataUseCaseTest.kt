@@ -18,7 +18,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnric
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.TransitionExtractorImpl
 import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGeneratorImpl
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -26,7 +26,7 @@ import org.junit.Test
 class GetTransitionGraphDataUseCaseTest {
 
     @Test
-    fun `returns filtered transitions and insight for today`() = runBlocking {
+    fun `returns filtered transitions and insight for today`() = runTest {
         val repository = FakeTransitionRepository(
             sessions = listOf(
                 AppSession("app.youtube", 0L, 60_000L, 60_000L),
@@ -64,7 +64,7 @@ class GetTransitionGraphDataUseCaseTest {
     }
 
     @Test
-    fun `maps preference read failure to data access error`() = runBlocking {
+    fun `maps preference read failure to data access error`() = runTest {
         val useCase = GetTransitionGraphDataUseCase(
             repository = FakeTransitionRepository(),
             appRepository = FakeTransitionRepository(),

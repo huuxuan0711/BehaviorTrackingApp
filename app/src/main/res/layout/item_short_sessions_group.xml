@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingStart="16dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="10dp"
-    android:layout_marginBottom="12dp"
+    android:paddingStart="@dimen/weekly_row_spacing"
+    android:paddingTop="@dimen/weekly_trend_icon_container_padding"
+    android:paddingEnd="@dimen/weekly_row_spacing"
+    android:paddingBottom="@dimen/weekly_trend_icon_container_padding"
+    android:layout_marginBottom="@dimen/weekly_title_spacing_small"
     android:background="@drawable/bg_search"
     android:clickable="true"
     android:focusable="true"
@@ -15,16 +15,18 @@
 
     <TextView
         android:id="@+id/tvShortSessionsSummary"
-        android:text="Other short sessions (5 apps)"
-        android:textColor="#6B7280"
-        android:textSize="14sp"
-        android:layout_width="0dp"
+        android:text="@string/auto_other_short_sessions_5_apps"
+        android:textColor="@color/weekly_overview_text_secondary"
+        android:textSize="@dimen/auto_sp_14"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
     <ImageView
         android:id="@+id/imgExpand"
         android:src="@drawable/chevron_down"
-        android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:layout_width="@dimen/weekly_trend_top_spacing"
+        android:layout_height="@dimen/weekly_trend_top_spacing" />
 </LinearLayout>
+
+

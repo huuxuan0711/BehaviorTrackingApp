@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFFFFF"/>
-    <corners android:topLeftRadius="20dp"
-        android:topRightRadius="20dp"/>
+    <solid android:color="@color/theme_surface_card"/>
+    <corners android:topLeftRadius="@dimen/weekly_trend_top_spacing"
+        android:topRightRadius="@dimen/weekly_trend_top_spacing"/>
 </shape>
+

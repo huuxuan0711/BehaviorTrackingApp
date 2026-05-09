@@ -4,16 +4,16 @@
     <!-- ON -->
     <item android:state_checked="true">
         <shape android:shape="rectangle">
-            <solid android:color="#5C6BC0"/>
-            <corners android:radius="12dp"/>
+            <solid android:color="@color/primary"/>
+            <corners android:radius="@dimen/weekly_title_spacing_small"/>
         </shape>
     </item>
 
     <!-- OFF -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#DADCE0"/>
-            <corners android:radius="12dp"/>
+            <solid android:color="@color/auto_color_dadce0"/>
+            <corners android:radius="@dimen/weekly_title_spacing_small"/>
         </shape>
     </item>
 

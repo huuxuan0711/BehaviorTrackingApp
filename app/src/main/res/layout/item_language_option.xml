@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/weekly_row_spacing">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/ivFlag"
+        android:layout_width="@dimen/auto_dp_32"
+        android:layout_height="@dimen/weekly_screen_bottom_padding"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="@dimen/auto_dp_4"
+        android:src="@drawable/globe" />
+
+    <TextView
+        android:id="@+id/tvLanguageName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/weekly_row_spacing"
+        android:textColor="@color/weekly_overview_text_primary"
+        android:textSize="@dimen/weekly_body_text_size"
+        android:textStyle="bold"
+        tools:text="English" />
+
+</LinearLayout>
+

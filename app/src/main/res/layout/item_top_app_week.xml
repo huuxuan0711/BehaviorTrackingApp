@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:paddingVertical="8dp"
+    android:paddingVertical="@dimen/weekly_small_icon_padding"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <!-- Icon -->
     <FrameLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#F6F7FB"
+        android:layout_width="@dimen/auto_dp_50"
+        android:layout_height="@dimen/auto_dp_50"
+        android:backgroundTint="@color/weekly_overview_background"
         android:background="@drawable/bg_app_icon">
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="@dimen/auto_dp_28"
+            android:layout_height="@dimen/auto_dp_28"
             android:src="@drawable/house"
             android:layout_gravity="center" />
     </FrameLayout>
@@ -24,26 +24,26 @@
     <!-- Info -->
     <LinearLayout
         android:orientation="vertical"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="@dimen/weekly_title_spacing_small"
+        android:layout_marginEnd="@dimen/weekly_trend_top_spacing"
         android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvName"
-            android:text="Instagram"
+            android:text="@string/auto_instagram"
             android:textStyle="bold"
-            android:textColor="#1A1A1A"
-            android:textSize="16sp"
+            android:textColor="@color/weekly_overview_text_primary"
+            android:textSize="@dimen/weekly_body_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tvTime"
-            android:text="2h 45m"
-            android:textColor="#6B7280"
-            android:textSize="14sp"
+            android:text="@string/auto_text_2h_45m"
+            android:textColor="@color/weekly_overview_text_secondary"
+            android:textSize="@dimen/auto_sp_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -53,7 +53,8 @@
         android:id="@+id/viewDot"
         android:layout_gravity="center_vertical"
         android:background="@drawable/bg_dot"
-        android:layout_width="6dp"
-        android:layout_height="6dp"/>
+        android:layout_width="@dimen/auto_dp_6"
+        android:layout_height="@dimen/auto_dp_6"/>
 
 </LinearLayout>
+

@@ -6,7 +6,12 @@ data class UsageAnalysisPreferences(
     val lateNightStartHour: Int,
     val longSessionThresholdMillis: Long,
     val trackAllCategories: Boolean,
-    val insightSensitivity: InsightSensitivity
+    val insightSensitivity: InsightSensitivity,
+    val insightNotificationsEnabled: Boolean = true,
+    val darkModeEnabled: Boolean = false,
+    val weeklyReportsEnabled: Boolean = true,
+    val languageCode: String = "en",
+    val isCloudBackupEnabled: Boolean = false
 ) {
     companion object {
         const val DEFAULT_LATE_NIGHT_START_HOUR = 22
@@ -18,7 +23,11 @@ data class UsageAnalysisPreferences(
             lateNightStartHour = DEFAULT_LATE_NIGHT_START_HOUR,
             longSessionThresholdMillis = DEFAULT_LONG_SESSION_THRESHOLD_MINUTES * 60L * 1000L,
             trackAllCategories = true,
-            insightSensitivity = InsightSensitivity.MEDIUM
+            insightSensitivity = InsightSensitivity.MEDIUM,
+            insightNotificationsEnabled = true,
+            darkModeEnabled = false,
+            weeklyReportsEnabled = true,
+            isCloudBackupEnabled = false
         )
     }
 }

@@ -3,14 +3,17 @@ package com.xmobile.project2digitalwellbeing.domain.apps.usecase
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
 import com.xmobile.project2digitalwellbeing.domain.apps.model.toFocusGroup
 import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
+import com.xmobile.project2digitalwellbeing.domain.usage.model.shouldIncludeCategory
 import javax.inject.Inject
 
 class GetAppCategoryDataUseCase @Inject constructor(
     private val usageRepository: UsageRepository,
     private val appRepository: AppRepository,
+    private val usagePreferencesRepository: UsagePreferencesRepository,
     private val aggregator: UsageAggregator
 ) {
     suspend operator fun invoke(): Map<AppFocusGroup, List<AppUsageStat>> {
@@ -19,6 +22,7 @@ class GetAppCategoryDataUseCase @Inject constructor(
 
         val sessions = usageRepository.getSessions(startOfDayMillis, nowMillis)
         val allAppMetadataList = appRepository.getAllAppMetadata()
+        val preferences = usagePreferencesRepository.getUsageAnalysisPreferences()
         val allAppMetadataMap = allAppMetadataList.associateBy { it.packageName }
 
         val usageStats = aggregator.buildAppUsageStats(sessions, allAppMetadataMap)
@@ -38,6 +42,7 @@ class GetAppCategoryDataUseCase @Inject constructor(
         val missingFromMetadata = usageStats.filter { it.packageName !in knownPackages }
 
         val finalStats = (allAppsWithUsage + missingFromMetadata)
+            .filter { preferences.shouldIncludeCategory(it.category) }
             .sortedWith(
                 compareByDescending<AppUsageStat> { it.totalTimeMillis }
                     .thenBy { it.appName ?: it.packageName }

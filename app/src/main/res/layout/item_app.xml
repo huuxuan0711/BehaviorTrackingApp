@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:padding="@dimen/weekly_title_spacing_small"
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <!-- Icon -->
     <FrameLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:backgroundTint="#F6F7FB"
+        android:layout_width="@dimen/auto_dp_60"
+        android:layout_height="@dimen/auto_dp_60"
+        android:backgroundTint="@color/weekly_overview_background"
         android:background="@drawable/bg_app_icon">
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="@dimen/auto_dp_28"
+            android:layout_height="@dimen/auto_dp_28"
             android:src="@drawable/house"
             android:layout_gravity="center" />
     </FrameLayout>
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp">
+        android:layout_marginEnd="@dimen/weekly_trend_icon_container_padding"
+        android:layout_marginStart="@dimen/weekly_trend_icon_container_padding">
 
         <TextView
             android:id="@+id/tvName"
@@ -37,31 +37,31 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="Instagram"
+            android:text="@string/auto_instagram"
             android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/weekly_section_title_size"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/auto_dp_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                app:tint="#A8AFB9"
+                android:layout_width="@dimen/auto_dp_14"
+                android:layout_height="@dimen/auto_dp_14"
+                app:tint="@color/weekly_overview_text_secondary"
                 android:src="@drawable/clock"/>
 
             <TextView
                 android:id="@+id/tvUsage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="2h 15m today"
-                android:textColor="#9CA3B7"
-                android:textSize="14sp"/>
+                android:layout_marginStart="@dimen/auto_dp_5"
+                android:text="@string/auto_text_2h_15m_today"
+                android:textColor="@color/weekly_overview_text_secondary"
+                android:textSize="@dimen/auto_sp_14"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -70,10 +70,10 @@
         android:id="@+id/layoutCategory"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="10dp"
+        android:paddingTop="@dimen/weekly_trend_icon_container_padding"
+        android:paddingBottom="@dimen/weekly_trend_icon_container_padding"
+        android:paddingStart="@dimen/auto_dp_15"
+        android:paddingEnd="@dimen/weekly_trend_icon_container_padding"
         android:background="@drawable/bg_chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -85,18 +85,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="Productive"
-            android:textColor="#407D32"
+            android:text="@string/auto_productive"
+            android:textColor="@color/theme_success_accent"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="@dimen/weekly_body_text_size" />
 
         <ImageView
             android:id="@+id/imgArrow"
             android:src="@drawable/chevron_down"
-            app:tint="#407D32"
-            android:layout_marginStart="6dp"
-            android:layout_width="18dp"
-            android:layout_height="18dp"/>
+            app:tint="@color/theme_success_accent"
+            android:layout_marginStart="@dimen/auto_dp_6"
+            android:layout_width="@dimen/auto_dp_18"
+            android:layout_height="@dimen/auto_dp_18"/>
     </LinearLayout>
 
 </LinearLayout>
+
+

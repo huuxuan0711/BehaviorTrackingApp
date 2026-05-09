@@ -2,12 +2,14 @@ package com.xmobile.project2digitalwellbeing.presentation.analysis.latenight
 
 import android.content.Context
 import android.graphics.Color
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp.RoundedBarChartRenderer
 
 internal object LateNightChartConfigurator {
@@ -15,6 +17,7 @@ internal object LateNightChartConfigurator {
     private val LABELS = listOf("10PM", "11PM", "12AM", "1AM", "2AM", "3AM", "4AM", "5AM")
 
     fun configure(chart: BarChart, context: Context) {
+        val secondaryTextColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
         chart.apply {
             description.isEnabled = false
             legend.isEnabled = false
@@ -24,7 +27,7 @@ internal object LateNightChartConfigurator {
             setDrawGridBackground(false)
             setDrawBarShadow(false)
             axisRight.isEnabled = false
-            setNoDataText("No usage data")
+            setNoDataText(context.getString(R.string.auto_no_usage_data))
             extraBottomOffset = 12f // Thêm khoảng trống ở dưới để nhãn không bị cắt
             
             axisLeft.apply {
@@ -34,10 +37,11 @@ internal object LateNightChartConfigurator {
                 labelCount = 5
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
-                textColor = Color.GRAY
+                textColor = secondaryTextColor
                 textSize = 12f
                 valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = "${value.toInt()}m"
+                    override fun getFormattedValue(value: Float): String = 
+                        context.getString(R.string.auto_unit_m_placeholder, value.toInt())
                 }
             }
             
@@ -49,7 +53,7 @@ internal object LateNightChartConfigurator {
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
                 textSize = 12f
-                textColor = Color.GRAY
+                textColor = secondaryTextColor
                 yOffset = 8f // Giảm từ 12f xuống 8f để dịch nhãn lên gần cột hơn
 
                 valueFormatter = object : ValueFormatter() {
@@ -67,15 +71,18 @@ internal object LateNightChartConfigurator {
         }
     }
 
-    fun render(chart: BarChart, values: List<Float>) {
+    fun render(chart: BarChart, context: Context, values: List<Float>) {
         val peakValue = values.maxOrNull() ?: 0f
         val entries = values.mapIndexed { index, value -> BarEntry(index.toFloat(), value) }
         
+        val peakColor = ContextCompat.getColor(context, R.color.auto_color_fb8c00)
+        val defaultColor = ContextCompat.getColor(context, R.color.primary)
+
         val colors = values.map { value ->
             if (value > 0f && value == peakValue) {
-                Color.parseColor("#FB8C00") // Orange for peak
+                peakColor
             } else {
-                Color.parseColor("#5C6BC0") // Indigo for others
+                defaultColor
             }
         }
 

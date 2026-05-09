@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.FragmentDashboardBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.daily.DailyOverviewActivity
@@ -130,12 +131,12 @@ class DashboardFragment : Fragment() {
         binding.txtKeyInsight.text = state.insightSummaryText
         binding.refreshLayout.isRefreshing = state.isLoading
 
-        binding.valueScreenTime.text = (state.dailyUsage?.totalScreenTimeMillis ?: 0L).toDashboardDurationText()
+        binding.valueScreenTime.text = (state.dailyUsage?.totalScreenTimeMillis ?: 0L).toDashboardDurationText(requireContext())
         binding.valueLongestSession.text = state.dailyUsage
             ?.sessions
             ?.maxOfOrNull { it.durationMillis }
-            ?.toDashboardDurationText()
-            ?: "0m"
+            ?.toDashboardDurationText(requireContext())
+            ?: context?.getString(R.string.auto_text_0m) ?: "0m"
         binding.valueLateNight.text = state.lateNightRatioText
 
         val topApps = state.topApps.toTopAppUiModels(requireContext())

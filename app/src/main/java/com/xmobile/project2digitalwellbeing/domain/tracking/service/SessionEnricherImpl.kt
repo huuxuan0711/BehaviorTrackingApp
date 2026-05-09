@@ -5,6 +5,7 @@ import com.xmobile.project2digitalwellbeing.domain.apps.model.AppMetadata
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
+import com.xmobile.project2digitalwellbeing.domain.usage.model.shouldIncludeCategory
 import java.time.Instant
 import java.time.ZoneId
 import javax.inject.Inject
@@ -21,15 +22,16 @@ class SessionEnricherImpl @Inject constructor() : SessionEnricher {
         return sessions.map { session ->
             val hourOfDay = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).hour
             val metadata = appMetadataByPackage[session.packageName]
+            val category = metadata?.reportingCategory ?: AppCategory.UNKNOWN
 
             EnrichedSession(
                 session = session,
                 appName = metadata?.appName,
-                category = metadata?.reportingCategory ?: AppCategory.UNKNOWN,
+                category = category,
                 hourOfDay = hourOfDay,
                 isLateNight = hourOfDay >= preferences.lateNightStartHour ||
                     hourOfDay < UsageAnalysisPreferences.DEFAULT_LATE_NIGHT_END_HOUR
             )
-        }
+        }.filter { preferences.shouldIncludeCategory(it.category) }
     }
 }

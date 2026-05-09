@@ -114,8 +114,9 @@ private class AppCategoryOptionAdapter(
         private val name: TextView = itemView.findViewById(R.id.tvCategoryName)
 
         fun bind(item: AppCategory, selected: Boolean, onClick: (AppCategory) -> Unit) {
-            val color = item.toFocusGroup().toBadgeColor()
-            name.text = item.toDisplayName()
+            val colorRes = item.toFocusGroup().getBadgeColorRes()
+            val color = ContextCompat.getColor(itemView.context, colorRes)
+            name.text = itemView.context.getString(item.getDisplayNameRes())
             name.setTextColor(color)
 
             val dotBg = dot.background?.mutate()

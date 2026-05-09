@@ -4,27 +4,28 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_chart_usage_marker"
-    android:elevation="8dp"
+    android:elevation="@dimen/weekly_small_icon_padding"
     android:orientation="vertical"
-    android:paddingHorizontal="14dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="14dp">
+    android:paddingHorizontal="@dimen/auto_dp_14"
+    android:paddingTop="@dimen/weekly_title_spacing_small"
+    android:paddingBottom="@dimen/auto_dp_14">
 
     <TextView
         android:id="@+id/tvHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="9PM"
-        android:textColor="#111111"
-        android:textSize="16sp"
+        android:text="@string/auto_text_9pm"
+        android:textColor="@color/weekly_overview_title"
+        android:textSize="@dimen/weekly_body_text_size"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvUsage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Usage : 85 min"
-        android:textColor="#5C6BC0"
-        android:textSize="14sp" />
+        android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
+        android:text="@string/auto_usage_85_min"
+        android:textColor="@color/primary"
+        android:textSize="@dimen/auto_sp_14" />
 </LinearLayout>
+

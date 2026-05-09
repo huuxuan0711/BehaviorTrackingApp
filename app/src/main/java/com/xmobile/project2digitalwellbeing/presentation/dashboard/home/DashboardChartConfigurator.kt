@@ -32,7 +32,7 @@ internal object DashboardChartConfigurator {
             extraRightOffset = 12f
             extraBottomOffset = 12f
             axisRight.isEnabled = false
-            setNoDataText("No hourly data yet")
+            setNoDataText(context.getString(R.string.auto_no_hourly_data))
             axisLeft.apply {
                 axisMinimum = 0f
                 textColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
@@ -42,7 +42,8 @@ internal object DashboardChartConfigurator {
                 setDrawZeroLine(false)
                 labelCount = 5
                 valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = "${value.toInt()}m"
+                    override fun getFormattedValue(value: Float): String = 
+                        context.getString(R.string.auto_unit_m_placeholder, value.toInt())
                 }
             }
             xAxis.apply {
@@ -82,10 +83,10 @@ internal object DashboardChartConfigurator {
 
                 val hour = hourlyUsage[index].hourOfDay
                 return when {
-                    hour == 0 -> "12AM"
-                    hour == 12 -> "12PM"
-                    hour > 12 -> "${hour - 12}PM"
-                    else -> "${hour}AM"
+                    hour == 0 -> context.getString(R.string.auto_time_12am)
+                    hour == 12 -> context.getString(R.string.auto_time_12pm)
+                    hour > 12 -> context.getString(R.string.auto_time_pm_placeholder, hour - 12)
+                    else -> context.getString(R.string.auto_time_am_placeholder, hour)
                 }
             }
         }

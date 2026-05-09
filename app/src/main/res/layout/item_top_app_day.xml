@@ -4,32 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:paddingTop="@dimen/weekly_small_icon_padding"
+    android:paddingBottom="@dimen/weekly_small_icon_padding"
     android:gravity="center_vertical">
 
     <!-- Icon container -->
     <FrameLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#F6F7FB"
+        android:layout_width="@dimen/auto_dp_50"
+        android:layout_height="@dimen/auto_dp_50"
+        android:backgroundTint="@color/weekly_overview_background"
         android:background="@drawable/bg_app_icon">
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/weekly_screen_bottom_padding"
+            android:layout_height="@dimen/weekly_screen_bottom_padding"
             android:layout_gravity="center"
             android:src="@drawable/house"/>
     </FrameLayout>
 
     <!-- Content -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="12dp">
+        android:layout_marginStart="@dimen/weekly_title_spacing_small">
 
         <!-- Name + time -->
         <LinearLayout
@@ -39,36 +39,37 @@
 
             <TextView
                 android:id="@+id/tvName"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/auto_dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Instagram"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:text="@string/auto_instagram"
+                android:textSize="@dimen/weekly_body_text_size"
+                android:textColor="@color/weekly_overview_text_primary"/>
 
             <TextView
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2h 15m"
-                android:textSize="16sp"
-                android:textColor="#888888"/>
+                android:text="@string/auto_text_2h_15m"
+                android:textSize="@dimen/weekly_body_text_size"
+                android:textColor="@color/weekly_overview_text_secondary"/>
         </LinearLayout>
 
         <!-- Progress -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_marginTop="5dp"
-            android:backgroundTint="#F3F4F6"
+            android:layout_height="@dimen/weekly_trend_icon_container_padding"
+            android:layout_marginTop="@dimen/auto_dp_5"
+            android:backgroundTint="@color/theme_surface_subtle"
             android:background="@drawable/bg_progress_bg">
 
             <View
                 android:id="@+id/viewProgress"
-                android:layout_width="100dp"
+                android:layout_width="@dimen/auto_dp_100"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_progress_fill"/>
         </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>
+

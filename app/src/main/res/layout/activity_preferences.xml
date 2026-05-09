@@ -12,18 +12,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/weekly_row_spacing">
 
-        <!-- HEADER -->
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Preferences"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#1A1A1A"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/auto_dp_30"
+                android:layout_height="@dimen/auto_dp_30"
+                android:src="@drawable/arrow_left"/>
+
+            <!-- HEADER -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/auto_preferences"
+                android:textSize="@dimen/auto_sp_26"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textColor="@color/weekly_overview_text_primary"/>
+        </LinearLayout>
 
         <!-- ================= ANALYSIS SETTINGS ================= -->
         <LinearLayout
@@ -31,30 +45,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_search"
-            android:elevation="2dp"
-            android:layout_marginBottom="16dp">
+            android:elevation="@dimen/weekly_card_elevation"
+            android:layout_marginBottom="@dimen/weekly_row_spacing">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Analysis Settings"
-                android:textColor="#1A1A1A"
-                android:textSize="22sp"
+                android:text="@string/auto_analysis_settings"
+                android:textColor="@color/weekly_overview_text_primary"
+                android:textSize="@dimen/weekly_header_title_size"
                 android:textStyle="bold"
-                android:padding="16dp"/>
+                android:padding="@dimen/weekly_row_spacing"/>
 
             <!-- Late Night Threshold -->
             <LinearLayout
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:src="@drawable/clock"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -64,22 +78,22 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="Late Night Threshold"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:text="@string/auto_late_night_threshold"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Define when app usage is considered late night"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"
-                        android:layout_marginBottom="10dp"/>
+                        android:text="@string/auto_define_when_app_usage_is_considered_late_night"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"/>
 
                     <SeekBar
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/weekly_trend_top_spacing"
                         android:id="@+id/seekLateNight"
                         android:layout_width="match_parent"
                         android:max="5"/>
@@ -88,31 +102,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="4dp">
+                        android:layout_marginTop="@dimen/auto_dp_4">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="8:00 PM"
-                            android:textSize="14sp"/>
+                            android:text="@string/auto_text_8_00_pm"
+                            android:textSize="@dimen/auto_sp_14"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tvLateNightValue"
                             android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:text="10:00 PM"
-                            android:textColor="#5C6BC0"/>
+                            android:textSize="@dimen/weekly_body_text_size"
+                            android:text="@string/auto_text_10_00_pm"
+                            android:textColor="@color/primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="1:00 AM"
-                            android:textSize="14sp"/>
+                            android:text="@string/auto_text_1_00_am"
+                            android:textSize="@dimen/auto_sp_14"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -120,16 +134,16 @@
 
             <!-- Session Length -->
             <LinearLayout
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:src="@drawable/smartphone"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -139,19 +153,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Session Length Threshold"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_session_length_threshold"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Set when a session is considered long"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"
-                        android:layout_marginBottom="10dp"/>
+                        android:text="@string/auto_set_when_a_session_is_considered_long"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"/>
 
                     <SeekBar
                         android:layout_height="wrap_content"
@@ -163,31 +177,31 @@
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
-                        android:layout_marginTop="4dp">
+                        android:layout_marginTop="@dimen/auto_dp_4">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="10 min"
-                            android:textSize="14sp"/>
+                            android:text="@string/auto_text_10_min"
+                            android:textSize="@dimen/auto_sp_14"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tvSessionValue"
                             android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:text="20 minutes"
-                            android:textColor="#5C6BC0"/>
+                            android:textSize="@dimen/weekly_body_text_size"
+                            android:text="@string/auto_text_20_minutes"
+                            android:textColor="@color/primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="30 min"
-                            android:textSize="14sp"/>
+                            android:text="@string/auto_text_30_min"
+                            android:textSize="@dimen/auto_sp_14"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -197,56 +211,55 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:src="@drawable/trending_up"
-                    app:tint="#5C6BC0"
+                    app:tint="@color/primary"
                     android:layout_gravity="top"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/auto_dp_0"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="App Category Tracking"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_app_category_tracking"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Include all app categories in analysis"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_include_all_app_categories_in_analysis"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
                     app:track="@drawable/switch_track"
                     app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
-                    app:switchMinWidth="44dp"
-                    app:switchPadding="0dp"
-                    android:minHeight="24dp"
-                    android:minWidth="44dp" />
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
-
         </LinearLayout>
 
         <!-- ================= DISPLAY SETTINGS ================= -->
@@ -255,180 +268,230 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_search"
-            android:elevation="2dp"
-            android:layout_marginBottom="16dp">
+            android:elevation="@dimen/weekly_card_elevation"
+            android:layout_marginBottom="@dimen/weekly_row_spacing">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Display Settings"
-                android:textColor="#1A1A1A"
-                android:textSize="22sp"
+                android:text="@string/auto_display_settings"
+                android:textColor="@color/weekly_overview_text_primary"
+                android:textSize="@dimen/weekly_header_title_size"
                 android:textStyle="bold"
-                android:padding="16dp"/>
+                android:padding="@dimen/weekly_row_spacing"/>
 
             <!-- Insight Notifications -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:src="@drawable/bell"
-                    app:tint="#5C6BC0"
+                    app:tint="@color/primary"
                     android:layout_gravity="top"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/auto_dp_0"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Insight Notifications"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_insight_notifications"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Get notified about behavior patterns"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_get_notified_about_behavior_patterns"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchInsight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
                     app:track="@drawable/switch_track"
                     app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
-                    app:switchMinWidth="44dp"
-                    app:switchPadding="0dp"
-                    android:minHeight="24dp"
-                    android:minWidth="44dp" />
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
 
             <!-- Dark Mode -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:src="@drawable/moon"
-                    app:tint="#5C6BC0"
+                    app:tint="@color/primary"
                     android:layout_gravity="top"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/auto_dp_0"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dark Mode"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_dark_mode"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Use dark theme throughout the app"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_use_dark_theme_throughout_the_app"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchDarkMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
                     app:track="@drawable/switch_track"
                     app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
-                    app:switchMinWidth="44dp"
-                    app:switchPadding="0dp"
-                    android:minHeight="24dp"
-                    android:minWidth="44dp" />
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
 
             <!-- Weekly Reports -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:src="@drawable/file_text"
-                    app:tint="#5C6BC0"
+                    app:tint="@color/primary"
                     android:layout_gravity="top"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/auto_dp_0"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Weekly Reports"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_weekly_reports"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Receive weekly usage summaries"
-                        android:textSize="16sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_receive_weekly_usage_summaries"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchWeekly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
                     app:track="@drawable/switch_track"
                     app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
-                    app:switchMinWidth="44dp"
-                    app:switchPadding="0dp"
-                    android:minHeight="24dp"
-                    android:minWidth="44dp" />
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
 
+            <!-- App Language -->
+            <LinearLayout
+                android:id="@+id/layoutLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/weekly_row_spacing"
+                android:orientation="horizontal"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:src="@drawable/languages"
+                    app:tint="@color/primary"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/auto_dp_0"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auto_app_language"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvCurrentLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auto_language_english"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:src="@drawable/chevron_right"
+                    android:layout_marginEnd="@dimen/weekly_trend_icon_container_padding"
+                    android:layout_width="@dimen/auto_dp_28"
+                    android:layout_height="@dimen/auto_dp_28"/>
+            </LinearLayout>
         </LinearLayout>
 
         <!-- ================= SENSITIVITY ================= -->
@@ -437,25 +500,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_search"
-            android:elevation="2dp"
-            android:padding="16dp">
+            android:elevation="@dimen/weekly_card_elevation"
+            android:padding="@dimen/weekly_row_spacing">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Insight Sensitivity"
-                android:layout_marginBottom="10dp"
-                android:textSize="18sp"
-                android:textColor="#1A1A1A"
+                android:text="@string/auto_insight_sensitivity"
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                android:textSize="@dimen/weekly_section_title_size"
+                android:textColor="@color/weekly_overview_text_primary"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Control how sensitive pattern detection is"
-                android:textSize="16sp"
-                android:textColor="#6B7280"
-                android:layout_marginBottom="10dp"/>
+                android:text="@string/auto_control_how_sensitive_pattern_detection_is"
+                android:textSize="@dimen/weekly_body_text_size"
+                android:textColor="@color/weekly_overview_text_secondary"
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"/>
 
             <SeekBar
                 android:layout_height="wrap_content"
@@ -467,34 +530,36 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="@dimen/weekly_small_icon_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Low"
-                    android:textSize="14sp"/>
+                    android:text="@string/auto_low"
+                    android:textSize="@dimen/auto_sp_14"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvSensitivityValue"
                     android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:text="Medium"
-                    android:textColor="#5C6BC0"/>
+                    android:textSize="@dimen/weekly_body_text_size"
+                    android:text="@string/auto_medium"
+                    android:textColor="@color/primary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="High"
-                    android:textSize="14sp"/>
+                    android:text="@string/auto_high"
+                    android:textSize="@dimen/auto_sp_14"/>
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
+
+

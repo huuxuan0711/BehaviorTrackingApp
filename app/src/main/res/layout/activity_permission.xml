@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#F6F7FB"
+    android:background="@color/weekly_overview_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.onboarding.permission.PermissionActivity">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollContent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/auto_dp_0"
+        android:layout_height="@dimen/auto_dp_0"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/weekly_row_spacing"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layoutButtons"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,12 +28,12 @@
             <!-- ================= TOP: Illustration ================= -->
             <ImageView
                 android:id="@+id/imgIllustration"
-                android:layout_width="198dp"
-                android:layout_height="198dp"
+                android:layout_width="@dimen/auto_dp_198"
+                android:layout_height="@dimen/auto_dp_198"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="16dp"
-                android:contentDescription="Usage illustration"
+                android:layout_marginTop="@dimen/weekly_icon_button_size_small"
+                android:layout_marginBottom="@dimen/weekly_row_spacing"
+                android:contentDescription="@string/auto_usage_illustration"
                 android:src="@drawable/ic_usage_access" />
 
             <!-- ================= CENTER: Content Card ================= -->
@@ -41,38 +41,38 @@
                 android:id="@+id/cardContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+                android:layout_marginBottom="@dimen/weekly_row_spacing"
                 android:backgroundTint="@color/white"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp">
+                app:cardCornerRadius="@dimen/weekly_screen_bottom_padding"
+                app:cardElevation="@dimen/weekly_card_elevation"
+                app:strokeWidth="@dimen/auto_dp_0">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="30dp">
+                    android:padding="@dimen/auto_dp_30">
 
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:text="Allow Usage Access"
-                        android:textColor="#1A1A1A"
-                        android:textSize="22sp"
+                        android:layout_marginBottom="@dimen/weekly_trend_top_spacing"
+                        android:text="@string/auto_allow_usage_access"
+                        android:textColor="@color/weekly_overview_text_primary"
+                        android:textSize="@dimen/weekly_header_title_size"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:lineSpacingExtra="4dp"
-                        android:text="To understand your digital habits, the app needs permission to view app usage statistics. This allows us to analyze usage sessions and provide meaningful insights."
-                        android:textColor="#6B7280"
-                        android:textSize="18sp" />
+                        android:layout_marginBottom="@dimen/weekly_trend_top_spacing"
+                        android:lineSpacingExtra="@dimen/auto_dp_4"
+                        android:text="@string/auto_to_understand_your_digital_habits_the_app_needs_permission_to_view_app_usage_statistics_this_allows_us_to_analyze_usage_sessions_and_provide_meaningful_insights"
+                        android:textColor="@color/weekly_overview_text_secondary"
+                        android:textSize="@dimen/weekly_section_title_size" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -81,22 +81,22 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="8dp"
+                            android:layout_width="@dimen/auto_dp_18"
+                            android:layout_height="@dimen/auto_dp_18"
+                            android:layout_marginTop="@dimen/auto_dp_4"
+                            android:layout_marginEnd="@dimen/weekly_small_icon_padding"
                             android:alpha="0.6"
                             android:src="@drawable/ic_info"
-                            app:tint="#5C6BC0" />
+                            app:tint="@color/primary" />
 
                         <TextView
                             android:id="@+id/tvNote"
-                            android:layout_width="0dp"
+                            android:layout_width="@dimen/auto_dp_0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="We never access personal content or messages."
-                            android:textColor="#6B7280"
-                            android:textSize="16sp" />
+                            android:text="@string/auto_we_never_access_personal_content_or_messages"
+                            android:textColor="@color/weekly_overview_text_secondary"
+                            android:textSize="@dimen/weekly_body_text_size" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -106,11 +106,11 @@
     <!-- ================= BOTTOM: Buttons ================= -->
     <LinearLayout
         android:id="@+id/layoutButtons"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+        android:layout_marginBottom="@dimen/weekly_screen_bottom_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -119,26 +119,28 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnOpenSettings"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:text="Open Settings"
-            android:textSize="18sp"
+            android:layout_height="@dimen/auto_dp_66"
+            android:text="@string/auto_open_settings"
+            android:textSize="@dimen/weekly_section_title_size"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="12dp"
-            app:cornerRadius="28dp"
-            android:backgroundTint="#5C6BC0"/>
+            android:layout_marginBottom="@dimen/weekly_title_spacing_small"
+            app:cornerRadius="@dimen/auto_dp_28"
+            android:backgroundTint="@color/primary"/>
 
         <!-- Secondary Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMaybeLater"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Maybe Later"
-            android:textSize="18sp"
+            android:layout_height="@dimen/weekly_selector_min_height"
+            android:text="@string/auto_maybe_later"
+            android:textSize="@dimen/weekly_section_title_size"
             android:textAllCaps="false"
-            android:textColor="#6B7280"
-            app:cornerRadius="28dp"
+            android:textColor="@color/weekly_overview_text_secondary"
+            app:cornerRadius="@dimen/auto_dp_28"
             android:backgroundTint="@android:color/transparent"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

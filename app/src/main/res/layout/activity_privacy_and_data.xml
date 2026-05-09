@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7FB"
+    android:background="@color/weekly_overview_background"
     tools:context=".presentation.settings.privacy.PrivacyAndDataActivity">
 
     <LinearLayout
@@ -18,80 +18,87 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:paddingTop="48dp"
-            android:paddingBottom="24dp">
+            android:paddingStart="@dimen/weekly_screen_bottom_padding"
+            android:paddingEnd="@dimen/weekly_screen_bottom_padding"
+            android:paddingTop="@dimen/weekly_icon_button_size"
+            android:paddingBottom="@dimen/weekly_screen_bottom_padding">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/auto_dp_30"
+                android:layout_height="@dimen/auto_dp_30"
+                android:layout_marginBottom="@dimen/weekly_icon_padding"
+                android:src="@drawable/arrow_left"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Privacy &amp; Data"
-                android:textSize="26sp"
+                android:text="@string/auto_privacy_amp_data"
+                android:textSize="@dimen/auto_sp_26"
                 android:textStyle="bold"
-                android:textColor="#1A1A1A"/>
+                android:textColor="@color/weekly_overview_text_primary"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your privacy matters. All usage data is analyzed locally on your device."
-                android:textSize="16sp"
-                android:textColor="#6B7280"
-                android:layout_marginTop="8dp"/>
+                android:text="@string/auto_your_privacy_matters_all_usage_data_is_analyzed_locally_on_your_device"
+                android:textSize="@dimen/weekly_body_text_size"
+                android:textColor="@color/weekly_overview_text_secondary"
+                android:layout_marginTop="@dimen/weekly_small_icon_padding"/>
         </LinearLayout>
 
         <!-- DATA WE USE -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp"
+            android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+            android:layout_marginBottom="@dimen/weekly_row_spacing"
+            android:elevation="@dimen/weekly_card_elevation"
             android:orientation="vertical"
-            android:padding="20dp"
+            android:padding="@dimen/weekly_trend_top_spacing"
             android:background="@drawable/bg_search">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="@dimen/weekly_row_spacing">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#EEF0FF"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/theme_surface_subtle"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="@dimen/auto_dp_18"
+                        android:layout_height="@dimen/auto_dp_18"
                         android:layout_gravity="center"
                         android:src="@drawable/chart_column"
-                        app:tint="#5C6BC0" />
+                        app:tint="@color/primary" />
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Data We Use"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_data_we_use"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="To help you understand your digital habits"
-                        android:textSize="14sp"
-                        android:textColor="#6B7280"/>
+                        android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
+                        android:text="@string/auto_to_help_you_understand_your_digital_habits"
+                        android:textSize="@dimen/auto_sp_14"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -100,42 +107,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/clock"
-                    app:tint="#5C6BC0" />
+                    app:tint="@color/primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="App usage statistics"
-                    android:textSize="14sp"
-                    android:textColor="#1A1A1A"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_app_usage_statistics"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_primary"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/chart_column"
-                    app:tint="#5C6BC0" />
+                    app:tint="@color/primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Session duration"
-                    android:textSize="14sp"
-                    android:textColor="#1A1A1A"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_session_duration"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_primary"/>
             </LinearLayout>
 
             <LinearLayout
@@ -144,18 +151,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/trending_up"
-                    app:tint="#5C6BC0" />
+                    app:tint="@color/primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="App transition patterns"
-                    android:textSize="14sp"
-                    android:textColor="#1A1A1A"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_app_transition_patterns"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_primary"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -164,54 +171,54 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+            android:layout_marginBottom="@dimen/weekly_row_spacing"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:elevation="2dp"
+            android:padding="@dimen/weekly_trend_top_spacing"
+            android:elevation="@dimen/weekly_card_elevation"
             android:background="@drawable/bg_search">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="@dimen/weekly_row_spacing">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#E8F5E9"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/theme_success_bg"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="@dimen/auto_dp_18"
+                        android:layout_height="@dimen/auto_dp_18"
                         android:layout_gravity="center"
                         android:src="@drawable/shield"
-                         app:tint="#4CAF50" />
+                         app:tint="@color/theme_success_accent" />
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="What We Don't Collect"
-                        android:textSize="18sp"
-                        android:textColor="#1A1A1A"
+                        android:text="@string/auto_what_we_don_t_collect"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="This app only analyzes anonymous usage statistics to understand digital habits."
-                        android:textSize="14sp"
-                        android:textColor="#6B7280"/>
+                        android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
+                        android:text="@string/auto_this_app_only_analyzes_anonymous_usage_statistics_to_understand_digital_habits"
+                        android:textSize="@dimen/auto_sp_14"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -220,42 +227,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/message_circle"
-                    app:tint="#9E9E9E" />
+                    app:tint="@color/auto_color_9e9e9e" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Messages"
-                    android:textSize="14sp"
-                    android:textColor="#6B7280"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_messages"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_secondary"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/file_text"
-                    app:tint="#9E9E9E" />
+                    app:tint="@color/auto_color_9e9e9e" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Personal content"
-                    android:textSize="14sp"
-                    android:textColor="#6B7280"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_personal_content"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_secondary"/>
             </LinearLayout>
 
             <LinearLayout
@@ -264,18 +271,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/auto_dp_18"
+                    android:layout_height="@dimen/auto_dp_18"
                     android:src="@drawable/globe"
-                    app:tint="#9E9E9E" />
+                    app:tint="@color/auto_color_9e9e9e" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Browsing history"
-                    android:textSize="14sp"
-                    android:textColor="#6B7280"/>
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
+                    android:text="@string/auto_browsing_history"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_secondary"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -284,154 +291,157 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+            android:layout_marginBottom="@dimen/weekly_row_spacing"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:elevation="2dp"
+            android:padding="@dimen/weekly_trend_top_spacing"
+            android:elevation="@dimen/weekly_card_elevation"
             android:background="@drawable/bg_search">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Control"
-                android:textSize="18sp"
+                android:text="@string/auto_data_control"
+                android:textSize="@dimen/weekly_section_title_size"
                 android:textStyle="bold"
-                android:textColor="#1A1A1A"
-                android:layout_marginBottom="12dp"/>
+                android:textColor="@color/weekly_overview_text_primary"
+                android:layout_marginBottom="@dimen/weekly_title_spacing_small"/>
 
             <!-- Export -->
             <LinearLayout
+                android:id="@+id/btnExportData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:padding="@dimen/weekly_title_spacing_small"
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#EEF0FF"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/theme_surface_subtle"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/weekly_row_spacing"
+                        android:layout_height="@dimen/weekly_row_spacing"
                         android:layout_gravity="center"
                         android:src="@drawable/download"
-                         app:tint="#5C6BC0" />
+                         app:tint="@color/primary" />
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Export usage data"
+                        android:text="@string/auto_export_usage_data"
                         android:textStyle="bold"
-                        android:textColor="#1A1A1A"
-                        android:textSize="16sp" />
+                        android:textColor="@color/weekly_overview_text_primary"
+                        android:textSize="@dimen/weekly_body_text_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="Download your data as a file"
-                        android:textSize="14sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_download_your_data_as_a_file"
+                        android:textSize="@dimen/auto_sp_14"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
 
             <!-- Delete -->
             <LinearLayout
+                android:id="@+id/btnDeleteData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:padding="@dimen/weekly_title_spacing_small"
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#FFEBEE"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/auto_color_ffebee"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/weekly_row_spacing"
+                        android:layout_height="@dimen/weekly_row_spacing"
                         android:layout_gravity="center"
                         android:src="@drawable/trash_2"
-                         app:tint="#E53935" />
+                         app:tint="@color/auto_color_e53935" />
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delete all stored data"
+                        android:text="@string/auto_delete_all_stored_data"
                         android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="#1A1A1A"/>
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_primary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="Permanently remove all usage data"
-                        android:textSize="14sp"
-                        android:textColor="#6B7280"/>
+                        android:text="@string/auto_permanently_remove_all_usage_data"
+                        android:textSize="@dimen/auto_sp_14"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
 
             <!-- Reset -->
             <LinearLayout
+                android:id="@+id/btnResetAnalysis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:padding="@dimen/weekly_title_spacing_small"
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#FFF3E0"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/theme_warning_bg"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/weekly_row_spacing"
+                        android:layout_height="@dimen/weekly_row_spacing"
                         android:layout_gravity="center"
                         android:src="@drawable/rotate_ccw"
-                        app:tint="#FB8C00" />
+                        app:tint="@color/auto_color_fb8c00" />
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reset behavior analysis"
+                        android:text="@string/auto_reset_behavior_analysis"
                         android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="#1A1A1A"/>
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_primary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear insights and start fresh"
+                        android:text="@string/auto_clear_insights_and_start_fresh"
                         android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="#6B7280"/>
+                        android:textSize="@dimen/auto_sp_14"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -441,11 +451,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginHorizontal="@dimen/weekly_screen_bottom_padding"
+            android:layout_marginBottom="@dimen/auto_dp_32"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:elevation="2dp"
+            android:padding="@dimen/weekly_trend_top_spacing"
+            android:elevation="@dimen/weekly_card_elevation"
             android:background="@drawable/bg_search">
 
             <LinearLayout
@@ -455,53 +465,55 @@
                 android:gravity="center_vertical">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#E3F2FD"
+                    android:layout_width="@dimen/weekly_icon_button_size_small"
+                    android:layout_height="@dimen/weekly_icon_button_size_small"
+                    android:backgroundTint="@color/auto_color_e3f2fd"
                     android:background="@drawable/bg_circle_amber">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/weekly_row_spacing"
+                        android:layout_height="@dimen/weekly_row_spacing"
                         android:layout_gravity="center"
                         android:src="@drawable/cloud"
-                        app:tint="#2196F3" />
+                        app:tint="@color/auto_color_2196f3" />
                 </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/weekly_title_spacing_small"
                     android:layout_weight="1"
-                    android:text="Enable Cloud Backup"
+                    android:text="@string/auto_enable_cloud_backup"
                     android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="#1A1A1A"/>
+                    android:textSize="@dimen/weekly_body_text_size"
+                    android:textColor="@color/weekly_overview_text_primary"/>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchCloud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
                     app:track="@drawable/switch_track"
                     app:thumbTint="@color/white"
                     app:trackTint="@null"
                     android:showText="false"
-                    app:switchMinWidth="44dp"
-                    app:switchPadding="0dp"
-                    android:minHeight="24dp"
-                    android:minWidth="44dp" />
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="8dp"
-                android:text="Securely back up your usage insights to your account."
-                android:textSize="14sp"
-                android:textColor="#6B7280"/>
+                android:layout_marginStart="@dimen/auto_dp_52"
+                android:layout_marginTop="@dimen/weekly_small_icon_padding"
+                android:text="@string/auto_securely_back_up_your_usage_insights_to_your_account"
+                android:textSize="@dimen/auto_sp_14"
+                android:textColor="@color/weekly_overview_text_secondary"/>
         </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
+
+

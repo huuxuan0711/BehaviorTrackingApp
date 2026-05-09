@@ -10,32 +10,32 @@
     <!-- Header -->
     <LinearLayout
         android:id="@+id/headerLayout"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="16dp"
+        android:paddingStart="@dimen/weekly_screen_bottom_padding"
+        android:paddingEnd="@dimen/weekly_screen_bottom_padding"
+        android:paddingTop="@dimen/auto_dp_32"
+        android:paddingBottom="@dimen/weekly_row_spacing"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/tvTitle"
-            android:text="Analysis"
-            android:textSize="26sp"
+            android:text="@string/auto_analysis"
+            android:textSize="@dimen/auto_sp_26"
             android:textStyle="bold"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/weekly_overview_text_primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tvSubtitle"
-            android:layout_marginTop="6dp"
-            android:text="Start with app categories, then explore the patterns behind your usage."
-            android:textSize="16sp"
-            android:textColor="#6B7280"
+            android:layout_marginTop="@dimen/auto_dp_6"
+            android:text="@string/auto_start_with_app_categories_then_explore_the_patterns_behind_your_usage"
+            android:textSize="@dimen/weekly_body_text_size"
+            android:textColor="@color/weekly_overview_text_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -43,19 +43,19 @@
             android:id="@+id/tvAnalysisStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Insights work best after categories match how you personally use each app."
-            android:textColor="#6B7280"
-            android:textSize="13sp" />
+            android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
+            android:text="@string/auto_insights_work_best_after_categories_match_how_you_personally_use_each_app"
+            android:textColor="@color/weekly_overview_text_secondary"
+            android:textSize="@dimen/auto_sp_13" />
     </LinearLayout>
 
     <!-- RecyclerView Grid -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvModules"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:layout_width="@dimen/auto_dp_0"
+        android:layout_height="@dimen/auto_dp_0"
+        android:paddingStart="@dimen/weekly_screen_bottom_padding"
+        android:paddingEnd="@dimen/weekly_screen_bottom_padding"
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,11 +64,11 @@
 
     <LinearLayout
         android:id="@+id/loadingOverlay"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/auto_dp_0"
+        android:layout_height="@dimen/auto_dp_0"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#66FFFFFF"
+        android:background="@color/theme_surface_glass"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
@@ -78,15 +78,17 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ProgressBar
-            android:layout_width="36dp"
-            android:layout_height="36dp" />
+            android:layout_width="@dimen/auto_dp_36"
+            android:layout_height="@dimen/auto_dp_36" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Opening analysis..."
-            android:textColor="#374151"
-            android:textSize="14sp" />
+            android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
+            android:text="@string/auto_opening_analysis"
+            android:textColor="@color/weekly_overview_text_primary"
+            android:textSize="@dimen/auto_sp_14" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -4,16 +4,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@android:drawable/ic_menu_view"
-        android:title="Home" />
+        android:title="@string/auto_home" />
 
     <item
         android:id="@+id/nav_focus"
         android:icon="@android:drawable/ic_media_play"
-        android:title="Focus" />
+        android:title="@string/auto_focus" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="Profile" />
+        android:title="@string/auto_profile" />
 
 </menu>
+

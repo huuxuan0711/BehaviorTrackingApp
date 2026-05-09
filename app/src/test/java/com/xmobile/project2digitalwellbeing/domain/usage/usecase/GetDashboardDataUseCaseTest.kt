@@ -20,7 +20,8 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -28,7 +29,7 @@ import org.junit.Test
 class GetDashboardDataUseCaseTest {
 
     @Test
-    fun `returns dashboard data with top insight and limited top apps`() = runBlocking {
+    fun `returns dashboard data with top insight and limited top apps`() = runTest {
         val repository = FakeUsageRepository(
             sessions = listOf(
                 AppSession("app.a", 1_000L, 61_000L, 60_000L),
@@ -65,7 +66,7 @@ class GetDashboardDataUseCaseTest {
     }
 
     @Test
-    fun `maps invalid timezone to dashboard error`() = runBlocking {
+    fun `maps invalid timezone to dashboard error`() = runTest {
         val useCase = GetDashboardDataUseCase(
             repository = FakeUsageRepository(),
             appRepository = FakeUsageRepository(),
@@ -86,7 +87,7 @@ class GetDashboardDataUseCaseTest {
     }
 
     @Test
-    fun `maps session read failure to data access error`() = runBlocking {
+    fun `maps session read failure to data access error`() = runTest {
         val useCase = GetDashboardDataUseCase(
             repository = FakeUsageRepository(
                 sessionsError = UsageDataLayerException(

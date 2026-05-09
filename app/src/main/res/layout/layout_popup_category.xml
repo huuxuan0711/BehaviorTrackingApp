@@ -3,8 +3,9 @@
     android:id="@+id/rvCategoryOptions"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:maxHeight="250dp"
-    android:minWidth="180dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
+    android:maxHeight="@dimen/auto_dp_250"
+    android:minWidth="@dimen/auto_dp_180"
+    android:paddingTop="@dimen/auto_dp_6"
+    android:paddingBottom="@dimen/auto_dp_6"
     android:clipToPadding="false" />
+

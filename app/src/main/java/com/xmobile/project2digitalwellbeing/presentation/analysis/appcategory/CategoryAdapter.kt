@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.ContextCompat
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ItemCategoryBinding
 class CategoryAdapter(
@@ -38,10 +39,11 @@ class CategoryAdapter(
         }
 
         fun bind(item: CategoryGroupUiModel) {
-            binding.tvCategory.text = item.category.toDisplayName()
-            binding.tvCount.text = "${item.apps.size} apps"
+            val context = itemView.context
+            binding.tvCategory.text = context.getString(item.category.getDisplayNameRes())
+            binding.tvCount.text = context.getString(R.string.auto_text_n_apps, item.apps.size)
             
-            val color = item.category.toBadgeColor()
+            val color = ContextCompat.getColor(context, item.category.getBadgeColorRes())
             binding.tvCategory.setTextColor(color)
             val bg = binding.tvCategory.background?.mutate()
             if (bg is GradientDrawable) {

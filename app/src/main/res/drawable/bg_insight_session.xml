@@ -4,16 +4,17 @@
     <!-- Background -->
     <item>
         <shape>
-            <solid android:color="#FFFFFF"/>
-            <corners android:radius="16dp"/>
+            <solid android:color="@color/theme_surface_card"/>
+            <corners android:radius="@dimen/weekly_row_spacing"/>
         </shape>
     </item>
 
     <!-- Left border -->
-    <item android:width="4dp">
+    <item android:width="@dimen/auto_dp_4">
         <shape>
-            <solid android:color="#5C6BC0"/>
+            <solid android:color="@color/theme_accent_primary"/>
         </shape>
     </item>
 
 </layer-list>
+

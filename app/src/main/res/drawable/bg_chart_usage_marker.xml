@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@android:color/white" />
-    <corners android:radius="14dp" />
+    <corners android:radius="@dimen/auto_dp_14" />
     <padding
-        android:left="2dp"
-        android:top="2dp"
-        android:right="2dp"
-        android:bottom="2dp" />
+        android:left="@dimen/weekly_card_elevation"
+        android:top="@dimen/weekly_card_elevation"
+        android:right="@dimen/weekly_card_elevation"
+        android:bottom="@dimen/weekly_card_elevation" />
 </shape>
+
+

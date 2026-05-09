@@ -12,32 +12,32 @@
     <!-- HEADER -->
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="#FFFFFF"
+        android:padding="@dimen/weekly_row_spacing"
+        android:background="@color/theme_surface_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="@dimen/auto_dp_26"
+            android:layout_height="@dimen/auto_dp_26"
             android:src="@drawable/arrow_left"
-            app:tint="#1A1A1A" />
+            app:tint="@color/weekly_overview_text_primary" />
 
         <TextView
-            android:text="App Transitions"
-            android:textSize="22sp"
+            android:text="@string/auto_app_transitions"
+            android:textSize="@dimen/weekly_header_title_size"
             android:textStyle="bold"
-            android:textColor="#1A1A1A"
-            android:layout_marginTop="8dp"
+            android:textColor="@color/weekly_overview_text_primary"
+            android:layout_marginTop="@dimen/weekly_small_icon_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="See how you switch between apps during your phone usage."
-            android:textSize="16sp"
-            android:textColor="#6B7280"
-            android:layout_marginTop="10dp"
+            android:text="@string/auto_see_how_you_switch_between_apps_during_your_phone_usage"
+            android:textSize="@dimen/weekly_body_text_size"
+            android:textColor="@color/weekly_overview_text_secondary"
+            android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -45,41 +45,41 @@
     <!-- FILTER -->
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="#FFFFFF"
+        android:padding="@dimen/weekly_row_spacing"
+        android:background="@color/theme_surface_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <!-- TIME FILTER -->
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/weekly_small_icon_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnToday"
-                android:text="Today"
+                android:text="@string/auto_today"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
+                android:textColor="@color/theme_surface_card"
+                android:textSize="@dimen/weekly_body_text_size"
                 android:background="@drawable/bg_filter_selected"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="8dp"
+                android:paddingHorizontal="@dimen/weekly_row_spacing"
+                android:paddingVertical="@dimen/auto_dp_6"
+                android:layout_marginEnd="@dimen/weekly_small_icon_padding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnWeek"
-                android:text="Week"
+                android:text="@string/auto_week"
                 android:textAllCaps="false"
-                android:textColor="#6B7280"
-                android:textSize="16sp"
+                android:textColor="@color/weekly_overview_text_secondary"
+                android:textSize="@dimen/weekly_body_text_size"
                 android:background="@drawable/bg_filter_outline"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp"
-                android:layout_marginStart="10dp"
+                android:paddingHorizontal="@dimen/weekly_row_spacing"
+                android:paddingVertical="@dimen/auto_dp_6"
+                android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -87,7 +87,7 @@
         <!-- CATEGORY FILTER -->
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -95,41 +95,41 @@
                 android:id="@+id/btnAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Apps"
+                android:text="@string/auto_all_apps"
                 android:textAllCaps="false"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
+                android:textSize="@dimen/auto_sp_14"
+                android:textColor="@color/theme_surface_card"
                 android:background="@drawable/bg_filter_selected"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:layout_marginEnd="6dp"/>
+                android:paddingHorizontal="@dimen/weekly_title_spacing_small"
+                android:paddingVertical="@dimen/auto_dp_4"
+                android:layout_marginEnd="@dimen/auto_dp_6"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnProductive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Productive"
+                android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
+                android:text="@string/auto_productive"
                 android:textAllCaps="false"
-                android:textSize="14sp"
-                android:textColor="#6B7280"
+                android:textSize="@dimen/auto_sp_14"
+                android:textColor="@color/weekly_overview_text_secondary"
                 android:background="@drawable/bg_filter_outline"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:layout_marginEnd="6dp"/>
+                android:paddingHorizontal="@dimen/weekly_title_spacing_small"
+                android:paddingVertical="@dimen/auto_dp_4"
+                android:layout_marginEnd="@dimen/auto_dp_6"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnDistracting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Distracting"
+                android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
+                android:text="@string/auto_distracting"
                 android:textAllCaps="false"
-                android:textSize="14sp"
-                android:textColor="#6B7280"
+                android:textSize="@dimen/auto_sp_14"
+                android:textColor="@color/weekly_overview_text_secondary"
                 android:background="@drawable/bg_filter_outline"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"/>
+                android:paddingHorizontal="@dimen/weekly_title_spacing_small"
+                android:paddingVertical="@dimen/auto_dp_4"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -137,102 +137,102 @@
     <!-- CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/auto_dp_0"
         android:layout_weight="1"
         android:fillViewport="true">
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="@dimen/weekly_row_spacing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <!-- GRAPH CARD -->
             <LinearLayout
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="@dimen/weekly_row_spacing"
                 android:background="@drawable/bg_search"
-                android:elevation="2dp"
+                android:elevation="@dimen/weekly_card_elevation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Transition Graph"
-                    android:textSize="18sp"
+                    android:text="@string/auto_transition_graph"
+                    android:textSize="@dimen/weekly_section_title_size"
                     android:textStyle="bold"
-                    android:textColor="#1A1A1A"
-                    android:layout_marginBottom="4dp"/>
+                    android:textColor="@color/weekly_overview_text_primary"
+                    android:layout_marginBottom="@dimen/auto_dp_4"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tap an app to highlight its connections"
-                    android:textSize="14sp"
-                    android:textColor="#6B7280"
-                    android:layout_marginBottom="12dp"/>
+                    android:text="@string/auto_tap_an_app_to_highlight_its_connections"
+                    android:textSize="@dimen/auto_sp_14"
+                    android:textColor="@color/weekly_overview_text_secondary"
+                    android:layout_marginBottom="@dimen/weekly_title_spacing_small"/>
 
                 <!-- 🔥 WEBVIEW GRAPH -->
                 <WebView
                     android:id="@+id/webGraph"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="@dimen/auto_dp_400"
                     tools:ignore="WebViewLayout" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_height="@dimen/auto_dp_1"
+                    android:layout_marginTop="@dimen/weekly_title_spacing_small"
                     android:background="@color/weekly_overview_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/weekly_title_spacing_small"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <View
-                        android:layout_width="36dp"
-                        android:layout_height="2dp"
+                        android:layout_width="@dimen/auto_dp_36"
+                        android:layout_height="@dimen/weekly_card_elevation"
                         android:background="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:text="Frequent"
+                        android:layout_marginStart="@dimen/weekly_small_icon_padding"
+                        android:layout_marginEnd="@dimen/weekly_trend_top_spacing"
+                        android:text="@string/auto_frequent"
                         android:textColor="@color/weekly_overview_text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/auto_sp_14" />
 
                     <View
-                        android:layout_width="30dp"
-                        android:layout_height="2dp"
-                        android:background="#B8B8B8" />
+                        android:layout_width="@dimen/auto_dp_30"
+                        android:layout_height="@dimen/weekly_card_elevation"
+                        android:background="@color/theme_border_soft" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:text="Occasional"
+                        android:layout_marginStart="@dimen/weekly_small_icon_padding"
+                        android:layout_marginEnd="@dimen/weekly_trend_top_spacing"
+                        android:text="@string/auto_occasional"
                         android:textColor="@color/weekly_overview_text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/auto_sp_14" />
 
                     <View
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="@dimen/auto_dp_18"
+                        android:layout_height="@dimen/auto_dp_18"
                         android:background="@drawable/bg_legend_selected_ring" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Selected"
+                        android:layout_marginStart="@dimen/weekly_small_icon_padding"
+                        android:text="@string/auto_selected"
                         android:textColor="@color/weekly_overview_text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/auto_sp_14" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -240,51 +240,53 @@
             <!-- INSIGHT -->
             <LinearLayout
                 android:orientation="horizontal"
-                android:padding="16dp"
-                android:layout_marginTop="16dp"
+                android:padding="@dimen/weekly_row_spacing"
+                android:layout_marginTop="@dimen/weekly_row_spacing"
                 android:background="@drawable/bg_search"
-                android:elevation="2dp"
+                android:elevation="@dimen/weekly_card_elevation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:background="@drawable/bg_circle_amber"
-                    android:backgroundTint="#F0F4FF"
-                    android:padding="10dp"
+                    android:backgroundTint="@color/theme_surface_subtle"
+                    android:padding="@dimen/weekly_trend_icon_container_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="@dimen/auto_dp_22"
+                        android:layout_height="@dimen/auto_dp_22"
                         android:src="@drawable/lightbulb"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Insight"
-                        android:textSize="18sp"
+                        android:text="@string/auto_insight"
+                        android:textSize="@dimen/weekly_section_title_size"
                         android:textStyle="bold"
-                        android:textColor="#1A1A1A"/>
+                        android:textColor="@color/weekly_overview_text_primary"/>
 
                     <TextView
                         android:id="@+id/tvInsight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You often switch from YouTube to TikTok during late-night sessions."
-                        android:textColor="#6B7280"
-                        android:textSize="16sp"
-                        android:layout_marginTop="10dp"/>
+                        android:text="@string/auto_you_often_switch_from_youtube_to_tiktok_during_late_night_sessions"
+                        android:textColor="@color/weekly_overview_text_secondary"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"/>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+
+

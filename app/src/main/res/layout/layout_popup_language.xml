@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_popup_rounded"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/weekly_row_spacing"
+    android:paddingBottom="@dimen/weekly_row_spacing">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/weekly_row_spacing"
+        android:paddingEnd="@dimen/weekly_row_spacing"
+        android:paddingBottom="@dimen/weekly_title_spacing_small"
+        android:text="@string/auto_app_language"
+        android:textColor="@color/weekly_overview_text_primary"
+        android:textSize="@dimen/weekly_section_title_size"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLanguages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="never" />
+
+</LinearLayout>

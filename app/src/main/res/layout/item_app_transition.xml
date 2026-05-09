@@ -6,53 +6,55 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:layout_marginBottom="12dp">
+    android:layout_marginBottom="@dimen/weekly_title_spacing_small">
 
     <ImageView
         android:id="@+id/ivFromAppIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/auto_dp_32"
+        android:layout_height="@dimen/auto_dp_32"
         android:src="@android:drawable/sym_def_app_icon" />
 
     <TextView
         android:id="@+id/tvFromAppName"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/weekly_small_icon_padding"
         tools:text="Instagram"
-        android:textColor="#111827"
-        android:textSize="14sp" />
+        android:textColor="@color/weekly_overview_text_primary"
+        android:textSize="@dimen/auto_sp_14" />
 
     <ImageView
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="@dimen/weekly_row_spacing"
+        android:layout_height="@dimen/weekly_row_spacing"
+        android:layout_marginEnd="@dimen/weekly_trend_icon_container_padding"
         android:src="@drawable/shuffle"
-        app:tint="#9CA3AF" />
+        app:tint="@color/weekly_overview_text_secondary" />
 
     <ImageView
         android:id="@+id/ivToAppIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/auto_dp_32"
+        android:layout_height="@dimen/auto_dp_32"
         android:src="@android:drawable/sym_def_app_icon" />
 
 
     <TextView
         android:id="@+id/tvToAppName"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/weekly_small_icon_padding"
         tools:text="TikTok"
-        android:textColor="#111827"
-        android:textSize="14sp" />
+        android:textColor="@color/weekly_overview_text_primary"
+        android:textSize="@dimen/auto_sp_14" />
 
     <TextView
         android:id="@+id/tvTransitionCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="12×"
-        android:textColor="#9CA3AF"
-        android:textSize="12sp" />
+        android:textColor="@color/weekly_overview_text_secondary"
+        android:textSize="@dimen/auto_sp_12" />
 </LinearLayout>
+
+

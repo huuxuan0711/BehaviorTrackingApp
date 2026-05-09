@@ -3,6 +3,7 @@ package com.xmobile.project2digitalwellbeing.presentation.onboarding.intro
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.data.preferences.local.AppPreferencesDataStore
@@ -14,38 +15,43 @@ class IntroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroBinding
     private lateinit var appPreferencesDataStore: AppPreferencesDataStore
 
-    private val onboardingItems = listOf(
-        OnboardingItem(
-            iconResId = R.drawable.smartphone,
-            iconTintRes = android.graphics.Color.parseColor("#5C6BC0"),
-            iconBackgroundRes = android.graphics.Color.parseColor("#EAECF6"),
-            title = "Understand Your\nDigital Habits",
-            description = "See how you spend time on your phone and discover hidden usage patterns."
-        ),
-        OnboardingItem(
-            iconResId = R.drawable.trending_up,
-            iconTintRes = android.graphics.Color.parseColor("#7E57C2"),
-            iconBackgroundRes = android.graphics.Color.parseColor("#ECEAF6"),
-            title = "Beyond Screen Time",
-            description = "Analyze usage sessions, app transitions, and behavioral patterns."
-        ),
-        OnboardingItem(
-            iconResId = R.drawable.target,
-            iconTintRes = android.graphics.Color.parseColor("#66BB6A"),
-            iconBackgroundRes = android.graphics.Color.parseColor("#EAF2EF"),
-            title = "Improve Your Focus",
-            description = "Receive insights that help you build healthier digital habits."
-        )
-    )
+    private lateinit var onboardingItems: List<OnboardingItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         appPreferencesDataStore = AppPreferencesDataStore(applicationContext)
+        onboardingItems = buildOnboardingItems()
         setupViewPager()
         setupActions()
         updateControls(0)
+    }
+
+    private fun buildOnboardingItems(): List<OnboardingItem> {
+        return listOf(
+            OnboardingItem(
+                iconResId = R.drawable.smartphone,
+                iconTintRes = ContextCompat.getColor(this, R.color.primary),
+                iconBackgroundRes = ContextCompat.getColor(this, R.color.auto_color_eaecf6),
+                title = getString(R.string.onboarding_title_habits),
+                description = getString(R.string.onboarding_desc_habits)
+            ),
+            OnboardingItem(
+                iconResId = R.drawable.trending_up,
+                iconTintRes = ContextCompat.getColor(this, R.color.auto_color_7e57c2),
+                iconBackgroundRes = ContextCompat.getColor(this, R.color.auto_color_eceaf6),
+                title = getString(R.string.onboarding_title_beyond_time),
+                description = getString(R.string.onboarding_desc_beyond_time)
+            ),
+            OnboardingItem(
+                iconResId = R.drawable.target,
+                iconTintRes = ContextCompat.getColor(this, R.color.auto_color_66bb6a),
+                iconBackgroundRes = ContextCompat.getColor(this, R.color.auto_color_eaf2ef),
+                title = getString(R.string.onboarding_title_focus),
+                description = getString(R.string.onboarding_desc_focus)
+            )
+        )
     }
 
     private fun setupViewPager() {
@@ -79,7 +85,11 @@ class IntroActivity : AppCompatActivity() {
 
     private fun updateControls(position: Int) {
         val isLastItem = position == onboardingItems.lastIndex
-        binding.btnNext.text = if (isLastItem) "Get Started" else "Next"
+        binding.btnNext.text = if (isLastItem) {
+            getString(R.string.onboarding_get_started)
+        } else {
+            getString(R.string.onboarding_next)
+        }
         binding.btnSkip.visibility = if (isLastItem) android.view.View.GONE else android.view.View.VISIBLE
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:paddingVertical="8dp"
+    android:paddingVertical="@dimen/weekly_small_icon_padding"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,21 +10,21 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/auto_dp_0"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/layoutIcon"
             android:background="@drawable/bg_app_icon"
-            android:backgroundTint="#F6F7FB"
-            android:padding="12dp"
+            android:backgroundTint="@color/weekly_overview_background"
+            android:padding="@dimen/weekly_title_spacing_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imgIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/auto_dp_22"
+                android:layout_height="@dimen/auto_dp_22"
                 android:src="@drawable/clock"/>
         </LinearLayout>
 
@@ -32,17 +32,18 @@
             android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:textColor="#1A1A1A"
-            android:text="Instagram"
-            android:textSize="16sp"/>
+            android:layout_marginStart="@dimen/auto_dp_14"
+            android:textColor="@color/weekly_overview_text_primary"
+            android:text="@string/auto_instagram"
+            android:textSize="@dimen/weekly_body_text_size"/>
     </LinearLayout>
 
     <TextView
         android:id="@+id/txtDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="45 min"
-        android:textColor="#6B7280"
-        android:textSize="16sp"/>
+        android:text="@string/auto_text_45_min"
+        android:textColor="@color/weekly_overview_text_secondary"
+        android:textSize="@dimen/weekly_body_text_size"/>
 </LinearLayout>
+

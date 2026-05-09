@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -26,13 +27,14 @@ class AppItemAdapter(
 
     inner class ViewHolder(private val binding: ItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppItemUiModel) {
+            val context = itemView.context
             binding.tvName.text = item.appName
             binding.tvUsage.visibility = View.VISIBLE
             binding.tvUsage.text = item.usageText
 
-            binding.tvCategory.text = item.category.toDisplayName()
+            binding.tvCategory.text = context.getString(item.category.getDisplayNameRes())
 
-            val color = item.category.toBadgeColor()
+            val color = ContextCompat.getColor(context, item.category.getBadgeColorRes())
             binding.tvCategory.setTextColor(color)
             binding.imgArrow.setColorFilter(color)
 

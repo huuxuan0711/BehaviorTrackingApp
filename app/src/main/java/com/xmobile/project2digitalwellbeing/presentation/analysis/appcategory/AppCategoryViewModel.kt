@@ -1,7 +1,9 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.apps.usecase.GetAppCategoryDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.apps.usecase.UpdateAppCategoryUseCase
@@ -18,10 +20,12 @@ import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 
 @HiltViewModel
 class AppCategoryViewModel @Inject constructor(
+    application: Application,
     private val getAppCategoryDataUseCase: GetAppCategoryDataUseCase,
     private val updateAppCategoryUseCase: UpdateAppCategoryUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
+    private val context get() = getApplication<Application>()
     private val _uiState = MutableStateFlow(AppCategoryUiState())
     val uiState: StateFlow<AppCategoryUiState> = _uiState.asStateFlow()
 
@@ -45,7 +49,10 @@ class AppCategoryViewModel @Inject constructor(
                         category = category,
                         isExpanded = true,
                         apps = apps.map {
-                            val durationText = "${UsageFormatter.formatDuration(it.totalTimeMillis)} past 24h"
+                            val durationText = context.getString(
+                                R.string.auto_text_duration_past_24h,
+                                UsageFormatter.formatDuration(context, it.totalTimeMillis)
+                            )
                             AppItemUiModel(
                                 packageName = it.packageName,
                                 appName = it.appName ?: it.packageName,
@@ -84,7 +91,7 @@ class AppCategoryViewModel @Inject constructor(
                 updateAppCategoryUseCase(packageName, newCategory)
                 load()
             } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = "Failed to update category") }
+                _uiState.update { it.copy(errorMessage = context.getString(R.string.auto_error_processing_failure)) }
             }
         }
     }

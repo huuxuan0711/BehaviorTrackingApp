@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -53,7 +54,17 @@ class AppPreferencesDataStore(private val context: Context) {
                     ?: UsageAnalysisPreferences.DEFAULT.trackAllCategories,
                 insightSensitivity = preferences[INSIGHT_SENSITIVITY_KEY]
                     ?.toInsightSensitivity()
-                    ?: UsageAnalysisPreferences.DEFAULT.insightSensitivity
+                    ?: UsageAnalysisPreferences.DEFAULT.insightSensitivity,
+                insightNotificationsEnabled = preferences[INSIGHT_NOTIFICATIONS_ENABLED_KEY]
+                    ?: UsageAnalysisPreferences.DEFAULT.insightNotificationsEnabled,
+                darkModeEnabled = preferences[DARK_MODE_ENABLED_KEY]
+                    ?: UsageAnalysisPreferences.DEFAULT.darkModeEnabled,
+                weeklyReportsEnabled = preferences[WEEKLY_REPORTS_ENABLED_KEY]
+                    ?: UsageAnalysisPreferences.DEFAULT.weeklyReportsEnabled,
+                languageCode = preferences[LANGUAGE_CODE_KEY]
+                    ?: UsageAnalysisPreferences.DEFAULT.languageCode,
+                isCloudBackupEnabled = preferences[CLOUD_BACKUP_ENABLED_KEY]
+                    ?: UsageAnalysisPreferences.DEFAULT.isCloudBackupEnabled
             )
         }
 
@@ -74,6 +85,11 @@ class AppPreferencesDataStore(private val context: Context) {
                 (preferences.longSessionThresholdMillis / (60L * 1000L)).toInt()
             editablePreferences[TRACK_ALL_CATEGORIES_KEY] = preferences.trackAllCategories
             editablePreferences[INSIGHT_SENSITIVITY_KEY] = preferences.insightSensitivity.toStorageValue()
+            editablePreferences[INSIGHT_NOTIFICATIONS_ENABLED_KEY] = preferences.insightNotificationsEnabled
+            editablePreferences[DARK_MODE_ENABLED_KEY] = preferences.darkModeEnabled
+            editablePreferences[WEEKLY_REPORTS_ENABLED_KEY] = preferences.weeklyReportsEnabled
+            editablePreferences[LANGUAGE_CODE_KEY] = preferences.languageCode
+            editablePreferences[CLOUD_BACKUP_ENABLED_KEY] = preferences.isCloudBackupEnabled
         }
     }
 
@@ -100,6 +116,11 @@ class AppPreferencesDataStore(private val context: Context) {
         val LONG_SESSION_THRESHOLD_MINUTES_KEY = intPreferencesKey("long_session_threshold_minutes")
         val TRACK_ALL_CATEGORIES_KEY = booleanPreferencesKey("track_all_categories")
         val INSIGHT_SENSITIVITY_KEY = intPreferencesKey("insight_sensitivity")
+        val INSIGHT_NOTIFICATIONS_ENABLED_KEY = booleanPreferencesKey("insight_notifications_enabled")
+        val DARK_MODE_ENABLED_KEY = booleanPreferencesKey("dark_mode_enabled")
+        val WEEKLY_REPORTS_ENABLED_KEY = booleanPreferencesKey("weekly_reports_enabled")
+        val LANGUAGE_CODE_KEY = stringPreferencesKey("language_code")
+        val CLOUD_BACKUP_ENABLED_KEY = booleanPreferencesKey("cloud_backup_enabled")
     }
 }
 

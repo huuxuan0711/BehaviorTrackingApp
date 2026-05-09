@@ -3,25 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minHeight="44dp"
+    android:minHeight="@dimen/auto_dp_44"
     android:orientation="horizontal"
-    android:paddingStart="12dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="18dp"
-    android:paddingBottom="10dp">
+    android:paddingStart="@dimen/weekly_title_spacing_small"
+    android:paddingTop="@dimen/weekly_trend_icon_container_padding"
+    android:paddingEnd="@dimen/auto_dp_18"
+    android:paddingBottom="@dimen/weekly_trend_icon_container_padding">
 
     <View
         android:id="@+id/viewDot"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="@dimen/weekly_trend_icon_container_padding"
+        android:layout_height="@dimen/weekly_trend_icon_container_padding"
         android:background="@drawable/bg_dot" />
 
     <TextView
         android:id="@+id/tvCategoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textColor="#111827"
-        android:textSize="15sp"
+        android:layout_marginStart="@dimen/weekly_title_spacing_small"
+        android:textColor="@color/weekly_overview_text_primary"
+        android:textSize="@dimen/auto_sp_15"
         android:textStyle="bold" />
 </LinearLayout>
+
+

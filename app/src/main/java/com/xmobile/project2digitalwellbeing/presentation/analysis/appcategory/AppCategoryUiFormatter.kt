@@ -1,57 +1,63 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.appcategory
 
-import android.graphics.Color
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory
 import com.xmobile.project2digitalwellbeing.domain.apps.model.AppFocusGroup
 
-internal fun AppCategory.toDisplayName(): String {
+@StringRes
+internal fun AppCategory.getDisplayNameRes(): Int {
     return when (this) {
-        AppCategory.SOCIAL -> "Social"
-        AppCategory.VIDEO -> "Video"
-        AppCategory.PRODUCTIVITY -> "Productivity"
-        AppCategory.COMMUNICATION -> "Communication"
-        AppCategory.GAME -> "Game"
-        AppCategory.BROWSER -> "Browser"
-        AppCategory.MUSIC -> "Music"
-        AppCategory.EDUCATION -> "Education"
-        AppCategory.TOOLS -> "Tools"
-        AppCategory.SYSTEM -> "System"
-        AppCategory.OTHER -> "Other"
-        AppCategory.UNKNOWN -> "Unknown"
+        AppCategory.SOCIAL -> R.string.auto_social
+        AppCategory.VIDEO -> R.string.auto_video
+        AppCategory.PRODUCTIVITY -> R.string.auto_productivity
+        AppCategory.COMMUNICATION -> R.string.auto_communication
+        AppCategory.GAME -> R.string.auto_game
+        AppCategory.BROWSER -> R.string.auto_browser
+        AppCategory.MUSIC -> R.string.auto_music
+        AppCategory.EDUCATION -> R.string.auto_education
+        AppCategory.TOOLS -> R.string.auto_tools
+        AppCategory.SYSTEM -> R.string.auto_system
+        AppCategory.OTHER -> R.string.auto_other
+        AppCategory.UNKNOWN -> R.string.auto_unknown
     }
 }
 
-internal fun AppCategory.toBadgeColor(): Int {
+@ColorRes
+internal fun AppCategory.getBadgeColorRes(): Int {
     return when (this) {
         AppCategory.PRODUCTIVITY,
         AppCategory.EDUCATION,
-        AppCategory.TOOLS -> Color.parseColor("#2E7D32")
+        AppCategory.TOOLS -> R.color.auto_color_2e7d32
 
         AppCategory.SOCIAL,
         AppCategory.VIDEO,
         AppCategory.GAME,
-        AppCategory.MUSIC -> Color.parseColor("#E65100")
+        AppCategory.MUSIC -> R.color.auto_color_e65100
 
         AppCategory.COMMUNICATION,
         AppCategory.BROWSER,
         AppCategory.SYSTEM,
         AppCategory.OTHER,
-        AppCategory.UNKNOWN -> Color.parseColor("#424242")
+        AppCategory.UNKNOWN -> R.color.auto_color_424242
     }
 }
 
-internal fun AppFocusGroup.toDisplayName(): String {
+@StringRes
+internal fun AppFocusGroup.getDisplayNameRes(): Int {
     return when (this) {
-        AppFocusGroup.PRODUCTIVE -> "Productive"
-        AppFocusGroup.DISTRACTING -> "Distracting"
-        AppFocusGroup.NEUTRAL -> "Neutral"
+        AppFocusGroup.PRODUCTIVE -> R.string.auto_productive
+        AppFocusGroup.DISTRACTING -> R.string.auto_distracting
+        AppFocusGroup.NEUTRAL -> R.string.auto_neutral
     }
 }
 
-internal fun AppFocusGroup.toBadgeColor(): Int {
+@ColorRes
+internal fun AppFocusGroup.getBadgeColorRes(): Int {
     return when (this) {
-        AppFocusGroup.PRODUCTIVE -> Color.parseColor("#2E7D32")
-        AppFocusGroup.DISTRACTING -> Color.parseColor("#E65100")
-        AppFocusGroup.NEUTRAL -> Color.parseColor("#424242")
+        AppFocusGroup.PRODUCTIVE -> R.color.auto_color_2e7d32
+        AppFocusGroup.DISTRACTING -> R.color.auto_color_e65100
+        AppFocusGroup.NEUTRAL -> R.color.auto_color_424242
     }
 }

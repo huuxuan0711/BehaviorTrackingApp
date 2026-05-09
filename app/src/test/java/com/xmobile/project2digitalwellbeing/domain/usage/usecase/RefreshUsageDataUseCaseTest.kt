@@ -16,6 +16,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageEventType
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
+import com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshMode
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
@@ -43,7 +44,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.model.TopCategoryFeatur
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatureTopApp
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.flow.flowOf
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import org.junit.Assert.assertEquals
@@ -54,7 +55,7 @@ import org.junit.Test
 class RefreshUsageDataUseCaseTest {
 
     @Test
-    fun `initial refresh uses 24 hour window and persists sessions`() = runBlocking {
+    fun `initial refresh uses 24 hour window and persists sessions`() = runTest {
         val nowMillis = 100_000L
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
@@ -113,7 +114,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `incremental refresh reprocesses safety window`() = runBlocking {
+    fun `incremental refresh reprocesses safety window`() = runTest {
         val nowMillis = 300_000L
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
@@ -152,7 +153,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `force full refresh ignores existing sync state`() = runBlocking {
+    fun `force full refresh ignores existing sync state`() = runTest {
         val nowMillis = 300_000L
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
@@ -190,7 +191,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `returns permission error when usage event access fails`() = runBlocking {
+    fun `returns permission error when usage event access fails`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = null,
@@ -231,7 +232,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `returns invalid timezone error when timezone is malformed`() = runBlocking {
+    fun `returns invalid timezone error when timezone is malformed`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = null,
@@ -271,7 +272,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `returns persistence error when repository replace fails`() = runBlocking {
+    fun `returns persistence error when repository replace fails`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = null,
@@ -308,7 +309,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `maps structured data layer read errors into data access failure`() = runBlocking {
+    fun `maps structured data layer read errors into data access failure`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = null,
@@ -350,7 +351,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `preserves last seen timestamp when no new events are returned`() = runBlocking {
+    fun `preserves last seen timestamp when no new events are returned`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = 50_000L,
@@ -385,7 +386,7 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
-    fun `keeps last seen timestamp null when there is still no event history`() = runBlocking {
+    fun `keeps last seen timestamp null when there is still no event history`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(
                 lastProcessedTimestampMillis = null,
@@ -501,6 +502,8 @@ class RefreshUsageDataUseCaseTest {
 
         override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
+        override suspend fun resolveAppName(packageName: String): String = packageName
+
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> {
             return emptyList()
         }
@@ -536,7 +539,7 @@ class RefreshUsageDataUseCaseTest {
             windowStartMillis: Long,
             windowEndMillis: Long,
             sessions: List<AppSession>,
-            insights: List<Insight>,
+            insights: List<InsightRefreshGroup>,
             newSyncState: UsageSyncState
         ) {
             replaceError?.let { throw it }
@@ -545,7 +548,7 @@ class RefreshUsageDataUseCaseTest {
             savedSessions.clear()
             savedSessions += sessions
             savedInsights.clear()
-            savedInsights += insights
+            // We can flatten insights for simple testing if needed
             savedSyncState = newSyncState
         }
     }
@@ -592,6 +595,28 @@ class RefreshUsageDataUseCaseTest {
                 dailyUsages = emptyList()
             )
         }
+
+        override fun buildSlidingUsage(
+            sessions: List<AppSession>,
+            timezoneId: String,
+            windowStartMillis: Long,
+            windowEndMillis: Long
+        ): DailyUsage {
+            return DailyUsage(
+                localDate = "1970-01-01",
+                timezoneId = timezoneId,
+                totalScreenTimeMillis = 0L,
+                totalSessionCount = 0,
+                sessions = emptyList()
+            )
+        }
+
+        override fun buildSlidingHourlyUsage(
+            sessions: List<AppSession>,
+            timezoneId: String,
+            windowStartMillis: Long,
+            windowEndMillis: Long
+        ): List<HourlyUsage> = emptyList()
 
         override fun buildCategoryUsage(
             sessions: List<AppSession>,

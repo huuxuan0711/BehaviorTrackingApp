@@ -4,9 +4,11 @@ import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightInterpreter
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedInsight
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.DailyUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
+import com.xmobile.project2digitalwellbeing.domain.usage.model.shouldIncludeCategory
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import java.time.Instant
@@ -68,6 +70,7 @@ sealed interface DashboardDataError {
 enum class DashboardDataStage {
     RESOLVE_DATE,
     READ_SESSIONS,
+    READ_PREFERENCES,
     READ_INSIGHTS,
     READ_APP_METADATA,
     BUILD_DAILY_USAGE,
@@ -78,6 +81,7 @@ enum class DashboardDataStage {
 class GetDashboardDataUseCase @Inject constructor(
     private val repository: UsageRepository,
     private val appRepository: AppRepository,
+    private val usagePreferencesRepository: UsagePreferencesRepository,
     private val aggregator: UsageAggregator,
     private val interpreter: InsightInterpreter
 ) {
@@ -116,6 +120,20 @@ class GetDashboardDataUseCase @Inject constructor(
             repository.getSessions(windowStartMillis, windowEndMillis)
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
 
+        val preferences = runStage(DashboardDataStage.READ_PREFERENCES, params) {
+            usagePreferencesRepository.getUsageAnalysisPreferences()
+        }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
+
+        val sourceAppMetadataByPackage = runStage(DashboardDataStage.READ_APP_METADATA, params) {
+            appRepository.getAppMetadata(sessions.map { it.packageName }.toSet())
+        }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
+
+        val filteredSessions = sessions.filter { session ->
+            val category = sourceAppMetadataByPackage[session.packageName]?.reportingCategory
+                ?: com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory.UNKNOWN
+            preferences.shouldIncludeCategory(category)
+        }
+
         val insights = runStage(DashboardDataStage.READ_INSIGHTS, params) {
             repository.getInsights(windowStartMillis, windowEndMillis)
         }.getOrElse { return GetDashboardDataOutcome.Failure(it.toDashboardError(params.timezoneId)) }
@@ -123,13 +141,13 @@ class GetDashboardDataUseCase @Inject constructor(
         val dailyUsage = runStage(DashboardDataStage.BUILD_DAILY_USAGE, params) {
             when (params.queryMode) {
                 DashboardQueryMode.Sliding24Hours -> aggregator.buildSlidingUsage(
-                    sessions = sessions,
+                    sessions = filteredSessions,
                     timezoneId = params.timezoneId,
                     windowStartMillis = windowStartMillis,
                     windowEndMillis = windowEndMillis
                 )
                 DashboardQueryMode.CalendarDay -> aggregator.buildDailyUsage(
-                    sessions = sessions,
+                    sessions = filteredSessions,
                     timezoneId = params.timezoneId,
                     localDate = currentLocalDate
                 )
@@ -143,7 +161,7 @@ class GetDashboardDataUseCase @Inject constructor(
         val hourlyUsage = runStage(DashboardDataStage.BUILD_HOURLY_USAGE, params) {
             when (params.queryMode) {
                 DashboardQueryMode.Sliding24Hours -> aggregator.buildSlidingHourlyUsage(
-                    sessions = sessions,
+                    sessions = filteredSessions,
                     timezoneId = params.timezoneId,
                     windowStartMillis = windowStartMillis,
                     windowEndMillis = windowEndMillis
@@ -222,6 +240,7 @@ private fun Throwable.toDashboardError(timezoneId: String): DashboardDataError {
 
         else -> when (stage) {
             DashboardDataStage.READ_SESSIONS,
+            DashboardDataStage.READ_PREFERENCES,
             DashboardDataStage.READ_INSIGHTS,
             DashboardDataStage.READ_APP_METADATA -> DashboardDataError.DataAccessFailure(
                 stage = stage,

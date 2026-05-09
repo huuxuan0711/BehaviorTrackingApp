@@ -1,11 +1,15 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.transition
 
+import android.content.Context
+import androidx.core.content.ContextCompat
+import com.xmobile.project2digitalwellbeing.R
 import org.json.JSONArray
 import org.json.JSONObject
 
 object AppTransitionGraphHtmlRenderer {
 
     fun render(
+        context: Context,
         nodes: List<GraphNodeUiModel>,
         edges: List<GraphEdgeUiModel>,
         iconDataByNodeId: Map<String, String>
@@ -34,23 +38,34 @@ object AppTransitionGraphHtmlRenderer {
             }
         }
 
+        val colorWhite = toHex(ContextCompat.getColor(context, R.color.white))
+        val colorTextPrimary = toHex(ContextCompat.getColor(context, R.color.auto_color_1f2937))
+        val colorSuccess = toHex(ContextCompat.getColor(context, R.color.auto_color_36a74a))
+        val colorNodeBg = toHex(ContextCompat.getColor(context, R.color.auto_color_f7f9ff))
+        val colorNodeStroke = toHex(ContextCompat.getColor(context, R.color.auto_color_5761c9))
+        val colorEdgeOccasional = toHex(ContextCompat.getColor(context, R.color.auto_color_b8b8b8))
+        val colorArrow = toHex(ContextCompat.getColor(context, R.color.auto_color_6670d8))
+        val colorMuted = toHex(ContextCompat.getColor(context, R.color.auto_color_9ca3af))
+        
+        val noDataText = context.getString(R.string.auto_no_transition_data)
+
         return """
             <!doctype html>
             <html>
             <head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
               <style>
-                body { margin: 0; background: #ffffff; font-family: sans-serif; }
+                body { margin: 0; background: $colorWhite; font-family: sans-serif; }
                 #root { width: 100%; height: 400px; position: relative; }
                 svg { width: 100%; height: 100%; display: block; }
-                .node text { fill: #1f2937; font-size: 12px; text-anchor: middle; }
-                .node .halo { fill: #36a74a; opacity: 0; }
-                .node circle { fill: #f7f9ff; stroke: #5761c9; stroke-width: 2; }
+                .node text { fill: $colorTextPrimary; font-size: 12px; text-anchor: middle; }
+                .node .halo { fill: $colorSuccess; opacity: 0; }
+                .node circle { fill: $colorNodeBg; stroke: $colorNodeStroke; stroke-width: 2; }
                 .node.selected .halo { opacity: 0.18; }
-                .node.selected circle { stroke: #36a74a; stroke-width: 3; }
+                .node.selected circle { stroke: $colorSuccess; stroke-width: 3; }
                 .edge { fill: none; stroke-linecap: round; marker-end: url(#arrow); opacity: 0.95; }
-                .edge.frequent { stroke: #5761c9; }
-                .edge.occasional { stroke: #b8b8b8; }
+                .edge.frequent { stroke: $colorNodeStroke; }
+                .edge.occasional { stroke: $colorEdgeOccasional; }
                 .muted { opacity: 0.16 !important; }
               </style>
             </head>
@@ -67,7 +82,7 @@ object AppTransitionGraphHtmlRenderer {
                 const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                 defs.innerHTML = `
                   <marker id="arrow" markerWidth="4.5" markerHeight="4.5" refX="4.1" refY="2.25" orient="auto">
-                    <path d="M0,0 L4.5,2.25 L0,4.5 Z" fill="#6670d8"></path>
+                    <path d="M0,0 L4.5,2.25 L0,4.5 Z" fill="$colorArrow"></path>
                   </marker>
                 `;
                 svg.appendChild(defs);
@@ -77,8 +92,8 @@ object AppTransitionGraphHtmlRenderer {
                   text.setAttribute('x', W / 2);
                   text.setAttribute('y', H / 2);
                   text.setAttribute('text-anchor', 'middle');
-                  text.setAttribute('fill', '#9ca3af');
-                  text.textContent = 'No transition data';
+                  text.setAttribute('fill', '$colorMuted');
+                  text.textContent = '$noDataText';
                   svg.appendChild(text);
                 } else {
                   const positions = {};
@@ -164,7 +179,7 @@ object AppTransitionGraphHtmlRenderer {
                       const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                       icon.setAttribute('x', p.x);
                       icon.setAttribute('y', p.y + 4);
-                      icon.setAttribute('fill', '#6b7280');
+                      icon.setAttribute('fill', '$colorMuted');
                       icon.textContent = (node.label || '?').trim().slice(0, 1).toUpperCase();
                       g.appendChild(icon);
                     }
@@ -213,5 +228,9 @@ object AppTransitionGraphHtmlRenderer {
             </body>
             </html>
         """.trimIndent()
+    }
+
+    private fun toHex(color: Int): String {
+        return String.format("#%06X", 0xFFFFFF and color)
     }
 }

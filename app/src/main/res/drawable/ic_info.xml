@@ -1,16 +1,17 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="20dp"
-    android:height="20dp"
+    android:width="@dimen/weekly_trend_top_spacing"
+    android:height="@dimen/weekly_trend_top_spacing"
     android:viewportWidth="20"
     android:viewportHeight="20">
   <path
       android:pathData="M10,0C4.48,0 0,4.48 0,10C0,15.52 4.48,20 10,20C15.52,20 20,15.52 20,10C20,4.48 15.52,0 10,0Z"
-      android:fillColor="#5C6BC0"
+      android:fillColor="@color/primary"
       android:fillAlpha="0.6"/>
   <path
       android:pathData="M10,5L10,5A1,1 0,0 1,11 6L11,10A1,1 0,0 1,10 11L10,11A1,1 0,0 1,9 10L9,6A1,1 0,0 1,10 5z"
-      android:fillColor="#ffffff"/>
+      android:fillColor="@color/auto_color_ffffff"/>
   <path
       android:pathData="M10,13L10,13A1,1 0,0 1,11 14L11,14A1,1 0,0 1,10 15L10,15A1,1 0,0 1,9 14L9,14A1,1 0,0 1,10 13z"
-      android:fillColor="#ffffff"/>
+      android:fillColor="@color/auto_color_ffffff"/>
 </vector>
+

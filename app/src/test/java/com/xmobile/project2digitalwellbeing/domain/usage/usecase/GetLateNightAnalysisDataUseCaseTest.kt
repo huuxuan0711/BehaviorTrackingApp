@@ -19,7 +19,7 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnric
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregatorImpl
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractorImpl
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -27,7 +27,7 @@ import org.junit.Test
 class GetLateNightAnalysisDataUseCaseTest {
 
     @Test
-    fun `returns late-night analysis data for overnight window`() = runBlocking {
+    fun `returns late-night analysis data for overnight window`() = runTest {
         val repository = FakeLateNightRepository(
             sessions = listOf(
                 AppSession("app.social", 0L, 60L * 60L * 1000L, 60L * 60L * 1000L),
@@ -66,7 +66,7 @@ class GetLateNightAnalysisDataUseCaseTest {
     }
 
     @Test
-    fun `maps preference read failure to data access error`() = runBlocking {
+    fun `maps preference read failure to data access error`() = runTest {
         val useCase = GetLateNightAnalysisDataUseCase(
             repository = FakeLateNightRepository(),
             appRepository = FakeLateNightRepository(),

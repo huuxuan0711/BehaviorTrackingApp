@@ -2,9 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <stroke android:color="#5C6BC0" android:width="2dp"/>
-            <corners android:radius="18dp"/>
-            <solid android:color="#FFFFFF"/>
+            <stroke android:color="@color/theme_accent_primary" android:width="@dimen/weekly_card_elevation"/>
+            <corners android:radius="@dimen/auto_dp_18"/>
+            <solid android:color="@color/theme_surface_card"/>
         </shape>
     </item>
 </selector>
+

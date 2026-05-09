@@ -1,7 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -192,11 +191,12 @@ class SessionTimelineAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         private fun AppCategory.toColor(): Int {
+            val context = binding.root.context
             return when (this) {
-                AppCategory.PRODUCTIVITY, AppCategory.EDUCATION, AppCategory.TOOLS -> Color.parseColor("#4CAF50")
-                AppCategory.SOCIAL, AppCategory.VIDEO, AppCategory.GAME, AppCategory.MUSIC -> Color.parseColor("#5C6BC0")
-                AppCategory.COMMUNICATION, AppCategory.BROWSER -> Color.parseColor("#FF9800")
-                AppCategory.SYSTEM, AppCategory.OTHER, AppCategory.UNKNOWN -> Color.parseColor("#9E9E9E")
+                AppCategory.PRODUCTIVITY, AppCategory.EDUCATION, AppCategory.TOOLS -> ContextCompat.getColor(context, R.color.auto_color_4caf50)
+                AppCategory.SOCIAL, AppCategory.VIDEO, AppCategory.GAME, AppCategory.MUSIC -> ContextCompat.getColor(context, R.color.primary)
+                AppCategory.COMMUNICATION, AppCategory.BROWSER -> ContextCompat.getColor(context, R.color.auto_color_ff9800)
+                AppCategory.SYSTEM, AppCategory.OTHER, AppCategory.UNKNOWN -> ContextCompat.getColor(context, R.color.auto_color_9e9e9e)
             }
         }
 

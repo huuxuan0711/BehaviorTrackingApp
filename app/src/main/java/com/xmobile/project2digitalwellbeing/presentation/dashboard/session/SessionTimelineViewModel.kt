@@ -1,6 +1,7 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
@@ -24,10 +25,13 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SessionTimelineViewModel @Inject constructor(
+    application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
     private val getSessionTimelineDataUseCase: GetSessionTimelineDataUseCase,
     private val timelineUiMapper: SessionTimelineUiMapper
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context get() = getApplication<Application>()
 
     private val _uiState = MutableStateFlow(SessionTimelineUiState())
     val uiState: StateFlow<SessionTimelineUiState> = _uiState.asStateFlow()
@@ -88,6 +92,7 @@ class SessionTimelineViewModel @Inject constructor(
                 is GetSessionTimelineDataOutcome.Success -> {
                     hasLoadedData = true
                     val timelineItems = timelineUiMapper.toTimelineItems(
+                        context = context,
                         sessions = outcome.data.sessions,
                         zoneId = zoneId,
                         selectedDate = normalizedDate,

@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.latenight
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.ActivityLateNightAnalysisBinding
+import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
+import com.xmobile.project2digitalwellbeing.presentation.onboarding.permission.PermissionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,6 +45,14 @@ class LateNightAnalysisActivity : AppCompatActivity() {
         observeUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!UsageAccessPermissionHelper.hasUsageAccessPermission(this)) {
+            startActivity(Intent(this, PermissionActivity::class.java))
+            finish()
+        }
+    }
+
     private fun setupViews() {
         binding.btnBack.setOnClickListener { finish() }
         binding.rvApps.apply {
@@ -68,7 +79,7 @@ class LateNightAnalysisActivity : AppCompatActivity() {
                     appAdapter.submitList(state.topApps)
                     
                     if (state.hourlyUsage.isNotEmpty()) {
-                        LateNightChartConfigurator.render(binding.barChart, state.hourlyUsage)
+                        LateNightChartConfigurator.render(binding.barChart, this@LateNightAnalysisActivity, state.hourlyUsage)
                     }
                     showErrorIfNeeded(state.errorMessage)
                 }

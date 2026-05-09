@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
-        android:startColor="#6366F1"
-        android:endColor="#4F46E5"
+        android:startColor="@color/auto_color_6366f1"
+        android:endColor="@color/auto_color_4f46e5"
         android:angle="-135"/>
-    <corners android:radius="20dp"/>
+    <corners android:radius="@dimen/weekly_trend_top_spacing"/>
 </shape>
+

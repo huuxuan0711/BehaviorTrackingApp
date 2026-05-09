@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="4dp">
+    android:padding="@dimen/auto_dp_4">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp">
+        android:paddingBottom="@dimen/auto_dp_4">
 
         <!-- Background for selected/today state -->
         <View
             android:id="@+id/vwDayBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="2dp"
+            android:layout_margin="@dimen/weekly_card_elevation"
             android:background="@drawable/bg_calendar_day"
             android:visibility="gone" />
 
@@ -23,19 +23,21 @@
         <Button
             android:id="@+id/btnDay"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="1"
-            android:textSize="14sp"
-            android:textColor="#000000"
+            android:layout_height="@dimen/weekly_icon_button_size_small"
+            android:text="@string/auto_text_1"
+            android:textSize="@dimen/auto_sp_14"
+            android:textColor="@color/weekly_overview_text_primary"
             android:textStyle="bold"
             android:background="@android:color/transparent"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
+            android:paddingStart="@dimen/auto_dp_0"
+            android:paddingEnd="@dimen/auto_dp_0"
             android:gravity="center"
-            android:minHeight="40dp"
-            android:minWidth="40dp"
+            android:minHeight="@dimen/weekly_icon_button_size_small"
+            android:minWidth="@dimen/weekly_icon_button_size_small"
             android:stateListAnimator="@null" />
     </FrameLayout>
 
 </LinearLayout>
+
+
 

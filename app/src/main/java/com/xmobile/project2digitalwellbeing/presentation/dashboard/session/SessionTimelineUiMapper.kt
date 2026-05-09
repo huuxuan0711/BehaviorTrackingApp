@@ -1,5 +1,6 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 
+import android.content.Context
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
@@ -18,6 +19,7 @@ class SessionTimelineUiMapper @Inject constructor() {
     }
 
     fun toTimelineItems(
+        context: Context,
         sessions: List<EnrichedSession>,
         zoneId: ZoneId,
         selectedDate: LocalDate,
@@ -32,6 +34,7 @@ class SessionTimelineUiMapper @Inject constructor() {
 
         return mergedSessions.mapIndexed { index, session ->
             session.toTimelineItem(
+                context = context,
                 previousSession = mergedSessions.getOrNull(index - 1),
                 maxDurationMillis = maxDurationMillis,
                 zoneId = zoneId,
@@ -93,6 +96,7 @@ class SessionTimelineUiMapper @Inject constructor() {
     }
 
     private fun EnrichedSession.toTimelineItem(
+        context: Context,
         previousSession: EnrichedSession?,
         maxDurationMillis: Long,
         zoneId: ZoneId,
@@ -108,7 +112,7 @@ class SessionTimelineUiMapper @Inject constructor() {
                 lateNightStartHour = lateNightStartHour
             ),
             timeRangeText = UsageFormatter.formatTimeRange(session.startTimeMillis, session.endTimeMillis, zoneId),
-            durationText = UsageFormatter.formatDurationVerbose(session.durationMillis),
+            durationText = UsageFormatter.formatDurationVerbose(context, session.durationMillis),
             durationMillis = session.durationMillis,
             progressRatio = if (maxDurationMillis <= 0L) 0f else {
                 session.durationMillis.toFloat() / maxDurationMillis.toFloat()

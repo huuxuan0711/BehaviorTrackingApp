@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_search"
     android:orientation="vertical"
-    android:elevation="2dp"
-    android:layout_marginBottom="12dp">
+    android:elevation="@dimen/weekly_card_elevation"
+    android:layout_marginBottom="@dimen/weekly_title_spacing_small">
 
     <!-- Header -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/layoutHeader"
-        android:padding="16dp">
+        android:padding="@dimen/weekly_row_spacing">
 
         <TextView
             android:id="@+id/tvCategory"
@@ -23,12 +23,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="Productive"
-            android:textColor="#407D32"
+            android:text="@string/auto_productive"
+            android:textColor="@color/theme_success_accent"
             android:textStyle="bold"
-            android:textSize="17sp"
+            android:textSize="@dimen/weekly_stat_value_text_size"
             android:background="@drawable/bg_chip"
-            android:padding="10dp"/>
+            android:padding="@dimen/weekly_trend_icon_container_padding"/>
 
         <TextView
             android:id="@+id/tvCount"
@@ -37,16 +37,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvCategory"
-            android:layout_marginStart="16dp"
-            android:textSize="18sp"
-            android:textColor="#6B7280"
+            android:layout_marginStart="@dimen/weekly_row_spacing"
+            android:textSize="@dimen/weekly_section_title_size"
+            android:textColor="@color/weekly_overview_text_secondary"
             android:textStyle="bold"
-            android:text="3 apps"/>
+            android:text="@string/auto_text_3_apps"/>
 
         <ImageView
             android:id="@+id/ivArrow"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/weekly_screen_bottom_padding"
+            android:layout_height="@dimen/weekly_screen_bottom_padding"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvApps"
         android:visibility="visible"
-        android:padding="16dp"
+        android:padding="@dimen/weekly_row_spacing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>
+

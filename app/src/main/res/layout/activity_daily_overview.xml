@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#F6F7FB"
+    android:background="@color/weekly_overview_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
         <!-- ================= HEADER ================= -->
         <LinearLayout
             android:id="@+id/headerLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/auto_dp_0"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="24dp"
-            android:paddingBottom="12dp"
-            android:elevation="4dp"
+            android:paddingStart="@dimen/weekly_trend_top_spacing"
+            android:paddingEnd="@dimen/weekly_trend_top_spacing"
+            android:paddingTop="@dimen/weekly_screen_bottom_padding"
+            android:paddingBottom="@dimen/weekly_title_spacing_small"
+            android:elevation="@dimen/auto_dp_4"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -29,25 +29,25 @@
 
                 <ImageView
                     android:id="@+id/btnBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/auto_dp_30"
+                    android:layout_height="@dimen/auto_dp_30"
                     android:src="@drawable/arrow_left"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Daily Overview"
-                    android:textSize="22sp"
+                    android:text="@string/auto_daily_overview"
+                    android:textSize="@dimen/weekly_header_title_size"
                     android:textStyle="bold"
-                    android:textColor="#000000"
+                    android:textColor="@color/weekly_overview_text_primary"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
 
             <!-- Date selector -->
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                android:layout_marginTop="16dp"
+                app:cardCornerRadius="@dimen/weekly_row_spacing"
+                app:cardElevation="@dimen/weekly_card_elevation"
+                android:layout_marginTop="@dimen/weekly_row_spacing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -56,22 +56,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="@dimen/auto_dp_14"
                     android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/txtDateSelector"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/auto_dp_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Today"
-                        android:textSize="18sp"
+                        android:text="@string/auto_today"
+                        android:textSize="@dimen/weekly_section_title_size"
                         android:textStyle="bold"
-                        android:textColor="#000000"/>
+                        android:textColor="@color/weekly_overview_text_primary"/>
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="@dimen/weekly_screen_bottom_padding"
+                        android:layout_height="@dimen/weekly_screen_bottom_padding"
                         android:src="@drawable/chevron_down"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -79,8 +79,8 @@
 
         <!-- ================= SCROLL CONTENT ================= -->
         <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/auto_dp_0"
+            android:layout_height="@dimen/auto_dp_0"
             android:fillViewport="true"
             app:layout_constraintTop_toBottomOf="@id/headerLayout"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -91,13 +91,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="@dimen/weekly_trend_top_spacing">
 
                 <!-- ===== SUMMARY CARD ===== -->
                 <androidx.cardview.widget.CardView
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="5dp"
-                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="@dimen/weekly_trend_top_spacing"
+                    app:cardElevation="@dimen/auto_dp_5"
+                    android:layout_marginBottom="@dimen/weekly_row_spacing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="20dp"
+                        android:padding="@dimen/weekly_trend_top_spacing"
                         android:background="@drawable/bg_gradient_primary">
 
                         <!-- Title -->
@@ -116,19 +116,19 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
+                                android:layout_width="@dimen/auto_dp_22"
+                                android:layout_height="@dimen/auto_dp_22"
                                 android:src="@drawable/smartphone"
-                                app:tint="#FFFFFF" />
+                                app:tint="@color/theme_surface_card" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Screen Time"
-                                android:textColor="#FFFFFF"
-                                android:textSize="14sp"
+                                android:text="@string/auto_total_screen_time"
+                                android:textColor="@color/theme_surface_card"
+                                android:textSize="@dimen/auto_sp_14"
                                 android:alpha="0.9"
-                                android:layout_marginStart="6dp"/>
+                                android:layout_marginStart="@dimen/auto_dp_6"/>
                         </LinearLayout>
 
                         <!-- Big number -->
@@ -136,45 +136,45 @@
                             android:id="@+id/txtTotalScreenTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5h 42m"
-                            android:textSize="26sp"
+                            android:text="@string/auto_text_5h_42m"
+                            android:textSize="@dimen/auto_sp_26"
                             android:textStyle="bold"
-                            android:textColor="#FFFFFF"
-                            android:layout_marginTop="12dp"/>
+                            android:textColor="@color/theme_surface_card"
+                            android:layout_marginTop="@dimen/weekly_title_spacing_small"/>
 
                         <TextView
                             android:id="@+id/txtCompare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="8% less than yesterday"
-                            android:textSize="14sp"
-                            android:textColor="#FFFFFF"
+                            android:text="@string/auto_text_8_less_than_yesterday"
+                            android:textSize="@dimen/auto_sp_14"
+                            android:textColor="@color/theme_surface_card"
                             android:alpha="0.8"
-                            android:layout_marginTop="4dp"/>
+                            android:layout_marginTop="@dimen/auto_dp_4"/>
 
                         <!-- Stats -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="16dp">
+                            android:layout_marginTop="@dimen/weekly_row_spacing">
 
                             <!-- Sessions -->
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="@dimen/auto_dp_0"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal"
-                                android:padding="12dp"
+                                android:padding="@dimen/weekly_title_spacing_small"
                                 android:background="@drawable/bg_glass">
 
                                 <ImageView
-                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginEnd="@dimen/weekly_trend_icon_container_padding"
                                     android:src="@drawable/clock"
-                                    app:tint="#E0E2F7"
-                                    android:layout_width="22dp"
-                                    android:layout_height="22dp"/>
+                                    app:tint="@color/theme_border_subtle"
+                                    android:layout_width="@dimen/auto_dp_22"
+                                    android:layout_height="@dimen/auto_dp_22"/>
 
                                 <LinearLayout
                                     android:orientation="vertical"
@@ -184,40 +184,40 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="12dp"
-                                        android:text="Sessions"
-                                        android:textSize="14sp"
-                                        android:textColor="#FFFFFF"
+                                        android:layout_marginBottom="@dimen/weekly_title_spacing_small"
+                                        android:text="@string/auto_sessions"
+                                        android:textSize="@dimen/auto_sp_14"
+                                        android:textColor="@color/theme_surface_card"
                                         android:alpha="0.8"/>
 
                                     <TextView
                                         android:id="@+id/txtSessionCount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="87"
-                                        android:textSize="23sp"
+                                        android:text="@string/auto_text_87"
+                                        android:textSize="@dimen/auto_sp_23"
                                         android:textStyle="bold"
-                                        android:textColor="#FFFFFF"
-                                        android:layout_marginTop="4dp"/>
+                                        android:textColor="@color/theme_surface_card"
+                                        android:layout_marginTop="@dimen/auto_dp_4"/>
                                 </LinearLayout>
                             </LinearLayout>
 
                             <!-- Longest Session -->
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="@dimen/auto_dp_0"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal"
-                                android:padding="12dp"
-                                android:layout_marginStart="12dp"
+                                android:padding="@dimen/weekly_title_spacing_small"
+                                android:layout_marginStart="@dimen/weekly_title_spacing_small"
                                 android:background="@drawable/bg_glass">
 
                                 <ImageView
-                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginEnd="@dimen/weekly_trend_icon_container_padding"
                                     android:src="@drawable/trending_up"
-                                    app:tint="#E0E2F7"
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"/>
+                                    app:tint="@color/theme_border_subtle"
+                                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
 
                                 <LinearLayout
                                     android:orientation="vertical"
@@ -227,20 +227,20 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Longest Session"
-                                        android:textSize="14sp"
-                                        android:textColor="#FFFFFF"
+                                        android:text="@string/auto_longest_session"
+                                        android:textSize="@dimen/auto_sp_14"
+                                        android:textColor="@color/theme_surface_card"
                                         android:alpha="0.8"/>
 
                                     <TextView
                                         android:id="@+id/txtValueLongestSession"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="42m"
-                                        android:textSize="18sp"
+                                        android:text="@string/auto_text_42m"
+                                        android:textSize="@dimen/weekly_section_title_size"
                                         android:textStyle="bold"
-                                        android:textColor="#FFFFFF"
-                                        android:layout_marginTop="4dp"/>
+                                        android:textColor="@color/theme_surface_card"
+                                        android:layout_marginTop="@dimen/auto_dp_4"/>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -249,9 +249,9 @@
 
                 <!-- ===== USAGE CHART ===== -->
                 <androidx.cardview.widget.CardView
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="@dimen/weekly_row_spacing"
+                    app:cardElevation="@dimen/weekly_card_elevation"
+                    android:layout_marginBottom="@dimen/weekly_row_spacing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -259,20 +259,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="@dimen/weekly_row_spacing">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Usage Timeline"
-                            android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:text="@string/auto_usage_timeline"
+                            android:textColor="@color/weekly_overview_text_primary"
+                            android:textSize="@dimen/weekly_section_title_size"
                             android:textStyle="bold"
-                            android:layout_marginBottom="12dp"/>
+                            android:layout_marginBottom="@dimen/weekly_title_spacing_small"/>
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="220dp">
+                            android:layout_height="@dimen/weekly_chart_height">
 
                             <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/barChart"
@@ -283,9 +283,9 @@
                                 android:id="@+id/txtEmptyChart"
                                 android:visibility="gone"
                                 android:gravity="center"
-                                android:text="No hourly activity for this day yet. Pick another day or check back after using your phone."
-                                android:textColor="#6B7280"
-                                android:textSize="14sp"
+                                android:text="@string/auto_no_hourly_activity_for_this_day_yet_pick_another_day_or_check_back_after_using_your_phone"
+                                android:textColor="@color/weekly_overview_text_secondary"
+                                android:textSize="@dimen/auto_sp_14"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"/>
                         </FrameLayout>
@@ -294,9 +294,9 @@
 
                 <!-- ===== TOP APPS LIST ===== -->
                 <androidx.cardview.widget.CardView
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="@dimen/weekly_row_spacing"
+                    app:cardElevation="@dimen/weekly_card_elevation"
+                    android:layout_marginBottom="@dimen/weekly_row_spacing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -304,16 +304,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="@dimen/weekly_row_spacing">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Most Used Apps"
-                            android:textSize="18sp"
+                            android:text="@string/auto_most_used_apps"
+                            android:textSize="@dimen/weekly_section_title_size"
                             android:textStyle="bold"
-                            android:textColor="#000000"
-                            android:layout_marginBottom="12dp"/>
+                            android:textColor="@color/weekly_overview_text_primary"
+                            android:layout_marginBottom="@dimen/weekly_title_spacing_small"/>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvApps"
@@ -324,11 +324,11 @@
                         <TextView
                             android:id="@+id/txtEmptyApps"
                             android:visibility="gone"
-                            android:text="No app usage for this day yet."
-                            android:textColor="#6B7280"
-                            android:textSize="14sp"
+                            android:text="@string/auto_no_app_usage_for_this_day_yet"
+                            android:textColor="@color/weekly_overview_text_secondary"
+                            android:textSize="@dimen/auto_sp_14"
                             android:gravity="center"
-                            android:padding="16dp"
+                            android:padding="@dimen/weekly_row_spacing"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -339,46 +339,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp"
+                    android:padding="@dimen/weekly_row_spacing"
                     android:background="@drawable/bg_insight">
 
                     <LinearLayout
                         android:background="@drawable/bg_circle_amber"
-                        android:padding="10dp"
+                        android:padding="@dimen/weekly_trend_icon_container_padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
+                            android:layout_width="@dimen/auto_dp_22"
+                            android:layout_height="@dimen/auto_dp_22"
                             android:src="@drawable/lightbulb"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/auto_dp_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="@dimen/weekly_title_spacing_small">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Usage Insight"
-                            android:textSize="18sp"
+                            android:text="@string/auto_usage_insight"
+                            android:textSize="@dimen/weekly_section_title_size"
                             android:textStyle="bold"
-                            android:textColor="#7B3306"/>
+                            android:textColor="@color/auto_color_7b3306"/>
 
                         <TextView
                             android:id="@+id/txtInsights"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="You used social media most frequently after 10 PM. Consider setting app limits for better sleep quality."
-                            android:textSize="16sp"
-                            android:textColor="#78350F"
-                            android:layout_marginTop="10dp"/>
+                            android:text="@string/auto_you_used_social_media_most_frequently_after_10_pm_consider_setting_app_limits_for_better_sleep_quality"
+                            android:textSize="@dimen/weekly_body_text_size"
+                            android:textColor="@color/auto_color_78350f"
+                            android:layout_marginTop="@dimen/weekly_trend_icon_container_padding"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

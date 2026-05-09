@@ -1,7 +1,9 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.daily
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
@@ -29,10 +31,12 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DailyOverviewViewModel @Inject constructor(
+    application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
     private val getDashboardDataUseCase: GetDashboardDataUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
+    private val context get() = getApplication<Application>()
     private val _uiState = MutableStateFlow(DailyOverviewUiState())
     val uiState: StateFlow<DailyOverviewUiState> = _uiState.asStateFlow()
     private val _effects = MutableSharedFlow<DailyOverviewEffect>()
@@ -90,7 +94,7 @@ class DailyOverviewViewModel @Inject constructor(
                     )
                 ) {
                     is RefreshUsageDataOutcome.Success -> null
-                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage()
+                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage(context)
                 }
             } else {
                 null
@@ -122,10 +126,11 @@ class DailyOverviewViewModel @Inject constructor(
                         isLoading = false,
                         selectedDate = resolvedDate,
                         dateLabel = UsageFormatter.formatFriendlyDate(
+                            context,
                             LocalDate.parse(todayOutcome.data.currentLocalDate),
                             today
                         ),
-                        totalScreenTimeText = UsageFormatter.formatDuration(todayUsage.totalScreenTimeMillis),
+                        totalScreenTimeText = UsageFormatter.formatDuration(context, todayUsage.totalScreenTimeMillis),
                         compareText = buildCompareText(
                             todayMillis = todayUsage.totalScreenTimeMillis,
                             yesterdayMillis = yesterdayUsage?.totalScreenTimeMillis
@@ -133,12 +138,12 @@ class DailyOverviewViewModel @Inject constructor(
                         sessionCountText = todayUsage.totalSessionCount.toString(),
                         longestSessionText = todayUsage.sessions
                             .maxOfOrNull { it.durationMillis }
-                            ?.let { UsageFormatter.formatDuration(it) }
-                            ?: "0m",
+                            ?.let { UsageFormatter.formatDuration(context, it) }
+                            ?: context.getString(R.string.auto_text_0m),
                         hourlyUsage = todayOutcome.data.hourlyUsage,
                         topApps = todayOutcome.data.topApps,
                         insightText = topInsight?.description?.takeIf { it.isNotBlank() }
-                            ?: "No daily insight yet. Usage patterns will appear after more activity is recorded.",
+                            ?: context.getString(R.string.auto_no_daily_insight),
                         errorMessage = refreshError
                     )
                 }
@@ -148,8 +153,8 @@ class DailyOverviewViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             selectedDate = resolvedDate,
-                            dateLabel = UsageFormatter.formatFriendlyDate(nowMillis, timezoneId, today),
-                            errorMessage = refreshError ?: todayOutcome.error.toUserMessage()
+                            dateLabel = UsageFormatter.formatFriendlyDate(context, nowMillis, timezoneId, today),
+                            errorMessage = refreshError ?: todayOutcome.error.toUserMessage(context)
                         )
                     }
                 }
@@ -159,35 +164,35 @@ class DailyOverviewViewModel @Inject constructor(
 
     private fun buildCompareText(todayMillis: Long, yesterdayMillis: Long?): String {
         if (yesterdayMillis == null || yesterdayMillis <= 0L) {
-            return "No yesterday data yet"
+            return context.getString(R.string.auto_no_yesterday_data)
         }
         val deltaPercent = (((todayMillis - yesterdayMillis).toDouble() / yesterdayMillis.toDouble()) * 100)
             .toInt()
         return when {
-            deltaPercent > 0 -> "${deltaPercent}% more than yesterday"
-            deltaPercent < 0 -> "${kotlin.math.abs(deltaPercent)}% less than yesterday"
-            else -> "Same as yesterday"
+            deltaPercent > 0 -> context.getString(R.string.auto_compare_more, deltaPercent)
+            deltaPercent < 0 -> context.getString(R.string.auto_compare_less, kotlin.math.abs(deltaPercent))
+            else -> context.getString(R.string.auto_compare_same)
         }
     }
 
-    private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(): String {
+    private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(context: android.content.Context): String {
         return when (this) {
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.PermissionDenied ->
-                "Usage access is required to refresh your daily overview."
+                context.getString(R.string.auto_error_permission_denied)
 
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "The latest usage data could not be refreshed."
+            else -> context.getString(R.string.auto_error_refresh_failure)
         }
     }
 
-    private fun DashboardDataError.toUserMessage(): String {
+    private fun DashboardDataError.toUserMessage(context: android.content.Context): String {
         return when (this) {
             is DashboardDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "Daily overview data is not available yet."
+            else -> context.getString(R.string.auto_error_no_dashboard_data)
         }
     }
 

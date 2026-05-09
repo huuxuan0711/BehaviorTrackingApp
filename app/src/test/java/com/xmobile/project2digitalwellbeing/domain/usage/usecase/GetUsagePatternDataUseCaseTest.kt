@@ -18,7 +18,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageReposit
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricherImpl
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractorImpl
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -26,7 +26,7 @@ import org.junit.Test
 class GetUsagePatternDataUseCaseTest {
 
     @Test
-    fun `returns usage pattern data with top apps and top insight`() = runBlocking {
+    fun `returns usage pattern data with top apps and top insight`() = runTest {
         val repository = FakePatternRepository(
             sessions = listOf(
                 AppSession("app.a", 0L, 60_000L, 60_000L),
@@ -62,7 +62,7 @@ class GetUsagePatternDataUseCaseTest {
     }
 
     @Test
-    fun `maps metadata read failure to data access error`() = runBlocking {
+    fun `maps metadata read failure to data access error`() = runTest {
         val repository = FakePatternRepository(
             metadataError = UsageDataLayerException(
                 UsageDataLayerError.CacheReadFailed(

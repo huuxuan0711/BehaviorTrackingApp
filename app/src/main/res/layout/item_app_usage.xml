@@ -3,27 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/weekly_row_spacing">
 
     <!-- Top row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/weekly_small_icon_padding"
         android:gravity="center_vertical">
 
         <!-- Icon -->
         <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:backgroundTint="#F3F4F6"
+            android:layout_width="@dimen/weekly_icon_button_size"
+            android:layout_height="@dimen/weekly_icon_button_size"
+            android:backgroundTint="@color/theme_surface_subtle"
             android:background="@drawable/bg_image_onboarding"
-            android:layout_marginEnd="20dp">
+            android:layout_marginEnd="@dimen/weekly_trend_top_spacing">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/auto_dp_28"
+                android:layout_height="@dimen/auto_dp_28"
                 android:id="@+id/imgIcon"
                 android:src="@drawable/house"
                 android:layout_gravity="center" />
@@ -31,7 +31,7 @@
 
         <!-- Name + duration -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="@dimen/auto_dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -40,31 +40,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvName"
-                android:text="Instagram"
-                android:textSize="18sp"
-                android:textColor="#1A1A1A"/>
+                android:text="@string/auto_instagram"
+                android:textSize="@dimen/weekly_section_title_size"
+                android:textColor="@color/weekly_overview_text_primary"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvDuration"
-                android:text="2h 15m"
-                android:textColor="#6B7280"
-                android:textSize="16sp"/>
+                android:text="@string/auto_text_2h_15m"
+                android:textColor="@color/weekly_overview_text_secondary"
+                android:textSize="@dimen/weekly_body_text_size"/>
         </LinearLayout>
     </LinearLayout>
 
     <!-- Progress bar -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="@dimen/weekly_small_icon_padding"
         android:background="@drawable/bg_progress_bg">
 
         <View
             android:id="@+id/viewProgress"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/auto_dp_0"
             android:layout_height="match_parent"
             android:background="@drawable/bg_progress_fill"/>
     </FrameLayout>
 
 </LinearLayout>
+

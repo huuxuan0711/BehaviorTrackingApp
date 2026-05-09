@@ -1,9 +1,11 @@
 package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
 import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrend
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
+import com.xmobile.project2digitalwellbeing.domain.usage.model.shouldIncludeCategory
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageTrendAnalyzer
@@ -57,6 +59,9 @@ enum class WeeklyOverviewDataStage {
     RESOLVE_WEEK,
     READ_CURRENT_WEEK_SESSIONS,
     READ_PREVIOUS_WEEK_SESSIONS,
+    READ_PREFERENCES,
+    READ_CURRENT_WEEK_APP_METADATA,
+    READ_PREVIOUS_WEEK_APP_METADATA,
     BUILD_CURRENT_WEEK_USAGE,
     BUILD_PREVIOUS_WEEK_USAGE,
     BUILD_TREND,
@@ -67,6 +72,7 @@ enum class WeeklyOverviewDataStage {
 class GetWeeklyOverviewDataUseCase @Inject constructor(
     private val repository: UsageRepository,
     private val appRepository: AppRepository,
+    private val usagePreferencesRepository: UsagePreferencesRepository,
     private val aggregator: UsageAggregator,
     private val trendAnalyzer: UsageTrendAnalyzer
 ) {
@@ -101,9 +107,33 @@ class GetWeeklyOverviewDataUseCase @Inject constructor(
             )
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
 
+        val preferences = runStage(WeeklyOverviewDataStage.READ_PREFERENCES, params) {
+            usagePreferencesRepository.getUsageAnalysisPreferences()
+        }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
+
+        val currentWeekAppMetadata = runStage(WeeklyOverviewDataStage.READ_CURRENT_WEEK_APP_METADATA, params) {
+            appRepository.getAppMetadata(currentWeekSessions.map { it.packageName }.toSet())
+        }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
+
+        val filteredCurrentWeekSessions = currentWeekSessions.filter { session ->
+            val category = currentWeekAppMetadata[session.packageName]?.reportingCategory
+                ?: com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory.UNKNOWN
+            preferences.shouldIncludeCategory(category)
+        }
+
+        val previousWeekAppMetadata = runStage(WeeklyOverviewDataStage.READ_PREVIOUS_WEEK_APP_METADATA, params) {
+            appRepository.getAppMetadata(previousWeekSessions.map { it.packageName }.toSet())
+        }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
+
+        val filteredPreviousWeekSessions = previousWeekSessions.filter { session ->
+            val category = previousWeekAppMetadata[session.packageName]?.reportingCategory
+                ?: com.xmobile.project2digitalwellbeing.domain.apps.model.AppCategory.UNKNOWN
+            preferences.shouldIncludeCategory(category)
+        }
+
         val weeklyUsage = runStage(WeeklyOverviewDataStage.BUILD_CURRENT_WEEK_USAGE, params) {
             aggregator.buildWeeklyUsage(
-                sessions = currentWeekSessions,
+                sessions = filteredCurrentWeekSessions,
                 timezoneId = params.timezoneId,
                 startLocalDate = currentWeekStart.toString(),
                 endLocalDate = currentWeekEnd.toString()
@@ -112,7 +142,7 @@ class GetWeeklyOverviewDataUseCase @Inject constructor(
 
         val previousWeeklyUsage = runStage(WeeklyOverviewDataStage.BUILD_PREVIOUS_WEEK_USAGE, params) {
             aggregator.buildWeeklyUsage(
-                sessions = previousWeekSessions,
+                sessions = filteredPreviousWeekSessions,
                 timezoneId = params.timezoneId,
                 startLocalDate = previousWeekStart.toString(),
                 endLocalDate = previousWeekEnd.toString()
@@ -124,12 +154,12 @@ class GetWeeklyOverviewDataUseCase @Inject constructor(
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
 
         val appMetadata = runStage(WeeklyOverviewDataStage.READ_APP_METADATA, params) {
-            appRepository.getAppMetadata(currentWeekSessions.map { it.packageName }.toSet())
+            appRepository.getAppMetadata(filteredCurrentWeekSessions.map { it.packageName }.toSet())
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
 
         val topApps = runStage(WeeklyOverviewDataStage.BUILD_TOP_APPS, params) {
             aggregator.buildAppUsageStats(
-                sessions = currentWeekSessions,
+                sessions = filteredCurrentWeekSessions,
                 appMetadataByPackage = appMetadata
             ).take(params.topAppsLimit)
         }.getOrElse { return GetWeeklyOverviewDataOutcome.Failure(it.toWeeklyOverviewDataError(params.timezoneId)) }
@@ -183,6 +213,9 @@ private fun Throwable.toWeeklyOverviewDataError(timezoneId: String): WeeklyOverv
         else -> when (stage) {
             WeeklyOverviewDataStage.READ_CURRENT_WEEK_SESSIONS,
             WeeklyOverviewDataStage.READ_PREVIOUS_WEEK_SESSIONS,
+            WeeklyOverviewDataStage.READ_PREFERENCES,
+            WeeklyOverviewDataStage.READ_CURRENT_WEEK_APP_METADATA,
+            WeeklyOverviewDataStage.READ_PREVIOUS_WEEK_APP_METADATA,
             WeeklyOverviewDataStage.READ_APP_METADATA ->
                 WeeklyOverviewDataError.DataAccessFailure(stage = stage, cause = cause)
 

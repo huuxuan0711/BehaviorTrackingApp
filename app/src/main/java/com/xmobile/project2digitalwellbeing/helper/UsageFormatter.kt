@@ -1,5 +1,7 @@
 package com.xmobile.project2digitalwellbeing.helper
 
+import android.content.Context
+import com.xmobile.project2digitalwellbeing.R
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -9,38 +11,38 @@ import java.util.Locale
 
 object UsageFormatter {
 
-    fun formatDuration(millis: Long): String {
+    fun formatDuration(context: Context, millis: Long): String {
         val totalMinutes = millis / (60L * 1000L)
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
         return when {
-            hours > 0L && minutes > 0L -> "${hours}h ${minutes}m"
-            hours > 0L -> "${hours}h"
-            else -> "${minutes}m"
+            hours > 0L && minutes > 0L -> context.getString(R.string.auto_duration_hm, hours.toInt(), minutes.toInt())
+            hours > 0L -> context.getString(R.string.auto_duration_h, hours.toInt())
+            else -> context.getString(R.string.auto_duration_m, minutes.toInt())
         }
     }
 
-    fun formatDurationVerbose(millis: Long): String {
+    fun formatDurationVerbose(context: Context, millis: Long): String {
         val totalMinutes = millis / (60L * 1000L)
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
         return when {
-            hours > 0L && minutes > 0L -> "${hours}h ${minutes}m"
-            hours > 0L -> "${hours}h"
-            else -> "$totalMinutes minutes"
+            hours > 0L && minutes > 0L -> context.getString(R.string.auto_duration_hm, hours.toInt(), minutes.toInt())
+            hours > 0L -> context.getString(R.string.auto_duration_h, hours.toInt())
+            else -> context.getString(R.string.auto_text_n_minutes_long, totalMinutes.toInt())
         }
     }
 
-    fun formatFriendlyDate(millis: Long, timezoneId: String, today: LocalDate): String {
+    fun formatFriendlyDate(context: Context, millis: Long, timezoneId: String, today: LocalDate): String {
         val localDate = Instant.ofEpochMilli(millis)
             .atZone(ZoneId.of(timezoneId))
             .toLocalDate()
-        return formatFriendlyDate(localDate, today)
+        return formatFriendlyDate(context, localDate, today)
     }
 
-    fun formatFriendlyDate(date: LocalDate, today: LocalDate): String {
+    fun formatFriendlyDate(context: Context, date: LocalDate, today: LocalDate): String {
         return if (date == today) {
-            "Today"
+            context.getString(R.string.auto_today)
         } else {
             date.format(
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)

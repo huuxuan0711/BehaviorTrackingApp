@@ -1,6 +1,7 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
@@ -29,9 +30,12 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class WeeklyOverviewViewModel @Inject constructor(
+    application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
     private val getWeeklyOverviewDataUseCase: GetWeeklyOverviewDataUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context get() = getApplication<Application>()
 
     private val _uiState = MutableStateFlow(WeeklyOverviewUiState())
     val uiState: StateFlow<WeeklyOverviewUiState> = _uiState.asStateFlow()
@@ -100,13 +104,13 @@ class WeeklyOverviewViewModel @Inject constructor(
                     _uiState.value = WeeklyOverviewUiState(
                         weekStartDate = normalizedWeekStart,
                         dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
-                        averageDailyScreenTimeText = UsageFormatter.formatDuration(weeklyUsage.averageDailyScreenTimeMillis),
+                        averageDailyScreenTimeText = UsageFormatter.formatDuration(context, weeklyUsage.averageDailyScreenTimeMillis),
                         mostUsedDayText = if (maxDay == null || maxDay.totalScreenTimeMillis <= 0L) {
                             "No data yet"
                         } else {
-                            "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(maxDay.totalScreenTimeMillis)}"
+                            "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(context, maxDay.totalScreenTimeMillis)}"
                         },
-                        totalScreenTimeText = UsageFormatter.formatDuration(weeklyUsage.totalScreenTimeMillis),
+                        totalScreenTimeText = UsageFormatter.formatDuration(context, weeklyUsage.totalScreenTimeMillis),
                         trendText = refreshError ?: outcome.data.trend.toFriendlySummary().takeIf { it.isNotBlank() }
                         ?: "No weekly trend yet. Patterns become clearer after a few active days.",
                         chartBars = dailyUsages.map { dailyUsage ->

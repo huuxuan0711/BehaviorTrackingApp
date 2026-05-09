@@ -2,24 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="@dimen/weekly_small_icon_padding"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <View
         android:id="@+id/imgDot"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
+        android:layout_width="@dimen/weekly_small_icon_padding"
+        android:layout_height="@dimen/weekly_small_icon_padding"
         android:background="@drawable/bg_dot"/>
 
     <TextView
         android:id="@+id/tvPeriod"
         android:textStyle="bold"
-        android:text="Morning"
-        android:textSize="18sp"
-        android:textColor="#1A1A1A"
-        android:layout_marginStart="20dp"
+        android:text="@string/auto_morning"
+        android:textSize="@dimen/weekly_section_title_size"
+        android:textColor="@color/weekly_overview_text_primary"
+        android:layout_marginStart="@dimen/weekly_trend_top_spacing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>
+

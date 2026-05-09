@@ -49,7 +49,7 @@ internal object UsageDetailChartConfigurator {
             setDrawBarShadow(false)
             axisRight.isEnabled = false
             axisLeft.isEnabled = false
-            setNoDataText("No hourly data")
+            setNoDataText(context.getString(R.string.auto_no_hourly_data))
 
             // Use custom renderer for rounded top corners
             val pxRadius = 12f * resources.displayMetrics.density
@@ -95,8 +95,8 @@ internal object UsageDetailChartConfigurator {
     fun renderBarChart(chart: BarChart, context: Context, values: List<Float>) {
         val entries = values.mapIndexed { index, value -> BarEntry(index.toFloat(), value) }
         val dataSet = BarDataSet(entries, "").apply {
-            color = android.graphics.Color.parseColor("#E0E1F6")
-            highLightColor = android.graphics.Color.parseColor("#6366F1")
+            color = ContextCompat.getColor(context, R.color.auto_color_e0e1f6)
+            highLightColor = ContextCompat.getColor(context, R.color.auto_color_6366f1)
             highLightAlpha = 255
             setDrawValues(false)
         }

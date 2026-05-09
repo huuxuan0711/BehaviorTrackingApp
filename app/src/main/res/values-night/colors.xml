@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#8C9BFF</color>
+    <color name="primary_light">#283252</color>
+    <color name="weekly_overview_background">#0F172A</color>
+    <color name="weekly_overview_title">#F8FAFC</color>
+    <color name="weekly_overview_text_primary">#E2E8F0</color>
+    <color name="weekly_overview_text_secondary">#94A3B8</color>
+    <color name="weekly_overview_divider">#1E293B</color>
+    <color name="weekly_trend_icon_background">#7C8CFF</color>
+
+    <color name="auto_color_000000">#E2E8F0</color>
+    <color name="auto_color_111827">#E2E8F0</color>
+    <color name="auto_color_374151">#CBD5E1</color>
+    <color name="auto_color_4b5563">#94A3B8</color>
+    <color name="auto_color_5c6bcc">#8C9BFF</color>
+    <color name="auto_color_7e8490">#94A3B8</color>
+    <color name="auto_color_888888">#94A3B8</color>
+    <color name="auto_color_8c8c8c">#94A3B8</color>
+    <color name="auto_color_9ca3af">#94A3B8</color>
+    <color name="auto_color_9ca3b7">#94A3B8</color>
+    <color name="auto_color_a8afb9">#94A3B8</color>
+    <color name="auto_color_b6b6b6">#94A3B8</color>
+    <color name="auto_color_b8b8b8">#94A3B8</color>
+    <color name="auto_color_d1d5db">#334155</color>
+    <color name="auto_color_dadce0">#334155</color>
+    <color name="auto_color_e0e0e0">#334155</color>
+    <color name="auto_color_e5e7eb">#334155</color>
+    <color name="auto_color_eef0f8">#1E293B</color>
+    <color name="auto_color_eef0ff">#1E293B</color>
+    <color name="auto_color_f0f0f0">#1E293B</color>
+    <color name="auto_color_f0f1ff">#1E293B</color>
+    <color name="auto_color_f0f4ff">#1E293B</color>
+    <color name="auto_color_f3f4f6">#1E293B</color>
+    <color name="auto_color_f5f6f8">#1E293B</color>
+    <color name="auto_color_f7f9ff">#1E293B</color>
+    <color name="auto_color_ffffff">#111827</color>
+    <color name="auto_color_66ffffff">#1F2937</color>
+    <color name="auto_color_33ffffff">#334155</color>
+    <color name="auto_color_1affffff">#1A334155</color>
+
+    <color name="auto_color_10b981">#34D399</color>
+    <color name="auto_color_4caf50">#34D399</color>
+    <color name="auto_color_36a74a">#22C55E</color>
+    <color name="auto_color_2e7d32">#16A34A</color>
+    <color name="auto_color_407d32">#22C55E</color>
+    <color name="auto_color_66bb6a">#4ADE80</color>
+
+    <color name="auto_color_ef4444">#F87171</color>
+    <color name="auto_color_e53935">#EF4444</color>
+
+    <color name="auto_color_fb8c00">#F59E0B</color>
+    <color name="auto_color_ff9800">#F59E0B</color>
+    <color name="auto_color_e65100">#EA580C</color>
+
+    <color name="auto_color_2196f3">#60A5FA</color>
+    <color name="auto_color_e3f2fd">#1E3A5F</color>
+
+    <color name="auto_color_e8f5e9">#123126</color>
+    <color name="auto_color_eaf2ef">#123126</color>
+    <color name="auto_color_ffebee">#3B1B22</color>
+    <color name="auto_color_fff3e0">#3D2A12</color>
+    <color name="auto_color_fff9eb">#3D2A12</color>
+    <color name="auto_color_fef3c6">#4A341A</color>
+
+    <color name="theme_surface_base">#0F172A</color>
+    <color name="theme_surface_card">#111827</color>
+    <color name="theme_surface_subtle">#1E293B</color>
+    <color name="theme_surface_glass">#1A334155</color>
+    <color name="theme_border_subtle">#334155</color>
+    <color name="theme_border_soft">#334155</color>
+    <color name="theme_accent_primary">#8C9BFF</color>
+    <color name="theme_accent_primary_light">#283252</color>
+    <color name="theme_accent_secondary">#A5B4FC</color>
+    <color name="theme_calendar_hover">#1E293B</color>
+    <color name="theme_success_bg">#123126</color>
+    <color name="theme_success_accent">#22C55E</color>
+    <color name="theme_warning_bg">#3D2A12</color>
+    <color name="theme_warning_border">#4A341A</color>
+    <color name="theme_progress_bg">#334155</color>
+</resources>

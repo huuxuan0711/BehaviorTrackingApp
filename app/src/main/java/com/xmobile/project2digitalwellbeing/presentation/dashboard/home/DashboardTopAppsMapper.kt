@@ -12,7 +12,7 @@ fun List<AppUsageStat>.toTopAppUiModels(context: Context): List<TopAppUiModel> {
     return map { app ->
         TopAppUiModel(
             name = app.appName ?: app.packageName,
-            durationText = app.totalTimeMillis.toDashboardDurationText(),
+            durationText = app.totalTimeMillis.toDashboardDurationText(context),
             progressRatio = if (totalDurationMillis <= 0L) 0f else {
                 app.totalTimeMillis.toFloat() / totalDurationMillis.toFloat()
             },
@@ -23,14 +23,14 @@ fun List<AppUsageStat>.toTopAppUiModels(context: Context): List<TopAppUiModel> {
     }
 }
 
-fun Long.toDashboardDurationText(): String {
+fun Long.toDashboardDurationText(context: Context): String {
     val totalMinutes = this / (60L * 1000L)
     val hours = totalMinutes / 60L
     val minutes = totalMinutes % 60L
     return when {
-        hours > 0L && minutes > 0L -> "${hours}h ${minutes}m"
-        hours > 0L -> "${hours}h"
-        else -> "${minutes}m"
+        hours > 0L && minutes > 0L -> context.getString(R.string.auto_duration_hm, hours.toInt(), minutes.toInt())
+        hours > 0L -> context.getString(R.string.auto_duration_h, hours.toInt())
+        else -> context.getString(R.string.auto_duration_m, minutes.toInt())
     }
 }
 

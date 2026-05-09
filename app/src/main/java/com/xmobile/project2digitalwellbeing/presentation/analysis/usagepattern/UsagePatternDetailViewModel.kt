@@ -1,7 +1,9 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.usagepattern
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsagePatternDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsagePatternDataParams
@@ -19,9 +21,11 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class UsagePatternDetailViewModel @Inject constructor(
+    application: Application,
     private val getUsagePatternDataUseCase: GetUsagePatternDataUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
+    private val context get() = getApplication<Application>()
     private val _uiState = MutableStateFlow(UsagePatternDetailUiState())
     val uiState: StateFlow<UsagePatternDetailUiState> = _uiState.asStateFlow()
 
@@ -51,7 +55,7 @@ class UsagePatternDetailViewModel @Inject constructor(
                         UsagePatternTopAppUiModel(
                             packageName = it.packageName,
                             appName = it.appName ?: it.packageName,
-                            sessionCountText = "${it.launchCount} sessions",
+                            sessionCountText = context.getString(R.string.auto_text_n_sessions, it.launchCount),
                             progressRatio = if (maxLaunchCount <= 0) 0f else {
                                 it.launchCount.toFloat() / maxLaunchCount.toFloat()
                             }
@@ -60,28 +64,28 @@ class UsagePatternDetailViewModel @Inject constructor(
 
                     _uiState.value = UsagePatternDetailUiState(
                         isLoading = false,
-                        averageSessionText = UsageFormatter.formatDurationVerbose(data.averageSessionLengthMillis),
-                        longestSessionText = UsageFormatter.formatDurationVerbose(data.longestSessionMillis),
+                        averageSessionText = UsageFormatter.formatDurationVerbose(context, data.averageSessionLengthMillis),
+                        longestSessionText = UsageFormatter.formatDurationVerbose(context, data.longestSessionMillis),
                         totalSessionText = data.totalSessionCount.toString(),
                         switchCountText = data.switchCount.toString(),
-                        averageSwitchIntervalText = UsageFormatter.formatDurationVerbose(data.averageSwitchIntervalMillis),
-                        shortSessionText = "${distribution.shortSessionCount} sessions",
-                        mediumSessionText = "${distribution.mediumSessionCount} sessions",
-                        longSessionText = "${distribution.longSessionCount} sessions",
+                        averageSwitchIntervalText = UsageFormatter.formatDurationVerbose(context, data.averageSwitchIntervalMillis),
+                        shortSessionText = context.getString(R.string.auto_text_n_sessions, distribution.shortSessionCount),
+                        mediumSessionText = context.getString(R.string.auto_text_n_sessions, distribution.mediumSessionCount),
+                        longSessionText = context.getString(R.string.auto_text_n_sessions, distribution.longSessionCount),
                         shortSessionRatio = distribution.shortSessionCount.toFloat() / totalDistributionCount.toFloat(),
                         mediumSessionRatio = distribution.mediumSessionCount.toFloat() / totalDistributionCount.toFloat(),
                         longSessionRatio = distribution.longSessionCount.toFloat() / totalDistributionCount.toFloat(),
                         topApps = topApps,
                         insightText = data.topInsight?.let { insight ->
                             when (insight.type) {
-                                InsightType.LATE_NIGHT_USAGE -> "A meaningful share of your usage happens late at night."
-                                InsightType.FREQUENT_SWITCHING -> "You switch between apps frequently, which may fragment attention."
-                                InsightType.BINGE_USAGE -> "Some sessions are long and uninterrupted in the same app."
-                                InsightType.LATE_NIGHT_SWITCHING -> "Late-night usage also includes rapid app switching."
-                                InsightType.WORK_HOUR_DISTRACTION -> "Distracting app usage appears during work hours."
-                                InsightType.MORNING_ROUTINE -> "Your morning starts with relatively heavy phone usage."
-                                InsightType.CONSTANT_CHECKING -> "You often check your phone in short bursts."
-                                InsightType.APP_RELIANCE -> "A small set of apps dominates your launch behavior."
+                                InsightType.LATE_NIGHT_USAGE -> context.getString(R.string.auto_insight_late_night_usage_desc)
+                                InsightType.FREQUENT_SWITCHING -> context.getString(R.string.auto_insight_frequent_switching_desc)
+                                InsightType.BINGE_USAGE -> context.getString(R.string.auto_insight_binge_usage_desc)
+                                InsightType.LATE_NIGHT_SWITCHING -> context.getString(R.string.auto_insight_late_night_switching_desc)
+                                InsightType.WORK_HOUR_DISTRACTION -> context.getString(R.string.auto_insight_work_hour_distraction_desc)
+                                InsightType.MORNING_ROUTINE -> context.getString(R.string.auto_insight_morning_routine_desc)
+                                InsightType.CONSTANT_CHECKING -> context.getString(R.string.auto_insight_constant_checking_desc)
+                                InsightType.APP_RELIANCE -> context.getString(R.string.auto_insight_app_reliance_desc)
                             }
                         } ?: UsagePatternDetailUiState.DEFAULT_INSIGHT
                     )
@@ -91,7 +95,7 @@ class UsagePatternDetailViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = outcome.error.toUserMessage()
+                            errorMessage = outcome.error.toUserMessage(context)
                         )
                     }
                 }
@@ -99,11 +103,11 @@ class UsagePatternDetailViewModel @Inject constructor(
         }
     }
 
-    private fun UsagePatternDataError.toUserMessage(): String {
+    private fun UsagePatternDataError.toUserMessage(context: android.content.Context): String {
         return when (this) {
-            is UsagePatternDataError.InvalidTimeZone -> "Your device time zone could not be resolved."
-            is UsagePatternDataError.DataAccessFailure -> "Usage pattern data is not available yet."
-            is UsagePatternDataError.ProcessingFailure -> "Usage pattern data could not be processed."
+            is UsagePatternDataError.InvalidTimeZone -> context.getString(R.string.auto_error_invalid_timezone)
+            is UsagePatternDataError.DataAccessFailure -> context.getString(R.string.auto_error_data_access_failure)
+            is UsagePatternDataError.ProcessingFailure -> context.getString(R.string.auto_error_processing_failure)
         }
     }
 }
