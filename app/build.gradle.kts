@@ -19,6 +19,7 @@ android {
 
         buildConfigField("String", "GEMINI_API_BASE_URL", "\"https://generativelanguage.googleapis.com/\"")
         buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-2.5-flash\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyA5e0rqHQactAkGK4qli5oud3GmlPsD8IQ\"")
         buildConfigField("boolean", "GEMINI_CLOUD_ENHANCEMENT_ENABLED", "false")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
