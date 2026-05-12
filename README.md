@@ -13,7 +13,6 @@ Bên cạnh đó, dự án tuân thủ kiến trúc **local-first** để bảo 
 ## 📱 Screenshots
 
 > `[Dashboard]`
-> 
 > `[Timeline]` `[Analysis]` `[Categories]` `[App Detail]`
 
 ## 🌟 Tính năng nổi bật & Chiều sâu sản phẩm

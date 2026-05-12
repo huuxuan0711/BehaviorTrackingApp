@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,6 +12,13 @@ android {
     namespace = "com.xmobile.project2digitalwellbeing"
     compileSdk = 36
 
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+    val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+
     defaultConfig {
         applicationId = "com.xmobile.project2digitalwellbeing"
         minSdk = 24
@@ -19,7 +28,7 @@ android {
 
         buildConfigField("String", "GEMINI_API_BASE_URL", "\"https://generativelanguage.googleapis.com/\"")
         buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-2.5-flash\"")
-        buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyCKb7sYTMh_zK8bf8Aca0WK-DaJXRgyn-8\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
         buildConfigField("boolean", "GEMINI_CLOUD_ENHANCEMENT_ENABLED", "false")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
