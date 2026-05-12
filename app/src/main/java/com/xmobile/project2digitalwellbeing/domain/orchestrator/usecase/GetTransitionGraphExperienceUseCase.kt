@@ -96,7 +96,8 @@ class GetTransitionGraphExperienceUseCase @Inject constructor(
                         GenerateCloudInsightTextParams(
                             surface = CloudInsightSurface.TRANSITION_GRAPH,
                             groundedContext = behaviorReasoning.llmContext,
-                            fallbackInsight = null
+                            fallbackInsight = null,
+                            languageCode = preferences.languageCode
                         )
                     ).getOrNull()?.text
                 } else {
@@ -115,7 +116,8 @@ class GetTransitionGraphExperienceUseCase @Inject constructor(
                 val insightSummaryText = cloudInsightText ?: localInsightNarrator.narrate(
                     resolutionDecision = effectiveResolutionDecision,
                     reasoningResult = behaviorReasoning,
-                    fallbackInsight = interpretedInsight
+                    fallbackInsight = interpretedInsight,
+                    languageCode = preferences.languageCode
                 )
 
                 GetTransitionGraphExperienceOutcome.Success(

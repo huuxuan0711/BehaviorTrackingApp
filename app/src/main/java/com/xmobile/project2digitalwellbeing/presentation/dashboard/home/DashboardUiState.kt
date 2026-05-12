@@ -6,11 +6,11 @@ import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 
 data class DashboardUiState(
     val isLoading: Boolean = false,
-    val currentDateLabel: String = "Today",
+    val currentDateLabel: String = "",
     val dailyUsage: DailyUsage? = null,
     val hourlyUsage: List<HourlyUsage> = emptyList(),
     val topApps: List<AppUsageStat> = emptyList(),
     val errorMessage: String? = null,
-    val insightSummaryText: String = "No clear pattern yet. Use your phone normally, then pull to refresh.",
+    val insightSummaryText: String = "",
     val lateNightRatioText: String = "0%"
 )

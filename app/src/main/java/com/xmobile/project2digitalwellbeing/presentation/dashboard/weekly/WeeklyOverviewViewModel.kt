@@ -3,6 +3,7 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetWeeklyOverviewExperienceOutcome
 import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetWeeklyOverviewExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
@@ -63,6 +64,7 @@ class WeeklyOverviewViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     weekStartDate = normalizedWeekStart,
+                    isLoading = true,
                     errorMessage = null
                 )
             }
@@ -101,10 +103,10 @@ class WeeklyOverviewViewModel @Inject constructor(
 
                     _uiState.value = WeeklyOverviewUiState(
                         weekStartDate = normalizedWeekStart,
-                        dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
+                        dateRangeLabel = UsageFormatter.formatDateRange(context, normalizedWeekStart, normalizedWeekStart.plusDays(6)),
                         averageDailyScreenTimeText = UsageFormatter.formatDuration(context, weeklyUsage.averageDailyScreenTimeMillis),
                         mostUsedDayText = if (maxDay == null || maxDay.totalScreenTimeMillis <= 0L) {
-                            "No data yet"
+                            context.getString(R.string.auto_no_usage_data)
                         } else {
                             "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(context, maxDay.totalScreenTimeMillis)}"
                         },
@@ -118,6 +120,7 @@ class WeeklyOverviewViewModel @Inject constructor(
                             )
                         },
                         topApps = outcome.data.weeklyData.topApps,
+                        isLoading = false,
                         errorMessage = refreshError,
                         canNavigateNext = normalizedWeekStart.isBefore(currentWeekStart)
                     )
@@ -126,8 +129,9 @@ class WeeklyOverviewViewModel @Inject constructor(
                 is GetWeeklyOverviewExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
-                            dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
+                            dateRangeLabel = UsageFormatter.formatDateRange(context, normalizedWeekStart, normalizedWeekStart.plusDays(6)),
                             trendText = refreshError ?: outcome.error.toUserMessage(),
+                            isLoading = false,
                             errorMessage = refreshError ?: outcome.error.toUserMessage(),
                             canNavigateNext = normalizedWeekStart.isBefore(currentWeekStart)
                         )
@@ -150,21 +154,21 @@ class WeeklyOverviewViewModel @Inject constructor(
     private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(): String {
         return when (this) {
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.PermissionDenied ->
-                "Usage access is required to refresh your weekly overview."
+                context.getString(R.string.auto_error_permission_denied)
 
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "The latest weekly usage data could not be refreshed."
+            else -> context.getString(R.string.auto_error_refresh_failure)
         }
     }
 
     private fun WeeklyOverviewDataError.toUserMessage(): String {
         return when (this) {
             is WeeklyOverviewDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "Weekly overview data is not available yet."
+            else -> context.getString(R.string.auto_weekly_data_unavailable)
         }
     }
 }

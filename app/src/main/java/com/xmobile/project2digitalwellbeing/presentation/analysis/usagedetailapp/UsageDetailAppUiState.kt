@@ -8,9 +8,9 @@ data class UsageDetailAppUiState(
     val todayTotalFormatted: String = "0m",
     val todayVsYesterdayPercent: Int = 0,
     val weekLineChartData: List<Float> = emptyList(),
-    val mostActivePeriod: String = "N/A",
+    val mostActivePeriod: String = "",
     val avgSessionFormatted: String = "0m",
-    val peakUsageLabel: String = "N/A",
+    val peakUsageLabel: String = "",
     val todayHourlyBarChartData: List<Float> = emptyList(),
     val totalSessionsToday: Int = 0,
     val longestSessionFormatted: String = "0m",
@@ -19,8 +19,8 @@ data class UsageDetailAppUiState(
     val timeMidLabel: String = "12:00",
     val timeEndLabel: String = "23:59",
     val topTransitions: List<AppTransitionUiModel> = emptyList(),
-    val insightSummary: String = "Usage metrics calculated. Keep monitoring your digital well-being.",
-    val tipSummary: String = "Monitor your screen time for better digital balance."
+    val insightSummary: String = "",
+    val tipSummary: String = ""
 )
 
 data class AppTransitionUiModel(

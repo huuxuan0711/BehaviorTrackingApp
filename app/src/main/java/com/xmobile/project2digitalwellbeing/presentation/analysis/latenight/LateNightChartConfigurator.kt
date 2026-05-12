@@ -14,9 +14,17 @@ import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
 
 internal object LateNightChartConfigurator {
 
-    private val LABELS = listOf("10PM", "11PM", "12AM", "1AM", "2AM", "3AM", "4AM", "5AM")
-
     fun configure(chart: BarChart, context: Context) {
+        val labels = listOf(
+            context.getString(R.string.auto_time_pm_placeholder, 10),
+            context.getString(R.string.auto_time_pm_placeholder, 11),
+            context.getString(R.string.auto_time_12am),
+            context.getString(R.string.auto_time_am_placeholder, 1),
+            context.getString(R.string.auto_time_am_placeholder, 2),
+            context.getString(R.string.auto_time_am_placeholder, 3),
+            context.getString(R.string.auto_time_am_placeholder, 4),
+            context.getString(R.string.auto_time_am_placeholder, 5)
+        )
         val secondaryTextColor = ContextCompat.getColor(context, R.color.weekly_overview_text_secondary)
         chart.apply {
             description.isEnabled = false
@@ -59,12 +67,12 @@ internal object LateNightChartConfigurator {
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         val idx = value.toInt()
-                        return if (idx in LABELS.indices) LABELS[idx] else ""
+                        return if (idx in labels.indices) labels[idx] else ""
                     }
                 }
                 axisMinimum = -0.6f
                 axisMaximum = 7.6f
-                labelCount = LABELS.size
+                labelCount = labels.size
                 granularity = 1f
                 setAvoidFirstLastClipping(false)
             }

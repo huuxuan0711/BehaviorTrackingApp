@@ -138,7 +138,7 @@ class GetTransitionGraphExperienceUseCaseTest {
             )
         )
         
-        whenever(localInsightNarrator.narrate(org.mockito.kotlin.any(), org.mockito.kotlin.anyOrNull(), org.mockito.kotlin.anyOrNull())).thenReturn("Local Narrator Text")
+        whenever(localInsightNarrator.narrate(org.mockito.kotlin.any(), org.mockito.kotlin.anyOrNull(), org.mockito.kotlin.anyOrNull(), org.mockito.kotlin.any())).thenReturn("Local Narrator Text")
 
         val result = useCase(params)
 

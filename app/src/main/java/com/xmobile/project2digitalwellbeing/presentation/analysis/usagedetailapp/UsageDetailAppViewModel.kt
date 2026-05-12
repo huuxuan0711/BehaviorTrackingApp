@@ -1,8 +1,10 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
 
+import android.app.Application
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.apps.usecase.GetAppMetadataUseCase
 import com.xmobile.project2digitalwellbeing.domain.apps.usecase.ResolveAppNameUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
@@ -21,12 +23,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsageDetailAppViewModel @Inject constructor(
+    application: Application,
     private val savedStateHandle: SavedStateHandle,
     private val usageRepository: UsageRepository,
     private val getAppMetadataUseCase: GetAppMetadataUseCase,
     private val resolveAppNameUseCase: ResolveAppNameUseCase,
     private val aggregator: UsageAggregator
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context get() = getApplication<Application>()
 
     private val packageName: String = savedStateHandle.get<String>("PACKAGE_NAME") ?: ""
 
@@ -42,7 +47,7 @@ class UsageDetailAppViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isLoading = false,
-                    errorMessage = "Missing app package. Unable to load usage detail."
+                    errorMessage = context.getString(R.string.auto_error_missing_app_package)
                 )
             }
             return
@@ -146,10 +151,10 @@ class UsageDetailAppViewModel @Inject constructor(
                 val mostActivePeriod = "${String.format("%02d:00", mostActiveHour)} - ${String.format("%02d:00", endHour)}"
 
                 val peakUsageLabel = when (mostActiveHour) {
-                    in 0..5 -> "Peak usage after midnight"
-                    in 6..11 -> "Peak usage in morning"
-                    in 12..16 -> "Peak usage in afternoon"
-                    else -> "Peak usage at night"
+                    in 0..5 -> context.getString(R.string.auto_peak_usage_after_midnight)
+                    in 6..11 -> context.getString(R.string.auto_peak_usage_morning)
+                    in 12..16 -> context.getString(R.string.auto_peak_usage_afternoon)
+                    else -> context.getString(R.string.auto_peak_usage_night)
                 }
 
                 val totalSessionsCount = todaySessions.size
@@ -198,17 +203,17 @@ class UsageDetailAppViewModel @Inject constructor(
                     }
 
                 val insightSummary = "You tend to use $appName mostly " + when (mostActiveHour) {
-                    in 0..5 -> "late at night."
-                    in 6..11 -> "in the morning."
-                    in 12..16 -> "in the afternoon."
-                    else -> "in the evening."
+                    in 0..5 -> context.getString(R.string.auto_usage_period_late_night)
+                    in 6..11 -> context.getString(R.string.auto_usage_period_morning)
+                    in 12..16 -> context.getString(R.string.auto_usage_period_afternoon)
+                    else -> context.getString(R.string.auto_usage_period_evening)
                 }
 
                 val tipSummary = when (mostActiveHour) {
-                    in 0..5 -> "You used $appName most frequently after midnight. Consider setting app limits for better sleep quality."
-                    in 6..11 -> "Morning usage detected. Ensure it does not distract you from your main daytime tasks."
-                    in 12..16 -> "Afternoon usage is high. A short screen break might boost your focus."
-                    else -> "Evening usage detected. Try winding down screen time an hour before bed."
+                    in 0..5 -> context.getString(R.string.auto_tip_after_midnight, appName)
+                    in 6..11 -> context.getString(R.string.auto_tip_morning_usage)
+                    in 12..16 -> context.getString(R.string.auto_tip_afternoon_usage)
+                    else -> context.getString(R.string.auto_tip_evening_usage)
                 }
 
                 _uiState.update {
@@ -238,7 +243,7 @@ class UsageDetailAppViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Unable to load app usage details right now."
+                        errorMessage = context.getString(R.string.auto_error_usage_detail_unavailable)
                     )
                 }
             }

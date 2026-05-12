@@ -68,6 +68,7 @@ class UsagePatternDetailActivity : AppCompatActivity() {
     }
 
     private fun render(state: UsagePatternDetailUiState) {
+        binding.loadingOverlay.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         binding.tvAvgSession.text = state.averageSessionText
         binding.tvLongestSession.text = state.longestSessionText
         binding.tvTotalSessions.text = state.totalSessionText
@@ -87,7 +88,6 @@ class UsagePatternDetailActivity : AppCompatActivity() {
             setProgressWidth(binding.progressLong, state.longSessionRatio)
         }
 
-        binding.main.alpha = if (state.isLoading) 0.6f else 1f
         showErrorIfNeeded(state.errorMessage)
     }
 

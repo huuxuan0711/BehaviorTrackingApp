@@ -43,9 +43,9 @@ class GetWeeklyOverviewExperienceUseCase @Inject constructor(
         return when (val outcome = getWeeklyOverviewDataUseCase(params)) {
             is GetWeeklyOverviewDataOutcome.Failure -> GetWeeklyOverviewExperienceOutcome.Failure(outcome.error)
             is GetWeeklyOverviewDataOutcome.Success -> {
-                val localSummary = outcome.data.trend.toFriendlySummary()
-                val cloudContext = buildCloudContext(outcome.data)
                 val preferences = usagePreferencesRepository.getUsageAnalysisPreferences()
+                val localSummary = outcome.data.trend.toFriendlySummary(preferences.languageCode)
+                val cloudContext = buildCloudContext(outcome.data, preferences.languageCode)
                 val initialDecision = insightResolutionStrategy.resolve(
                     InsightResolutionContext(
                         hasRuleInsight = localSummary.isNotBlank(),
@@ -61,7 +61,8 @@ class GetWeeklyOverviewExperienceUseCase @Inject constructor(
                         GenerateCloudInsightTextParams(
                             surface = CloudInsightSurface.WEEKLY_OVERVIEW,
                             groundedContext = cloudContext,
-                            fallbackInsight = null
+                            fallbackInsight = null,
+                            languageCode = preferences.languageCode
                         )
                     ).getOrNull()?.text
                 } else {
@@ -85,12 +86,17 @@ class GetWeeklyOverviewExperienceUseCase @Inject constructor(
         }
     }
 
-    private fun buildCloudContext(data: WeeklyOverviewData): LlmGroundedContext {
+    private fun buildCloudContext(data: WeeklyOverviewData, languageCode: String): LlmGroundedContext {
         val topApps = data.topApps.take(3).map {
             mapOf(
                 "title" to (it.appName ?: it.packageName),
                 "description" to "total=${it.totalTimeMillis} launch=${it.launchCount}",
-                "suggestedTimeLabel" to "weekly",
+                "suggestedTimeLabel" to when (languageCode.lowercase()) {
+                    "vi" -> "hàng tuần"
+                    "fr" -> "hebdomadaire"
+                    "de" -> "wöchentlich"
+                    else -> "weekly"
+                },
                 "priority" to "1"
             )
         }
@@ -103,14 +109,29 @@ class GetWeeklyOverviewExperienceUseCase @Inject constructor(
             secondaryPatterns = emptyList(),
             riskScore = (abs(data.trend.deltaRatio) * 100f).toInt().coerceIn(0, 100),
             confidence = 0.7f,
-            summary = data.trend.toFriendlySummary(),
+            summary = data.trend.toFriendlySummary(languageCode),
             evidence = evidence,
             recommendations = if (topApps.isEmpty()) {
                 listOf(
                     mapOf(
-                        "title" to "Review weekly usage",
-                        "description" to "Set one screen-time target for next week.",
-                        "suggestedTimeLabel" to "Monday morning",
+                        "title" to when (languageCode.lowercase()) {
+                            "vi" -> "Xem lại mức dùng tuần"
+                            "fr" -> "Revoir l'usage hebdomadaire"
+                            "de" -> "Wochennutzung prüfen"
+                            else -> "Review weekly usage"
+                        },
+                        "description" to when (languageCode.lowercase()) {
+                            "vi" -> "Đặt một mục tiêu thời gian màn hình cho tuần tới."
+                            "fr" -> "Fixez un objectif de temps d'écran pour la semaine prochaine."
+                            "de" -> "Setzen Sie ein Bildschirmzeit-Ziel für die nächste Woche."
+                            else -> "Set one screen-time target for next week."
+                        },
+                        "suggestedTimeLabel" to when (languageCode.lowercase()) {
+                            "vi" -> "Sáng thứ Hai"
+                            "fr" -> "Lundi matin"
+                            "de" -> "Montagmorgen"
+                            else -> "Monday morning"
+                        },
                         "priority" to "1"
                     )
                 )
@@ -120,12 +141,29 @@ class GetWeeklyOverviewExperienceUseCase @Inject constructor(
         )
     }
 
-    private fun com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrend.toFriendlySummary(): String {
+    private fun com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrend.toFriendlySummary(languageCode: String): String {
         val ratioPercent = (abs(deltaRatio) * 100f).toInt()
-        return when (direction) {
-            UsageTrendDirection.UP -> "Your screen time increased by $ratioPercent% compared to last week."
-            UsageTrendDirection.DOWN -> "Your screen time decreased by $ratioPercent% compared to last week."
-            UsageTrendDirection.FLAT -> "Your screen time is stable compared to last week."
+        return when (languageCode.lowercase()) {
+            "vi" -> when (direction) {
+                UsageTrendDirection.UP -> "Thời gian màn hình của bạn đã tăng $ratioPercent% so với tuần trước."
+                UsageTrendDirection.DOWN -> "Thời gian màn hình của bạn đã giảm $ratioPercent% so với tuần trước."
+                UsageTrendDirection.FLAT -> "Thời gian màn hình của bạn đang ổn định so với tuần trước."
+            }
+            "fr" -> when (direction) {
+                UsageTrendDirection.UP -> "Votre temps d'écran a augmenté de $ratioPercent% par rapport à la semaine dernière."
+                UsageTrendDirection.DOWN -> "Votre temps d'écran a diminué de $ratioPercent% par rapport à la semaine dernière."
+                UsageTrendDirection.FLAT -> "Votre temps d'écran est stable par rapport à la semaine dernière."
+            }
+            "de" -> when (direction) {
+                UsageTrendDirection.UP -> "Ihre Bildschirmzeit ist im Vergleich zur letzten Woche um $ratioPercent% gestiegen."
+                UsageTrendDirection.DOWN -> "Ihre Bildschirmzeit ist im Vergleich zur letzten Woche um $ratioPercent% gesunken."
+                UsageTrendDirection.FLAT -> "Ihre Bildschirmzeit ist im Vergleich zur letzten Woche stabil."
+            }
+            else -> when (direction) {
+                UsageTrendDirection.UP -> "Your screen time increased by $ratioPercent% compared to last week."
+                UsageTrendDirection.DOWN -> "Your screen time decreased by $ratioPercent% compared to last week."
+                UsageTrendDirection.FLAT -> "Your screen time is stable compared to last week."
+            }
         }
     }
 }

@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.databinding.ActivityDailyOverviewBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
+import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.home.toTopAppUiModels
 import com.xmobile.project2digitalwellbeing.presentation.onboarding.permission.PermissionActivity
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -100,7 +102,12 @@ class DailyOverviewActivity : AppCompatActivity() {
     }
 
     private fun render(state: DailyOverviewUiState) {
-        binding.txtDateSelector.text = state.dateLabel
+        binding.loadingOverlay.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+        binding.txtDateSelector.text = UsageFormatter.formatFriendlyDate(
+            context = this,
+            date = state.selectedDate,
+            today = LocalDate.now()
+        )
         binding.txtTotalScreenTime.text = state.totalScreenTimeText
         binding.txtCompare.text = state.compareText
         binding.txtSessionCount.text = state.sessionCountText

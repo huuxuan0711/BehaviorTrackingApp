@@ -6,10 +6,10 @@ data class LateNightAnalysisUiState(
     val sessionCount: String = "0",
     val avgDuration: String = "0m",
     val hourlyUsage: List<Float> = emptyList(),
-    val peakUsageLabel: String = "Peak usage between 11 PM - 1 AM",
+    val peakUsageLabel: String = "",
     val topApps: List<LateNightAppUiModel> = emptyList(),
-    val insightText: String = "No clear pattern yet.",
-    val recommendationText: String = "Reducing phone use after midnight may improve sleep quality.",
+    val insightText: String = "",
+    val recommendationText: String = "",
     val errorMessage: String? = null
 )
 

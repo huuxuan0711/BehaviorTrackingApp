@@ -27,7 +27,7 @@ android {
         versionName = "1.0"
 
         buildConfigField("String", "GEMINI_API_BASE_URL", "\"https://generativelanguage.googleapis.com/\"")
-        buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-3-flash\"")
+        buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-2.5-flash\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
         buildConfigField("boolean", "GEMINI_CLOUD_ENHANCEMENT_ENABLED", "false")
 

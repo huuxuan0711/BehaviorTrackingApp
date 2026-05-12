@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:background="@color/weekly_overview_background"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.analysis.usagepattern.UsagePatternDetailActivity">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <!-- HEADER -->
     <LinearLayout
@@ -48,6 +52,8 @@
             android:layout_marginStart="@dimen/weekly_trend_icon_container_padding"
             android:text="@string/auto_understand_how_you_interact_with_your_phone_throughout_the_day"
             android:textColor="@color/weekly_overview_text_secondary"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textSize="@dimen/auto_sp_14" />
     </LinearLayout>
 
@@ -489,6 +495,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/auto_you_often_open_social_media_apps_in_short_sessions_throughout_the_evening"
                         android:textSize="@dimen/auto_sp_14"
+                        android:maxWidth="240dp"
+                        android:maxLines="3"
+                        android:ellipsize="end"
                         android:textColor="@color/theme_border_soft"/>
                 </LinearLayout>
 
@@ -496,9 +505,23 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
 
-</LinearLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</FrameLayout>
 
 
 

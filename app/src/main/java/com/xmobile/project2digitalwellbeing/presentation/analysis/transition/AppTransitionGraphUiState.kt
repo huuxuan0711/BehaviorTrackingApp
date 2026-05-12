@@ -8,7 +8,7 @@ data class AppTransitionGraphUiState(
     val errorMessage: String? = null,
     val timeRange: AnalysisTimeRange = AnalysisTimeRange.TODAY,
     val filter: TransitionFilter = TransitionFilter.ALL,
-    val insightText: String = "No transition insight yet.",
+    val insightText: String = "",
     val nodes: List<GraphNodeUiModel> = emptyList(),
     val edges: List<GraphEdgeUiModel> = emptyList()
 )

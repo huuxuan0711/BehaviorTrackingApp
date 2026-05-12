@@ -3,6 +3,7 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetSessionTimelineExperienceOutcome
 import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetSessionTimelineExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
@@ -60,6 +61,7 @@ class SessionTimelineViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     selectedDate = normalizedDate,
+                    isLoading = true,
                     errorMessage = null
                 )
             }
@@ -103,8 +105,9 @@ class SessionTimelineViewModel @Inject constructor(
                         selectedDate = normalizedDate,
                         dateRangeLabel = timelineUiMapper.toDateLabel(normalizedDate),
                         insightText = refreshError ?: outcome.data.insightSummaryText.takeIf { it.isNotBlank() }
-                        ?: "No session insight yet. Meaningful patterns will appear after more usage is recorded.",
+                        ?: context.getString(R.string.auto_no_session_insight),
                         sessions = timelineItems,
+                        isLoading = false,
                         errorMessage = refreshError,
                         canNavigateNext = normalizedDate.isBefore(today)
                     )
@@ -116,6 +119,7 @@ class SessionTimelineViewModel @Inject constructor(
                             selectedDate = normalizedDate,
                             dateRangeLabel = timelineUiMapper.toDateLabel(normalizedDate),
                             insightText = refreshError ?: outcome.error.toUserMessage(),
+                            isLoading = false,
                             errorMessage = refreshError ?: outcome.error.toUserMessage(),
                             canNavigateNext = normalizedDate.isBefore(today)
                         )
@@ -138,21 +142,21 @@ class SessionTimelineViewModel @Inject constructor(
     private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(): String {
         return when (this) {
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.PermissionDenied ->
-                "Usage access is required to refresh your session timeline."
+                context.getString(R.string.auto_error_permission_denied)
 
             is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "The latest session timeline data could not be refreshed."
+            else -> context.getString(R.string.auto_error_refresh_failure)
         }
     }
 
     private fun SessionTimelineDataError.toUserMessage(): String {
         return when (this) {
             is SessionTimelineDataError.InvalidTimeZone ->
-                "Your device time zone could not be resolved."
+                context.getString(R.string.auto_error_invalid_timezone)
 
-            else -> "Session timeline data is not available yet."
+            else -> context.getString(R.string.auto_session_timeline_data_unavailable)
         }
     }
 

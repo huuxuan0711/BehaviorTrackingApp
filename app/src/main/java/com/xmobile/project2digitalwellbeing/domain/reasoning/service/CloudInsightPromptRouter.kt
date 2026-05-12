@@ -19,7 +19,7 @@ class CloudInsightPromptRouter @Inject constructor(
         transitionGraphBuilder
     )
 
-    fun buildSystemInstruction(): String = policy.buildSystemInstruction()
+    fun buildSystemInstruction(request: CloudInsightRequest): String = policy.buildSystemInstruction(request)
 
     fun buildUserPrompt(request: CloudInsightRequest): String {
         val builder = builders.firstOrNull { it.supports(request) }

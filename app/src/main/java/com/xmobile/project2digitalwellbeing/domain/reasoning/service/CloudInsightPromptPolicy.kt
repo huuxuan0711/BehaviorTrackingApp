@@ -5,8 +5,11 @@ import javax.inject.Inject
 
 class CloudInsightPromptPolicy @Inject constructor() {
 
-    fun buildSystemInstruction(): String {
-        return "You are a digital wellbeing assistant. Use only grounded context, avoid inventing facts, avoid medical claims, and return calm plain text without markdown."
+    fun buildSystemInstruction(request: CloudInsightRequest): String {
+        return buildString {
+            append("You are a digital wellbeing assistant. Use only grounded context, avoid inventing facts, avoid medical claims, and return calm plain text without markdown. ")
+            append(languageInstruction(request.languageCode))
+        }.trim()
     }
 
     private fun determineTone(riskScore: Int): String {
@@ -42,5 +45,14 @@ class CloudInsightPromptPolicy @Inject constructor() {
             appendLine(recommendationLines.ifBlank { "- none" })
             append(fallbackSection)
         }.trim()
+    }
+
+    private fun languageInstruction(languageCode: String): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> "Write the full response in Vietnamese."
+            "fr" -> "Write the full response in French."
+            "de" -> "Write the full response in German."
+            else -> "Write the full response in English."
+        }
     }
 }

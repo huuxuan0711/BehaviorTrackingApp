@@ -81,29 +81,29 @@ class AnalysisHubFragment : Fragment() {
 
     private fun buildModules(): List<AnalysisHubItem> {
         return listOf(
-            AnalysisHubItem.SectionHeader("App mapping"),
+            AnalysisHubItem.SectionHeader(getString(com.xmobile.project2digitalwellbeing.R.string.auto_app_mapping)),
             AnalysisHubItem.Module(
-                title = "App Categories",
-                description = "Tell the app which apps help you focus and which tend to distract.",
+                title = getString(com.xmobile.project2digitalwellbeing.R.string.auto_app_categories),
+                description = getString(com.xmobile.project2digitalwellbeing.R.string.auto_app_categories_desc),
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.layout_grid,
                 destination = AppCategoryActivity::class.java
             ),
             AnalysisHubItem.Module(
-                title = "Transitions",
-                description = "Follow the app-to-app flow behind distracting loops.",
+                title = getString(com.xmobile.project2digitalwellbeing.R.string.auto_app_transitions),
+                description = getString(com.xmobile.project2digitalwellbeing.R.string.auto_app_transitions_desc),
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.rotate_ccw,
                 destination = AppTransitionGraphActivity::class.java
             ),
-            AnalysisHubItem.SectionHeader("Explore insights"),
+            AnalysisHubItem.SectionHeader(getString(com.xmobile.project2digitalwellbeing.R.string.auto_explore_insights)),
             AnalysisHubItem.Module(
-                title = "Usage Patterns",
-                description = "Review long sessions, quick checks, and repeated usage habits.",
+                title = getString(com.xmobile.project2digitalwellbeing.R.string.auto_usage_patterns),
+                description = getString(com.xmobile.project2digitalwellbeing.R.string.auto_usage_patterns_desc),
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.chart_column,
                 destination = UsagePatternDetailActivity::class.java
             ),
             AnalysisHubItem.Module(
-                title = "Late Night",
-                description = "See how much phone use happens near bedtime and after midnight.",
+                title = getString(com.xmobile.project2digitalwellbeing.R.string.auto_late_night),
+                description = getString(com.xmobile.project2digitalwellbeing.R.string.auto_late_night_desc),
                 iconResId = com.xmobile.project2digitalwellbeing.R.drawable.moon,
                 destination = LateNightAnalysisActivity::class.java
             )

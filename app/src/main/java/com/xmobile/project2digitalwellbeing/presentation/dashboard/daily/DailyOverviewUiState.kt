@@ -7,13 +7,13 @@ import java.time.LocalDate
 data class DailyOverviewUiState(
     val isLoading: Boolean = false,
     val selectedDate: LocalDate = LocalDate.now(),
-    val dateLabel: String = "Today",
+    val dateLabel: String = "",
     val totalScreenTimeText: String = "0m",
-    val compareText: String = "No yesterday data yet",
+    val compareText: String = "",
     val sessionCountText: String = "0",
     val longestSessionText: String = "0m",
     val hourlyUsage: List<HourlyUsage> = emptyList(),
     val topApps: List<AppUsageStat> = emptyList(),
-    val insightText: String = "No daily insight yet. Usage patterns will appear after more activity is recorded.",
+    val insightText: String = "",
     val errorMessage: String? = null
 )

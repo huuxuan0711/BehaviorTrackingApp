@@ -8,6 +8,7 @@ interface LocalInsightNarrator {
     fun narrate(
         resolutionDecision: InsightResolutionDecision,
         reasoningResult: BehaviorReasoningResult?,
-        fallbackInsight: InterpretedInsight?
+        fallbackInsight: InterpretedInsight?,
+        languageCode: String
     ): String
 }

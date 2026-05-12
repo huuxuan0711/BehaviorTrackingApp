@@ -1,6 +1,10 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.daily
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
+import android.os.LocaleList
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.R
@@ -18,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,6 +80,7 @@ class DailyOverviewViewModel @Inject constructor(
         val shouldRefreshCurrentDay = resolvedDate == today
 
         viewModelScope.launch {
+            val localizedContext = context.localizedForAppLocale()
             _uiState.update {
                 it.copy(
                     isLoading = true,
@@ -94,7 +100,7 @@ class DailyOverviewViewModel @Inject constructor(
                     )
                 ) {
                     is RefreshUsageDataOutcome.Success -> null
-                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage(context)
+                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage(localizedContext)
                 }
             } else {
                 null
@@ -125,20 +131,21 @@ class DailyOverviewViewModel @Inject constructor(
                         isLoading = false,
                         selectedDate = resolvedDate,
                         dateLabel = UsageFormatter.formatFriendlyDate(
-                            context,
+                            localizedContext,
                             LocalDate.parse(todayOutcome.data.dashboardData.currentLocalDate),
                             today
                         ),
-                        totalScreenTimeText = UsageFormatter.formatDuration(context, todayUsage.totalScreenTimeMillis),
+                        totalScreenTimeText = UsageFormatter.formatDuration(localizedContext, todayUsage.totalScreenTimeMillis),
                         compareText = buildCompareText(
+                            localizedContext,
                             todayMillis = todayUsage.totalScreenTimeMillis,
                             yesterdayMillis = yesterdayUsage?.totalScreenTimeMillis
                         ),
                         sessionCountText = todayUsage.totalSessionCount.toString(),
                         longestSessionText = todayUsage.sessions
                             .maxOfOrNull { it.durationMillis }
-                            ?.let { UsageFormatter.formatDuration(context, it) }
-                            ?: context.getString(R.string.auto_text_0m),
+                            ?.let { UsageFormatter.formatDuration(localizedContext, it) }
+                            ?: localizedContext.getString(R.string.auto_text_0m),
                         hourlyUsage = todayOutcome.data.dashboardData.hourlyUsage,
                         topApps = todayOutcome.data.dashboardData.topApps,
                         insightText = todayOutcome.data.insightSummaryText,
@@ -151,8 +158,8 @@ class DailyOverviewViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             selectedDate = resolvedDate,
-                            dateLabel = UsageFormatter.formatFriendlyDate(context, nowMillis, timezoneId, today),
-                            errorMessage = refreshError ?: todayOutcome.error.toUserMessage(context)
+                            dateLabel = UsageFormatter.formatFriendlyDate(localizedContext, nowMillis, timezoneId, today),
+                            errorMessage = refreshError ?: todayOutcome.error.toUserMessage(localizedContext)
                         )
                     }
                 }
@@ -160,7 +167,7 @@ class DailyOverviewViewModel @Inject constructor(
         }
     }
 
-    private fun buildCompareText(todayMillis: Long, yesterdayMillis: Long?): String {
+    private fun buildCompareText(context: Context, todayMillis: Long, yesterdayMillis: Long?): String {
         if (yesterdayMillis == null || yesterdayMillis <= 0L) {
             return context.getString(R.string.auto_no_yesterday_data)
         }
@@ -171,6 +178,15 @@ class DailyOverviewViewModel @Inject constructor(
             deltaPercent < 0 -> context.getString(R.string.auto_compare_less, kotlin.math.abs(deltaPercent))
             else -> context.getString(R.string.auto_compare_same)
         }
+    }
+
+    private fun Context.localizedForAppLocale(): Context {
+        val appLocales = AppCompatDelegate.getApplicationLocales()
+        val firstLocale = appLocales[0] ?: return this
+        val configuration = Configuration(resources.configuration)
+        Locale.setDefault(firstLocale)
+        configuration.setLocales(LocaleList(firstLocale))
+        return createConfigurationContext(configuration)
     }
 
     private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(context: android.content.Context): String {

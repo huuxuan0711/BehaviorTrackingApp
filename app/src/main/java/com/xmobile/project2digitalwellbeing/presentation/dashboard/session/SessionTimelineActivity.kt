@@ -90,6 +90,7 @@ class SessionTimelineActivity : AppCompatActivity() {
     }
 
     private fun render(state: SessionTimelineUiState) {
+        binding.loadingOverlay.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         binding.txtDate.text = state.dateRangeLabel
         binding.tvInsight.text = state.insightText
         binding.btnNextWeek.isEnabled = state.canNavigateNext

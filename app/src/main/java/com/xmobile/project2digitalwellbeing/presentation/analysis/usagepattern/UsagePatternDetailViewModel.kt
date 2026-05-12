@@ -87,7 +87,7 @@ class UsagePatternDetailViewModel @Inject constructor(
                                 InsightType.CONSTANT_CHECKING -> context.getString(R.string.auto_insight_constant_checking_desc)
                                 InsightType.APP_RELIANCE -> context.getString(R.string.auto_insight_app_reliance_desc)
                             }
-                        } ?: UsagePatternDetailUiState.DEFAULT_INSIGHT
+                        } ?: context.getString(R.string.auto_usage_pattern_default_insight)
                     )
                 }
 

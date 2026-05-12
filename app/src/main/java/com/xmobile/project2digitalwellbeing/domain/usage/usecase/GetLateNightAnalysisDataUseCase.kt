@@ -218,17 +218,51 @@ class GetLateNightAnalysisDataUseCase @Inject constructor(
         features: com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures,
         preferences: UsageAnalysisPreferences
     ): String {
-        return when (insight?.type) {
-            InsightType.LATE_NIGHT_SWITCHING ->
-                "Your late-night usage is fragmented, with frequent switching after ${formatHour(preferences.lateNightStartHour)}."
-
-            InsightType.LATE_NIGHT_USAGE ->
-                "A large share of your usage happens after ${formatHour(preferences.lateNightStartHour)}, which can disrupt sleep routines."
-
-            else -> if (features.lateNightUsageMillis > 0L) {
-                "Most of tonight's usage happened after ${formatHour(preferences.lateNightStartHour)}."
-            } else {
-                "No meaningful late-night usage was detected in the latest analysis window."
+        val startHour = formatHour(preferences.lateNightStartHour)
+        return when (preferences.languageCode.lowercase()) {
+            "vi" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Việc sử dụng đêm khuya của bạn bị phân mảnh, với nhiều lần chuyển đổi sau $startHour."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Một phần lớn thời gian sử dụng của bạn diễn ra sau $startHour, điều này có thể ảnh hưởng đến giấc ngủ."
+                else -> if (features.lateNightUsageMillis > 0L) {
+                    "Phần lớn thời gian dùng tối nay diễn ra sau $startHour."
+                } else {
+                    "Chưa phát hiện mức sử dụng đêm khuya đáng kể trong khung phân tích mới nhất."
+                }
+            }
+            "fr" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Votre usage nocturne est fragmenté, avec de nombreux changements après $startHour."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Une grande partie de votre usage a lieu après $startHour, ce qui peut perturber le sommeil."
+                else -> if (features.lateNightUsageMillis > 0L) {
+                    "La majeure partie de l'usage de ce soir a eu lieu après $startHour."
+                } else {
+                    "Aucun usage nocturne significatif n'a été détecté dans la dernière fenêtre d'analyse."
+                }
+            }
+            "de" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Ihre nächtliche Nutzung ist fragmentiert, mit häufigen Wechseln nach $startHour."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Ein großer Teil Ihrer Nutzung findet nach $startHour statt, was den Schlafrhythmus stören kann."
+                else -> if (features.lateNightUsageMillis > 0L) {
+                    "Der größte Teil der heutigen Nutzung fand nach $startHour statt."
+                } else {
+                    "Im letzten Analysefenster wurde keine relevante späte Nutzung erkannt."
+                }
+            }
+            else -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Your late-night usage is fragmented, with frequent switching after $startHour."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "A large share of your usage happens after $startHour, which can disrupt sleep routines."
+                else -> if (features.lateNightUsageMillis > 0L) {
+                    "Most of tonight's usage happened after $startHour."
+                } else {
+                    "No meaningful late-night usage was detected in the latest analysis window."
+                }
             }
         }
     }
@@ -238,17 +272,51 @@ class GetLateNightAnalysisDataUseCase @Inject constructor(
         features: com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures,
         preferences: UsageAnalysisPreferences
     ): String {
-        return when (insight?.type) {
-            InsightType.LATE_NIGHT_SWITCHING ->
-                "Reduce rapid app switching after ${formatHour(preferences.lateNightStartHour)} by setting a cutoff for social and video apps."
-
-            InsightType.LATE_NIGHT_USAGE ->
-                "Try to reduce screen exposure after ${formatHour(preferences.lateNightStartHour)} to protect sleep continuity."
-
-            else -> if (features.lateNightUsageMillis >= 60L * 60L * 1000L) {
-                "A fixed shutdown time before sleep would likely reduce this late-night screen block."
-            } else {
-                "Current late-night usage is limited. Keep the same boundary if this matches your target."
+        val startHour = formatHour(preferences.lateNightStartHour)
+        return when (preferences.languageCode.lowercase()) {
+            "vi" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Hãy giảm việc chuyển ứng dụng nhanh sau $startHour bằng cách đặt giờ ngắt cho các app mạng xã hội và video."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Hãy giảm tiếp xúc màn hình sau $startHour để bảo vệ chất lượng giấc ngủ."
+                else -> if (features.lateNightUsageMillis >= 60L * 60L * 1000L) {
+                    "Một mốc tắt máy cố định trước giờ ngủ có thể giúp giảm khối thời gian dùng đêm khuya này."
+                } else {
+                    "Mức dùng đêm khuya hiện còn thấp. Hãy giữ nguyên ranh giới này nếu phù hợp với mục tiêu của bạn."
+                }
+            }
+            "fr" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Réduisez les changements rapides d'application après $startHour en fixant une limite pour les apps sociales et vidéo."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Essayez de réduire l'exposition aux écrans après $startHour pour préserver la continuité du sommeil."
+                else -> if (features.lateNightUsageMillis >= 60L * 60L * 1000L) {
+                    "Une heure d'arrêt fixe avant le coucher réduirait probablement ce bloc d'usage nocturne."
+                } else {
+                    "L'usage nocturne actuel reste limité. Gardez cette limite si elle correspond à votre objectif."
+                }
+            }
+            "de" -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Reduzieren Sie schnelle App-Wechsel nach $startHour, indem Sie eine Grenze für soziale und Video-Apps setzen."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Versuchen Sie, die Bildschirmnutzung nach $startHour zu verringern, um den Schlaf zu schützen."
+                else -> if (features.lateNightUsageMillis >= 60L * 60L * 1000L) {
+                    "Eine feste Abschaltzeit vor dem Schlafen würde diesen späten Nutzungsblock wahrscheinlich reduzieren."
+                } else {
+                    "Die aktuelle späte Nutzung ist begrenzt. Behalten Sie diese Grenze bei, wenn sie zu Ihrem Ziel passt."
+                }
+            }
+            else -> when (insight?.type) {
+                InsightType.LATE_NIGHT_SWITCHING ->
+                    "Reduce rapid app switching after $startHour by setting a cutoff for social and video apps."
+                InsightType.LATE_NIGHT_USAGE ->
+                    "Try to reduce screen exposure after $startHour to protect sleep continuity."
+                else -> if (features.lateNightUsageMillis >= 60L * 60L * 1000L) {
+                    "A fixed shutdown time before sleep would likely reduce this late-night screen block."
+                } else {
+                    "Current late-night usage is limited. Keep the same boundary if this matches your target."
+                }
             }
         }
     }

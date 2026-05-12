@@ -9,11 +9,12 @@ data class WeeklyOverviewUiState(
     val weekStartDate: LocalDate = currentWeekStart(),
     val dateRangeLabel: String = "",
     val averageDailyScreenTimeText: String = "0m",
-    val mostUsedDayText: String = "No data yet",
+    val mostUsedDayText: String = "",
     val totalScreenTimeText: String = "0m",
-    val trendText: String = "No weekly trend yet. Patterns become clearer after a few active days.",
+    val trendText: String = "",
     val chartBars: List<WeeklyChartBarUiModel> = emptyList(),
     val topApps: List<AppUsageStat> = emptyList(),
+    val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val canNavigateNext: Boolean = false
 )

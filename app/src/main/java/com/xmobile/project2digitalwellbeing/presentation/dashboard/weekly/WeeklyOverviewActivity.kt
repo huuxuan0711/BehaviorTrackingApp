@@ -87,6 +87,7 @@ class WeeklyOverviewActivity : AppCompatActivity() {
     }
 
     private fun render(state: WeeklyOverviewUiState) {
+        binding.loadingOverlay.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         binding.txtDate.text = state.dateRangeLabel
         binding.tvAvg.text = state.averageDailyScreenTimeText
         binding.tvMax.text = state.mostUsedDayText

@@ -41,9 +41,10 @@ class GetSessionTimelineExperienceUseCase @Inject constructor(
         return when (val outcome = getSessionTimelineDataUseCase(params)) {
             is GetSessionTimelineDataOutcome.Failure -> GetSessionTimelineExperienceOutcome.Failure(outcome.error)
             is GetSessionTimelineDataOutcome.Success -> {
-                val localSummary = outcome.data.insight?.summary?.takeIf { it.isNotBlank() } ?: DEFAULT_EMPTY_TEXT
-                val context = buildCloudContext(outcome.data)
                 val preferences = usagePreferencesRepository.getUsageAnalysisPreferences()
+                val localSummary = outcome.data.insight?.summary?.takeIf { it.isNotBlank() }
+                    ?: defaultEmptyText(preferences.languageCode)
+                val context = buildCloudContext(outcome.data, preferences.languageCode)
                 val initialDecision = insightResolutionStrategy.resolve(
                     InsightResolutionContext(
                         hasRuleInsight = outcome.data.insight != null,
@@ -59,7 +60,8 @@ class GetSessionTimelineExperienceUseCase @Inject constructor(
                         GenerateCloudInsightTextParams(
                             surface = CloudInsightSurface.SESSION_TIMELINE,
                             groundedContext = context,
-                            fallbackInsight = null
+                            fallbackInsight = null,
+                            languageCode = preferences.languageCode
                         )
                     ).getOrNull()?.text
                 } else {
@@ -81,7 +83,7 @@ class GetSessionTimelineExperienceUseCase @Inject constructor(
         }
     }
 
-    private fun buildCloudContext(data: SessionTimelineData): LlmGroundedContext {
+    private fun buildCloudContext(data: SessionTimelineData, languageCode: String): LlmGroundedContext {
         val insight = data.insight
         val primaryPattern = if (insight != null) "SESSION_TRANSITION_LOOP" else null
         val evidence = if (insight != null) {
@@ -96,18 +98,48 @@ class GetSessionTimelineExperienceUseCase @Inject constructor(
         val recommendations = if (insight != null) {
             listOf(
                 mapOf(
-                    "title" to "Reduce switch loops",
-                    "description" to "Batch related tasks and avoid rapid app hopping during focused sessions.",
-                    "suggestedTimeLabel" to "During deep work blocks",
+                    "title" to when (languageCode.lowercase()) {
+                        "vi" -> "Giảm vòng lặp chuyển ứng dụng"
+                        "fr" -> "Réduire les boucles de changement"
+                        "de" -> "Wechselschleifen reduzieren"
+                        else -> "Reduce switch loops"
+                    },
+                    "description" to when (languageCode.lowercase()) {
+                        "vi" -> "Gom các tác vụ liên quan và tránh nhảy ứng dụng liên tục trong các phiên cần tập trung."
+                        "fr" -> "Regroupez les tâches liées et évitez de passer rapidement d'une app à l'autre pendant les sessions de concentration."
+                        "de" -> "Bündeln Sie zusammenhängende Aufgaben und vermeiden Sie schnelles App-Hopping in Fokusphasen."
+                        else -> "Batch related tasks and avoid rapid app hopping during focused sessions."
+                    },
+                    "suggestedTimeLabel" to when (languageCode.lowercase()) {
+                        "vi" -> "Trong các khối làm việc sâu"
+                        "fr" -> "Pendant les blocs de travail profond"
+                        "de" -> "Während Tiefenarbeitsblöcken"
+                        else -> "During deep work blocks"
+                    },
                     "priority" to "1"
                 )
             )
         } else {
             listOf(
                 mapOf(
-                    "title" to "Continue tracking",
-                    "description" to "Use your phone normally to collect enough transition data.",
-                    "suggestedTimeLabel" to "Today",
+                    "title" to when (languageCode.lowercase()) {
+                        "vi" -> "Tiếp tục theo dõi"
+                        "fr" -> "Poursuivre le suivi"
+                        "de" -> "Weiter erfassen"
+                        else -> "Continue tracking"
+                    },
+                    "description" to when (languageCode.lowercase()) {
+                        "vi" -> "Hãy dùng điện thoại bình thường để thu thập đủ dữ liệu chuyển đổi."
+                        "fr" -> "Utilisez votre téléphone normalement pour collecter suffisamment de données de transition."
+                        "de" -> "Nutzen Sie Ihr Telefon normal, um genügend Übergangsdaten zu sammeln."
+                        else -> "Use your phone normally to collect enough transition data."
+                    },
+                    "suggestedTimeLabel" to when (languageCode.lowercase()) {
+                        "vi" -> "Hôm nay"
+                        "fr" -> "Aujourd'hui"
+                        "de" -> "Heute"
+                        else -> "Today"
+                    },
                     "priority" to "1"
                 )
             )
@@ -117,14 +149,18 @@ class GetSessionTimelineExperienceUseCase @Inject constructor(
             secondaryPatterns = emptyList(),
             riskScore = insight?.score ?: 0,
             confidence = insight?.confidence ?: 0f,
-            summary = insight?.summary ?: DEFAULT_EMPTY_TEXT,
+            summary = insight?.summary ?: defaultEmptyText(languageCode),
             evidence = evidence,
             recommendations = recommendations
         )
     }
 
-    private companion object {
-        private const val DEFAULT_EMPTY_TEXT =
-            "No session insight yet. Meaningful patterns will appear after more usage is recorded."
+    private fun defaultEmptyText(languageCode: String): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> "Chưa có insight phiên. Các mẫu có ý nghĩa sẽ xuất hiện sau khi ghi nhận thêm hoạt động."
+            "fr" -> "Aucun insight de session pour le moment. Des schémas utiles apparaîtront après plus d'activité."
+            "de" -> "Noch kein Sitzungs-Insight. Aussagekräftige Muster erscheinen nach mehr Aktivität."
+            else -> "No session insight yet. Meaningful patterns will appear after more usage is recorded."
+        }
     }
 }

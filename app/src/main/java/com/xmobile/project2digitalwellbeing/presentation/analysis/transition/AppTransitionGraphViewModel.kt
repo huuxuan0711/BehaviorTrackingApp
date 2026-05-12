@@ -1,13 +1,18 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.transition
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.R
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetTransitionGraphExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetTransitionGraphExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppTransitionStat
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.TransitionFilter
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
+import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.AnalysisTimeRange
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetTransitionGraphDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetTransitionGraphDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetTransitionGraphDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.ZoneId
 import javax.inject.Inject
@@ -19,11 +24,16 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AppTransitionGraphViewModel @Inject constructor(
-    private val getTransitionGraphDataUseCase: GetTransitionGraphDataUseCase
-) : ViewModel() {
+    application: Application,
+    private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
+    private val getTransitionGraphExperienceUseCase: GetTransitionGraphExperienceUseCase
+) : AndroidViewModel(application) {
+
+    private val context get() = getApplication<Application>()
 
     private val _uiState = MutableStateFlow(AppTransitionGraphUiState())
     val uiState: StateFlow<AppTransitionGraphUiState> = _uiState.asStateFlow()
+    private var hasLoadedData = false
 
     fun setTimeRange(timeRange: AnalysisTimeRange) {
         if (_uiState.value.timeRange == timeRange) return
@@ -39,20 +49,40 @@ class AppTransitionGraphViewModel @Inject constructor(
 
     fun load() {
         val state = _uiState.value
+        val timezoneId = ZoneId.systemDefault().id
+        val nowMillis = System.currentTimeMillis()
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            val refreshError = if (!hasLoadedData) {
+                when (
+                    val refreshOutcome = refreshUsageDataUseCase(
+                        RefreshUsageDataParams(
+                            nowMillis = nowMillis,
+                            timezoneId = timezoneId,
+                            forceFullRefresh = false
+                        )
+                    )
+                ) {
+                    is RefreshUsageDataOutcome.Success -> null
+                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage()
+                }
+            } else {
+                null
+            }
+
             when (
-                val outcome = getTransitionGraphDataUseCase(
+                val outcome = getTransitionGraphExperienceUseCase(
                     GetTransitionGraphDataParams(
-                        nowMillis = System.currentTimeMillis(),
-                        timezoneId = ZoneId.systemDefault().id,
+                        nowMillis = nowMillis,
+                        timezoneId = timezoneId,
                         timeRange = state.timeRange,
                         filter = state.filter
                     )
                 )
             ) {
-                is GetTransitionGraphDataOutcome.Success -> {
-                    val dominantEdges = toDominantEdges(outcome.data.transitions)
+                is GetTransitionGraphExperienceOutcome.Success -> {
+                    hasLoadedData = true
+                    val dominantEdges = toDominantEdges(outcome.data.data.transitions)
                     val maxCount = dominantEdges.maxOfOrNull { it.transitionCount } ?: 0
                     val frequentThreshold = if (maxCount <= 1) 1 else kotlin.math.ceil(maxCount * 0.6).toInt()
 
@@ -85,23 +115,22 @@ class AppTransitionGraphViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = null,
+                            errorMessage = refreshError,
                             nodes = nodes,
                             edges = filteredEdges,
-                            insightText = outcome.data.insight?.summary
-                                ?: "No transition insight yet. Keep using apps to build pattern data."
+                            insightText = refreshError ?: outcome.data.insightSummaryText
                         )
                     }
                 }
 
-                is GetTransitionGraphDataOutcome.Failure -> {
+                is GetTransitionGraphExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = "Transition data is not available yet.",
+                            errorMessage = refreshError ?: context.getString(R.string.auto_transition_data_unavailable),
                             nodes = emptyList(),
                             edges = emptyList(),
-                            insightText = "No transition insight yet."
+                            insightText = refreshError ?: context.getString(R.string.auto_no_transition_insight)
                         )
                     }
                 }
@@ -136,5 +165,17 @@ class AppTransitionGraphViewModel @Inject constructor(
     companion object {
         private const val MAX_NODE_COUNT = 7
         private const val MAX_EDGE_COUNT = 12
+    }
+
+    private fun com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.toUserMessage(): String {
+        return when (this) {
+            is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.PermissionDenied ->
+                context.getString(R.string.auto_error_permission_denied)
+
+            is com.xmobile.project2digitalwellbeing.domain.tracking.usecase.UsageDataError.InvalidTimeZone ->
+                context.getString(R.string.auto_error_invalid_timezone)
+
+            else -> context.getString(R.string.auto_error_refresh_failure)
+        }
     }
 }

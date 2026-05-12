@@ -73,7 +73,8 @@ class GetDashboardExperienceUseCase @Inject constructor(
                 val cloudInsightText = generateCloudInsightTextIfNeeded(
                     resolutionDecision = initialResolutionDecision,
                     behaviorReasoning = behaviorReasoning,
-                    fallbackInsight = dashboardData.topInsight
+                    fallbackInsight = dashboardData.topInsight,
+                    languageCode = preferences.languageCode
                 )
                 val effectiveResolutionDecision = if (
                     initialResolutionDecision.requestCloudEnhancement && cloudInsightText == null
@@ -85,7 +86,8 @@ class GetDashboardExperienceUseCase @Inject constructor(
                 val insightSummaryText = cloudInsightText ?: localInsightNarrator.narrate(
                     resolutionDecision = effectiveResolutionDecision,
                     reasoningResult = behaviorReasoning,
-                    fallbackInsight = dashboardData.topInsight
+                    fallbackInsight = dashboardData.topInsight,
+                    languageCode = preferences.languageCode
                 )
                 GetDashboardExperienceOutcome.Success(
                     DashboardExperienceData(
@@ -136,7 +138,8 @@ class GetDashboardExperienceUseCase @Inject constructor(
     private suspend fun generateCloudInsightTextIfNeeded(
         resolutionDecision: com.xmobile.project2digitalwellbeing.domain.reasoning.model.InsightResolutionDecision,
         behaviorReasoning: BehaviorReasoningResult?,
-        fallbackInsight: com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedInsight?
+        fallbackInsight: com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedInsight?,
+        languageCode: String
     ): String? {
         if (!resolutionDecision.requestCloudEnhancement) {
             return null
@@ -146,7 +149,8 @@ class GetDashboardExperienceUseCase @Inject constructor(
             GenerateCloudInsightTextParams(
                 surface = CloudInsightSurface.DASHBOARD,
                 groundedContext = llmContext,
-                fallbackInsight = fallbackInsight
+                fallbackInsight = fallbackInsight,
+                languageCode = languageCode
             )
         ).getOrNull()?.text
     }

@@ -27,8 +27,8 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
 
         val primary = hypotheses.firstOrNull()
         val secondary = hypotheses.drop(1).take(MAX_SECONDARY_HYPOTHESES)
-        val recommendations = buildRecommendations(primary, secondary)
-        val summary = buildSummary(primary, secondary)
+        val recommendations = buildRecommendations(primary, secondary, input.preferences.languageCode)
+        val summary = buildSummary(primary, secondary, input.preferences.languageCode)
 
         return BehaviorReasoningResult(
             primaryHypothesis = primary,
@@ -62,7 +62,7 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         )
         return BehaviorHypothesis(
             pattern = BehaviorPatternType.LATE_NIGHT_DRIFT,
-            summary = "Late-night usage is elevated and drifting above your normal pattern.",
+            summary = summaryText(input.preferences.languageCode, BehaviorPatternType.LATE_NIGHT_DRIFT),
             evidence = evidence,
             riskScore = riskScore,
             confidence = confidenceFrom(riskScore, hasInsight)
@@ -97,7 +97,7 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         )
         return BehaviorHypothesis(
             pattern = BehaviorPatternType.FRAGMENTED_ATTENTION,
-            summary = "Frequent context switching indicates fragmented attention.",
+            summary = summaryText(input.preferences.languageCode, BehaviorPatternType.FRAGMENTED_ATTENTION),
             evidence = evidence,
             riskScore = riskScore,
             confidence = confidenceFrom(riskScore, hasInsight || hasTransitionSignal)
@@ -130,7 +130,7 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         )
         return BehaviorHypothesis(
             pattern = BehaviorPatternType.COMPULSIVE_CHECKING,
-            summary = "Short and repeated sessions suggest a checking loop.",
+            summary = summaryText(input.preferences.languageCode, BehaviorPatternType.COMPULSIVE_CHECKING),
             evidence = evidence,
             riskScore = riskScore,
             confidence = confidenceFrom(riskScore, hasInsight)
@@ -161,7 +161,7 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         )
         return BehaviorHypothesis(
             pattern = BehaviorPatternType.WORK_HOUR_LEAKAGE,
-            summary = "Distracting app usage during work hours is above a healthy limit.",
+            summary = summaryText(input.preferences.languageCode, BehaviorPatternType.WORK_HOUR_LEAKAGE),
             evidence = evidence,
             riskScore = riskScore,
             confidence = confidenceFrom(riskScore, hasInsight)
@@ -190,7 +190,7 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         )
         return BehaviorHypothesis(
             pattern = BehaviorPatternType.APP_DOMINANCE,
-            summary = "A single app dominates your screen-time budget.",
+            summary = summaryText(input.preferences.languageCode, BehaviorPatternType.APP_DOMINANCE),
             evidence = evidence,
             riskScore = riskScore,
             confidence = confidenceFrom(riskScore, hasInsight)
@@ -199,39 +199,40 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
 
     private fun buildRecommendations(
         primary: BehaviorHypothesis?,
-        secondary: List<BehaviorHypothesis>
+        secondary: List<BehaviorHypothesis>,
+        languageCode: String
     ): List<InterventionRecommendation> {
         val uniquePatterns = listOfNotNull(primary?.pattern) + secondary.map { it.pattern }
         return uniquePatterns.distinct().mapIndexed { index, pattern ->
             when (pattern) {
                 BehaviorPatternType.LATE_NIGHT_DRIFT -> InterventionRecommendation(
-                    title = "Start wind-down mode",
-                    description = "Enable bedtime reminder and reduce stimulation after 10 PM.",
-                    suggestedTimeLabel = "21:30-22:00",
+                    title = recommendationTitle(languageCode, pattern),
+                    description = recommendationDescription(languageCode, pattern),
+                    suggestedTimeLabel = recommendationTimeLabel(languageCode, pattern),
                     priority = 100 - index
                 )
                 BehaviorPatternType.FRAGMENTED_ATTENTION -> InterventionRecommendation(
-                    title = "Run focus blocks",
-                    description = "Batch tasks and avoid rapid app switching during focus periods.",
-                    suggestedTimeLabel = "Morning work blocks",
+                    title = recommendationTitle(languageCode, pattern),
+                    description = recommendationDescription(languageCode, pattern),
+                    suggestedTimeLabel = recommendationTimeLabel(languageCode, pattern),
                     priority = 100 - index
                 )
                 BehaviorPatternType.COMPULSIVE_CHECKING -> InterventionRecommendation(
-                    title = "Batch notification checks",
-                    description = "Check notifications on schedule instead of impulse checks.",
-                    suggestedTimeLabel = "Every 60-90 minutes",
+                    title = recommendationTitle(languageCode, pattern),
+                    description = recommendationDescription(languageCode, pattern),
+                    suggestedTimeLabel = recommendationTimeLabel(languageCode, pattern),
                     priority = 100 - index
                 )
                 BehaviorPatternType.WORK_HOUR_LEAKAGE -> InterventionRecommendation(
-                    title = "Use work-hour app limits",
-                    description = "Restrict distracting categories during work sessions.",
-                    suggestedTimeLabel = "09:00-17:00",
+                    title = recommendationTitle(languageCode, pattern),
+                    description = recommendationDescription(languageCode, pattern),
+                    suggestedTimeLabel = recommendationTimeLabel(languageCode, pattern),
                     priority = 100 - index
                 )
                 BehaviorPatternType.APP_DOMINANCE -> InterventionRecommendation(
-                    title = "Set single-app quota",
-                    description = "Cap daily time for the dominant app and diversify activities.",
-                    suggestedTimeLabel = "At first launch",
+                    title = recommendationTitle(languageCode, pattern),
+                    description = recommendationDescription(languageCode, pattern),
+                    suggestedTimeLabel = recommendationTimeLabel(languageCode, pattern),
                     priority = 100 - index
                 )
             }
@@ -240,9 +241,10 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
 
     private fun buildSummary(
         primary: BehaviorHypothesis?,
-        secondary: List<BehaviorHypothesis>
+        secondary: List<BehaviorHypothesis>,
+        languageCode: String
     ): String {
-        if (primary == null) return "No high-risk behavior pattern detected in the current window."
+        if (primary == null) return noRiskSummary(languageCode)
         if (secondary.isEmpty()) return primary.summary
         return "${primary.summary} ${secondary.take(1).joinToString(" ") { it.summary }}"
     }
@@ -301,6 +303,147 @@ class BehaviorReasoningEngineImpl @Inject constructor() : BehaviorReasoningEngin
         "+${formatRatio()}"
     } else {
         formatRatio()
+    }
+
+    private fun summaryText(languageCode: String, pattern: BehaviorPatternType): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Việc sử dụng đêm khuya của bạn đang tăng và vượt lên trên mức bình thường."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Việc chuyển đổi ngữ cảnh thường xuyên cho thấy sự tập trung đang bị phân mảnh."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Các phiên ngắn lặp lại cho thấy xu hướng kiểm tra điện thoại theo vòng lặp."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Việc dùng ứng dụng gây xao nhãng trong giờ làm việc đang vượt ngưỡng lành mạnh."
+                BehaviorPatternType.APP_DOMINANCE -> "Một ứng dụng đang chiếm phần lớn ngân sách thời gian màn hình của bạn."
+            }
+            "fr" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Votre usage tardif augmente et dépasse votre niveau habituel."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Les changements fréquents de contexte indiquent une attention fragmentée."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Des sessions courtes et répétées suggèrent une boucle de vérification."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "L'usage d'apps distrayantes pendant le travail dépasse une limite saine."
+                BehaviorPatternType.APP_DOMINANCE -> "Une seule application domine votre budget de temps d'écran."
+            }
+            "de" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Ihre späte Nutzung steigt an und liegt über Ihrem normalen Muster."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Häufige Kontextwechsel deuten auf fragmentierte Aufmerksamkeit hin."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Kurze, wiederholte Sitzungen deuten auf eine Prüfschleife hin."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Ablenkende App-Nutzung während der Arbeitszeit liegt über einem gesunden Maß."
+                BehaviorPatternType.APP_DOMINANCE -> "Eine einzelne App dominiert Ihr Bildschirmzeitbudget."
+            }
+            else -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Late-night usage is elevated and drifting above your normal pattern."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Frequent context switching indicates fragmented attention."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Short and repeated sessions suggest a checking loop."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Distracting app usage during work hours is above a healthy limit."
+                BehaviorPatternType.APP_DOMINANCE -> "A single app dominates your screen-time budget."
+            }
+        }
+    }
+
+    private fun recommendationTitle(languageCode: String, pattern: BehaviorPatternType): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Bắt đầu chế độ thư giãn"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Tạo khối tập trung"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Gom lịch kiểm tra thông báo"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Đặt giới hạn ứng dụng giờ làm"
+                BehaviorPatternType.APP_DOMINANCE -> "Đặt hạn mức cho một ứng dụng"
+            }
+            "fr" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Activer le mode détente"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Créer des blocs de concentration"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Regrouper les vérifications"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Limiter les apps au travail"
+                BehaviorPatternType.APP_DOMINANCE -> "Définir un quota d'application"
+            }
+            "de" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Entspannungsmodus starten"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Fokusblöcke nutzen"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Benachrichtigungen bündeln"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "App-Limits für Arbeitszeit"
+                BehaviorPatternType.APP_DOMINANCE -> "Einzel-App-Limit setzen"
+            }
+            else -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Start wind-down mode"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Run focus blocks"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Batch notification checks"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Use work-hour app limits"
+                BehaviorPatternType.APP_DOMINANCE -> "Set single-app quota"
+            }
+        }
+    }
+
+    private fun recommendationDescription(languageCode: String, pattern: BehaviorPatternType): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Bật nhắc giờ ngủ và giảm kích thích sau 10 giờ tối."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Gom việc thành cụm và tránh chuyển ứng dụng liên tục trong lúc cần tập trung."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Kiểm tra thông báo theo lịch thay vì mở máy theo phản xạ."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Hạn chế các nhóm ứng dụng gây xao nhãng trong phiên làm việc."
+                BehaviorPatternType.APP_DOMINANCE -> "Giới hạn thời gian mỗi ngày cho ứng dụng chiếm ưu thế và đa dạng hóa hoạt động."
+            }
+            "fr" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Activez un rappel du coucher et réduisez la stimulation après 22 h."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Regroupez les tâches et évitez les changements rapides d'application pendant les périodes de concentration."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Consultez les notifications à des horaires fixes au lieu de vérifier par impulsion."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Limitez les catégories distrayantes pendant les sessions de travail."
+                BehaviorPatternType.APP_DOMINANCE -> "Fixez une limite quotidienne pour l'application dominante et variez vos activités."
+            }
+            "de" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Aktivieren Sie eine Schlafenszeit-Erinnerung und reduzieren Sie Reize nach 22 Uhr."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Bündeln Sie Aufgaben und vermeiden Sie schnelle App-Wechsel in Fokusphasen."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Prüfen Sie Benachrichtigungen nach Plan statt aus Impuls."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Begrenzen Sie ablenkende Kategorien während der Arbeitszeit."
+                BehaviorPatternType.APP_DOMINANCE -> "Begrenzen Sie die tägliche Zeit für die dominante App und variieren Sie Ihre Aktivitäten."
+            }
+            else -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "Enable bedtime reminder and reduce stimulation after 10 PM."
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Batch tasks and avoid rapid app switching during focus periods."
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Check notifications on schedule instead of impulse checks."
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "Restrict distracting categories during work sessions."
+                BehaviorPatternType.APP_DOMINANCE -> "Cap daily time for the dominant app and diversify activities."
+            }
+        }
+    }
+
+    private fun recommendationTimeLabel(languageCode: String, pattern: BehaviorPatternType): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "21:30-22:00"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Các khối làm việc buổi sáng"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Mỗi 60-90 phút"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "09:00-17:00"
+                BehaviorPatternType.APP_DOMINANCE -> "Ngay lần mở đầu tiên"
+            }
+            "fr" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "21:30-22:00"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Blocs de travail du matin"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Toutes les 60-90 minutes"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "09:00-17:00"
+                BehaviorPatternType.APP_DOMINANCE -> "Au premier lancement"
+            }
+            "de" -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "21:30-22:00"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Arbeitsblöcke am Morgen"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Alle 60-90 Minuten"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "09:00-17:00"
+                BehaviorPatternType.APP_DOMINANCE -> "Beim ersten Start"
+            }
+            else -> when (pattern) {
+                BehaviorPatternType.LATE_NIGHT_DRIFT -> "21:30-22:00"
+                BehaviorPatternType.FRAGMENTED_ATTENTION -> "Morning work blocks"
+                BehaviorPatternType.COMPULSIVE_CHECKING -> "Every 60-90 minutes"
+                BehaviorPatternType.WORK_HOUR_LEAKAGE -> "09:00-17:00"
+                BehaviorPatternType.APP_DOMINANCE -> "At first launch"
+            }
+        }
+    }
+
+    private fun noRiskSummary(languageCode: String): String {
+        return when (languageCode.lowercase()) {
+            "vi" -> "Không phát hiện mẫu hành vi rủi ro cao trong khung thời gian hiện tại."
+            "fr" -> "Aucun comportement à haut risque n'a été détecté dans cette période."
+            "de" -> "Im aktuellen Zeitraum wurde kein Verhaltensmuster mit hohem Risiko erkannt."
+            else -> "No high-risk behavior pattern detected in the current window."
+        }
     }
 
     private companion object {

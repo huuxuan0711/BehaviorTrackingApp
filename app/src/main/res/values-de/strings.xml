@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Digital Wellbeing</string>
     <string name="hello_blank_fragment">Hallo leeres Fragment</string>
@@ -318,4 +318,46 @@
     <string name="reset_analysis_confirmation_message">Dadurch werden alle generierten Einblicke gelöscht, aber Ihr roher Nutzungsverlauf bleibt erhalten. Die App beginnt erneut, Ihre Gewohnheiten zu analysieren.</string>
     <string name="reset_analysis_positive_button">Analyse zurücksetzen</string>
     <string name="dialog_cancel">Abbrechen</string>
+
+    <!-- Added fallback strings from base locale -->
+    <string name="auto_cloud_enhancement">Cloud AI enhancement</string>
+    <string name="auto_use_gemini_for_richer_online_insight_text_when_available">Use Gemini for richer online insight text when network and secure credentials are available.</string>
+    <string name="notification_channel_insights_name">Insight Notifications</string>
+    <string name="notification_channel_insights_description">Behavior insights and notable usage patterns</string>
+    <string name="notification_channel_weekly_name">Weekly Reports</string>
+    <string name="notification_channel_weekly_description">Weekly summaries of your screen-time trends</string>
+    <string name="notification_insight_title">New behavior insight</string>
+    <string name="notification_weekly_title">Weekly usage summary</string>
+    <string name="notification_weekly_message_template">Total screen time: %1$s. %2$s</string>
+    <string name="notification_weekly_fallback_summary">Weekly trend is ready to review.</string>
+    <string name="auto_no_transition_insight">No transition insight yet.</string>
+    <string name="auto_transition_data_unavailable">Transition data is not available yet.</string>
+    <string name="auto_no_session_insight">No session insight yet. Meaningful patterns will appear after more usage is recorded.</string>
+    <string name="auto_session_timeline_data_unavailable">Session timeline data is not available yet.</string>
+    <string name="auto_weekly_data_unavailable">Weekly overview data is not available yet.</string>
+    <string name="auto_peak_usage_at">Peak usage at %1$s</string>
+    <string name="auto_no_peak_usage_detected">No peak usage detected</string>
+    <string name="auto_late_night_data_unavailable">Late-night analysis data is not available yet.</string>
+    <string name="auto_error_missing_app_package">Missing app package. Unable to load usage detail.</string>
+    <string name="auto_error_usage_detail_unavailable">Unable to load app usage details right now.</string>
+    <string name="auto_peak_usage_after_midnight">Peak usage after midnight</string>
+    <string name="auto_peak_usage_morning">Peak usage in morning</string>
+    <string name="auto_peak_usage_afternoon">Peak usage in afternoon</string>
+    <string name="auto_peak_usage_night">Peak usage at night</string>
+    <string name="auto_usage_period_late_night">late at night.</string>
+    <string name="auto_usage_period_morning">in the morning.</string>
+    <string name="auto_usage_period_afternoon">in the afternoon.</string>
+    <string name="auto_usage_period_evening">in the evening.</string>
+    <string name="auto_tip_after_midnight">You used %1$s most frequently after midnight. Consider setting app limits for better sleep quality.</string>
+    <string name="auto_tip_morning_usage">Morning usage detected. Ensure it does not distract you from your main daytime tasks.</string>
+    <string name="auto_tip_afternoon_usage">Afternoon usage is high. A short screen break might boost your focus.</string>
+    <string name="auto_tip_evening_usage">Evening usage detected. Try winding down screen time an hour before bed.</string>
+    <string name="auto_hourly_usage">Hourly usage</string>
+    <string name="auto_usage_pattern_default_insight">Usage pattern insight will appear after enough activity is captured today.</string>
+    <string name="auto_app_mapping">App mapping</string>
+    <string name="auto_app_categories_desc">Tell the app which apps help you focus and which tend to distract.</string>
+    <string name="auto_app_transitions_desc">Follow the app-to-app flow behind distracting loops.</string>
+    <string name="auto_usage_patterns_desc">Review long sessions, quick checks, and repeated usage habits.</string>
+    <string name="auto_late_night_desc">See how much phone use happens near bedtime and after midnight.</string>
 </resources>
+

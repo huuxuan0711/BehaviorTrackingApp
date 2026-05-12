@@ -83,13 +83,13 @@ class AppTransitionGraphActivity : AppCompatActivity() {
     }
 
     private fun render(state: AppTransitionGraphUiState) {
+        binding.loadingOverlay.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         setSelectedState(binding.btnToday, state.timeRange == AnalysisTimeRange.TODAY)
         setSelectedState(binding.btnWeek, state.timeRange == AnalysisTimeRange.WEEK)
         setSelectedState(binding.btnAll, state.filter == TransitionFilter.ALL)
         setSelectedState(binding.btnProductive, state.filter == TransitionFilter.PRODUCTIVE_MIXED)
         setSelectedState(binding.btnDistracting, state.filter == TransitionFilter.DISTRACTING_MIXED)
         binding.tvInsight.text = state.insightText
-        binding.webGraph.alpha = if (state.isLoading) 0.5f else 1f
 
         val iconDataByNodeId = state.nodes.associate { node ->
             node.id to resolveIconDataUrl(node.id)

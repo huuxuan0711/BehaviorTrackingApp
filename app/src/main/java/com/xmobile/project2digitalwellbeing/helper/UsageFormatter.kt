@@ -11,6 +11,11 @@ import java.util.Locale
 
 object UsageFormatter {
 
+    private fun appLocale(context: Context): Locale {
+        val configuration = context.resources.configuration
+        return if (configuration.locales.isEmpty) Locale.getDefault() else configuration.locales[0]
+    }
+
     fun formatDuration(context: Context, millis: Long): String {
         val totalMinutes = millis / (60L * 1000L)
         val hours = totalMinutes / 60L
@@ -46,18 +51,19 @@ object UsageFormatter {
         } else {
             date.format(
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-                    .withLocale(Locale.getDefault())
+                    .withLocale(appLocale(context))
             )
         }
     }
 
-    fun formatDateRange(startDate: LocalDate, endDate: LocalDate): String {
+    fun formatDateRange(context: Context, startDate: LocalDate, endDate: LocalDate): String {
+        val locale = appLocale(context)
         val sameYear = startDate.year == endDate.year
         val startFormatter = DateTimeFormatter.ofPattern(
             if (sameYear) "MMM d" else "MMM d, yyyy",
-            Locale.getDefault()
+            locale
         )
-        val endFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())
+        val endFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", locale)
         return "${startDate.format(startFormatter)} - ${endDate.format(endFormatter)}"
     }
 
@@ -72,10 +78,11 @@ object UsageFormatter {
         }
     }
 
-    fun formatTimeRange(startTimeMillis: Long, endTimeMillis: Long, zoneId: ZoneId): String {
-        val formatter = DateTimeFormatter.ofPattern("EEE, HH:mm", Locale.getDefault())
+    fun formatTimeRange(context: Context, startTimeMillis: Long, endTimeMillis: Long, zoneId: ZoneId): String {
+        val locale = appLocale(context)
+        val formatter = DateTimeFormatter.ofPattern("EEE, HH:mm", locale)
         val start = Instant.ofEpochMilli(startTimeMillis).atZone(zoneId)
         val end = Instant.ofEpochMilli(endTimeMillis).atZone(zoneId)
-        return "${start.format(formatter)} - ${end.format(DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()))}"
+        return "${start.format(formatter)} - ${end.format(DateTimeFormatter.ofPattern("HH:mm", locale))}"
     }
 }

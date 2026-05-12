@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/weekly_overview_background"
-    android:fillViewport="true"
     tools:context=".presentation.dashboard.weekly.WeeklyOverviewActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,6 +82,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:maxWidth="220dp"
+                    android:ellipsize="end"
                     android:text="@string/weekly_overview_date_range_placeholder"
                     android:textColor="@color/weekly_overview_text_primary"
                     android:textSize="@dimen/weekly_section_title_size"
@@ -292,6 +298,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/weekly_content_spacing"
+                android:maxWidth="260dp"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:text="@string/weekly_trend_placeholder"
                 android:textColor="@color/white"
                 android:textSize="@dimen/weekly_body_text_size" />
@@ -341,6 +350,22 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</FrameLayout>
 
 

@@ -59,7 +59,8 @@ class GetLateNightAnalysisExperienceUseCase @Inject constructor(
                         GenerateCloudInsightTextParams(
                             surface = CloudInsightSurface.LATE_NIGHT_ANALYSIS,
                             groundedContext = context,
-                            fallbackInsight = null
+                            fallbackInsight = null,
+                            languageCode = preferences.languageCode
                         )
                     ).getOrNull()?.text
                 } else {

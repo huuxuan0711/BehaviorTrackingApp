@@ -96,7 +96,7 @@ class GetDashboardExperienceUseCaseTest {
             )
         )
 
-        whenever(localInsightNarrator.narrate(any(), anyOrNull(), anyOrNull())).thenReturn("Dashboard Local Narrator")
+        whenever(localInsightNarrator.narrate(any(), anyOrNull(), anyOrNull(), any())).thenReturn("Dashboard Local Narrator")
 
         val result = useCase(params)
 

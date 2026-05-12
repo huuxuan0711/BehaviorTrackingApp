@@ -111,7 +111,7 @@ class SessionTimelineUiMapper @Inject constructor() {
                 selectedDate = selectedDate,
                 lateNightStartHour = lateNightStartHour
             ),
-            timeRangeText = UsageFormatter.formatTimeRange(session.startTimeMillis, session.endTimeMillis, zoneId),
+            timeRangeText = UsageFormatter.formatTimeRange(context, session.startTimeMillis, session.endTimeMillis, zoneId),
             durationText = UsageFormatter.formatDurationVerbose(context, session.durationMillis),
             durationMillis = session.durationMillis,
             progressRatio = if (maxDurationMillis <= 0L) 0f else {

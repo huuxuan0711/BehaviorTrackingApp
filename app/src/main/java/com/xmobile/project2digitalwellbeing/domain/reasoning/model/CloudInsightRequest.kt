@@ -5,5 +5,6 @@ import com.xmobile.project2digitalwellbeing.domain.insights.service.InterpretedI
 data class CloudInsightRequest(
     val surface: CloudInsightSurface,
     val groundedContext: LlmGroundedContext,
-    val fallbackInsight: InterpretedInsight? = null
+    val fallbackInsight: InterpretedInsight? = null,
+    val languageCode: String = "en"
 )

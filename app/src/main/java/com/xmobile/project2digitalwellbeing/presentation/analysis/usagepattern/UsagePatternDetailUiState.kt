@@ -8,19 +8,15 @@ data class UsagePatternDetailUiState(
     val totalSessionText: String = "0",
     val switchCountText: String = "0",
     val averageSwitchIntervalText: String = "0m",
-    val shortSessionText: String = "0 sessions",
-    val mediumSessionText: String = "0 sessions",
-    val longSessionText: String = "0 sessions",
+    val shortSessionText: String = "",
+    val mediumSessionText: String = "",
+    val longSessionText: String = "",
     val shortSessionRatio: Float = 0f,
     val mediumSessionRatio: Float = 0f,
     val longSessionRatio: Float = 0f,
     val topApps: List<UsagePatternTopAppUiModel> = emptyList(),
-    val insightText: String = DEFAULT_INSIGHT
-) {
-    companion object {
-        const val DEFAULT_INSIGHT = "Usage pattern insight will appear after enough activity is captured today."
-    }
-}
+    val insightText: String = ""
+)
 
 data class UsagePatternTopAppUiModel(
     val packageName: String,

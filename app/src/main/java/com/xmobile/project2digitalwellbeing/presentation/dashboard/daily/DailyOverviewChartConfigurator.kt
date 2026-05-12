@@ -29,7 +29,7 @@ internal object DailyOverviewChartConfigurator {
             extraRightOffset = 12f
             extraBottomOffset = 12f
             axisRight.isEnabled = false
-            setNoDataText("No hourly data yet")
+            setNoDataText(context.getString(R.string.auto_no_hourly_data))
 
             axisLeft.apply {
                 axisMinimum = 0f
@@ -39,7 +39,8 @@ internal object DailyOverviewChartConfigurator {
                 setDrawAxisLine(false)
                 labelCount = 5
                 valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = "${value.toInt()}m"
+                    override fun getFormattedValue(value: Float): String =
+                        context.getString(R.string.auto_unit_m_placeholder, value.toInt())
                 }
             }
 
@@ -58,12 +59,12 @@ internal object DailyOverviewChartConfigurator {
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         return when (value.toInt()) {
-                            0 -> "12AM"
-                            4 -> "4AM"
-                            8 -> "8AM"
-                            12 -> "12PM"
-                            16 -> "4PM"
-                            20 -> "8PM"
+                            0 -> context.getString(R.string.auto_time_12am)
+                            4 -> context.getString(R.string.auto_time_am_placeholder, 4)
+                            8 -> context.getString(R.string.auto_time_am_placeholder, 8)
+                            12 -> context.getString(R.string.auto_time_12pm)
+                            16 -> context.getString(R.string.auto_time_pm_placeholder, 4)
+                            20 -> context.getString(R.string.auto_time_pm_placeholder, 8)
                             else -> ""
                         }
                     }
@@ -90,7 +91,7 @@ internal object DailyOverviewChartConfigurator {
         val highlightColor = ContextCompat.getColor(context, R.color.weekly_trend_icon_background)
         val defaultColor = ContextCompat.getColor(context, R.color.weekly_overview_divider)
         val maxY = entries.maxOfOrNull { it.y } ?: 0f
-        return BarDataSet(entries, "Hourly usage").apply {
+        return BarDataSet(entries, context.getString(R.string.auto_hourly_usage)).apply {
             colors = entries.map { entry ->
                 if (entry.y >= maxY && maxY > 0f) highlightColor else defaultColor
             }
