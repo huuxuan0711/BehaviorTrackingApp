@@ -10,6 +10,7 @@ data class UsageAnalysisPreferences(
     val insightNotificationsEnabled: Boolean = true,
     val darkModeEnabled: Boolean = false,
     val weeklyReportsEnabled: Boolean = true,
+    val cloudEnhancementEnabled: Boolean = false,
     val languageCode: String = "en",
     val isCloudBackupEnabled: Boolean = false
 ) {
@@ -27,6 +28,7 @@ data class UsageAnalysisPreferences(
             insightNotificationsEnabled = true,
             darkModeEnabled = false,
             weeklyReportsEnabled = true,
+            cloudEnhancementEnabled = false,
             isCloudBackupEnabled = false
         )
     }

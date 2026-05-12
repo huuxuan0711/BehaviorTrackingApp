@@ -3,12 +3,12 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetSessionTimelineExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetSessionTimelineExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetSessionTimelineDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetSessionTimelineDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetSessionTimelineDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.SessionTimelineDataError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class SessionTimelineViewModel @Inject constructor(
     application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
-    private val getSessionTimelineDataUseCase: GetSessionTimelineDataUseCase,
+    private val getSessionTimelineExperienceUseCase: GetSessionTimelineExperienceUseCase,
     private val timelineUiMapper: SessionTimelineUiMapper
 ) : AndroidViewModel(application) {
 
@@ -82,27 +82,27 @@ class SessionTimelineViewModel @Inject constructor(
             }
 
             when (
-                val outcome = getSessionTimelineDataUseCase(
+                val outcome = getSessionTimelineExperienceUseCase(
                     GetSessionTimelineDataParams(
                         nowMillis = nowMillis,
                         timezoneId = timezoneId
                     )
                 )
             ) {
-                is GetSessionTimelineDataOutcome.Success -> {
+                is GetSessionTimelineExperienceOutcome.Success -> {
                     hasLoadedData = true
                     val timelineItems = timelineUiMapper.toTimelineItems(
                         context = context,
-                        sessions = outcome.data.sessions,
+                        sessions = outcome.data.data.sessions,
                         zoneId = zoneId,
                         selectedDate = normalizedDate,
-                        lateNightStartHour = outcome.data.lateNightStartHour
+                        lateNightStartHour = outcome.data.data.lateNightStartHour
                     )
 
                     _uiState.value = SessionTimelineUiState(
                         selectedDate = normalizedDate,
                         dateRangeLabel = timelineUiMapper.toDateLabel(normalizedDate),
-                        insightText = refreshError ?: outcome.data.insight?.summary?.takeIf { it.isNotBlank() }
+                        insightText = refreshError ?: outcome.data.insightSummaryText.takeIf { it.isNotBlank() }
                         ?: "No session insight yet. Meaningful patterns will appear after more usage is recorded.",
                         sessions = timelineItems,
                         errorMessage = refreshError,
@@ -110,7 +110,7 @@ class SessionTimelineViewModel @Inject constructor(
                     )
                 }
 
-                is GetSessionTimelineDataOutcome.Failure -> {
+                is GetSessionTimelineExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
                             selectedDate = normalizedDate,

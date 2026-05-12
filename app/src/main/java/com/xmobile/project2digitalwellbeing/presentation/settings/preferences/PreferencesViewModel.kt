@@ -57,6 +57,10 @@ class PreferencesViewModel @Inject constructor(
         actions.tryEmit(PreferencesAction.WeeklyReportsChanged(enabled))
     }
 
+    fun onCloudEnhancementChanged(enabled: Boolean) {
+        actions.tryEmit(PreferencesAction.CloudEnhancementChanged(enabled))
+    }
+
     fun onInsightSensitivityChanged(progress: Int) {
         actions.tryEmit(PreferencesAction.InsightSensitivityChanged(progress))
     }
@@ -90,6 +94,9 @@ class PreferencesViewModel @Inject constructor(
                 is PreferencesAction.WeeklyReportsChanged ->
                     current.copy(weeklyReportsEnabled = action.enabled)
 
+                is PreferencesAction.CloudEnhancementChanged ->
+                    current.copy(cloudEnhancementEnabled = action.enabled)
+
                 is PreferencesAction.InsightSensitivityChanged -> {
                     val sensitivity = when (action.progress) {
                         0 -> InsightSensitivity.LOW
@@ -121,6 +128,7 @@ private sealed interface PreferencesAction {
     data class InsightNotificationsChanged(val enabled: Boolean) : PreferencesAction
     data class DarkModeChanged(val enabled: Boolean) : PreferencesAction
     data class WeeklyReportsChanged(val enabled: Boolean) : PreferencesAction
+    data class CloudEnhancementChanged(val enabled: Boolean) : PreferencesAction
     data class InsightSensitivityChanged(val progress: Int) : PreferencesAction
     data class LanguageChanged(val languageCode: String) : PreferencesAction
 }
@@ -134,6 +142,7 @@ data class PreferencesUiState(
     val insightNotificationsEnabled: Boolean = true,
     val darkModeEnabled: Boolean = false,
     val weeklyReportsEnabled: Boolean = true,
+    val cloudEnhancementEnabled: Boolean = false,
     val sensitivity: InsightSensitivity = InsightSensitivity.MEDIUM,
     val sensitivityProgress: Int = 1,
     val languageCode: String = "en"
@@ -157,6 +166,7 @@ data class PreferencesUiState(
             insightNotificationsEnabled = prefs.insightNotificationsEnabled,
             darkModeEnabled = prefs.darkModeEnabled,
             weeklyReportsEnabled = prefs.weeklyReportsEnabled,
+            cloudEnhancementEnabled = prefs.cloudEnhancementEnabled,
             sensitivity = prefs.insightSensitivity,
             sensitivityProgress = sensitivityProgress,
             languageCode = prefs.languageCode

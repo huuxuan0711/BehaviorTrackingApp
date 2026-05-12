@@ -2,13 +2,13 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataParams
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.DashboardQueryMode
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.time.Instant
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
-    private val getDashboardDataUseCase: GetDashboardDataUseCase
+    private val getDashboardExperienceUseCase: GetDashboardExperienceUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -80,31 +80,31 @@ class DashboardViewModel @Inject constructor(
                 null
             }
 
-            when (val outcome = getDashboardDataUseCase(
+            when (val outcome = getDashboardExperienceUseCase(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
                     timezoneId = timezoneId,
                     queryMode = DashboardQueryMode.Sliding24Hours
                 )
             )) {
-                is GetDashboardDataOutcome.Success -> {
+                is GetDashboardExperienceOutcome.Success -> {
                     hasLoadedData = true
+                    val dashboardData = outcome.data.dashboardData
                     val state = DashboardUiState(
                         isLoading = false,
-                        currentDateLabel = outcome.data.currentLocalDate.toFriendlyDate(timezoneId),
-                        dailyUsage = outcome.data.dailyUsage,
-                        topInsight = outcome.data.topInsight,
-                        hourlyUsage = outcome.data.hourlyUsage,
-                        topApps = outcome.data.topApps,
-                        errorMessage = refreshErrorMessage
+                        currentDateLabel = dashboardData.currentLocalDate.toFriendlyDate(timezoneId),
+                        dailyUsage = dashboardData.dailyUsage,
+                        hourlyUsage = dashboardData.hourlyUsage,
+                        topApps = dashboardData.topApps,
+                        errorMessage = refreshErrorMessage,
+                        insightSummaryText = outcome.data.insightSummaryText
                     )
                     _uiState.value = state.copy(
-                        insightSummaryText = state.toInsightSummaryText(),
                         lateNightRatioText = state.hourlyUsage.toLateNightRatioText()
                     )
                 }
 
-                is GetDashboardDataOutcome.Failure -> {
+                is GetDashboardExperienceOutcome.Failure -> {
                     _uiState.update {
                         val error = refreshErrorMessage ?: outcome.error.toUserMessage()
                         it.copy(

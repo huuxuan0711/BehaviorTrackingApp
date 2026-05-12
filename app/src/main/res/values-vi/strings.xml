@@ -40,6 +40,7 @@
     <string name="auto_classify_apps_to_help_the_app_better_understand_your_digital_habits">Phân loại ứng dụng để giúp ứng dụng hiểu rõ hơn về thói quen kỹ thuật số của bạn.</string>
     <string name="auto_clear_insights_and_start_fresh">Xóa thông tin phân tích và bắt đầu lại</string>
     <string name="auto_cloud_backup">Sao lưu đám mây</string>
+    <string name="auto_cloud_enhancement">Tăng cường AI đám mây</string>
     <string name="auto_contact_support">Liên hệ hỗ trợ</string>
     <string name="auto_control_how_sensitive_pattern_detection_is">Điều chỉnh độ nhạy của việc phát hiện kiểu hành vi</string>
     <string name="auto_control_how_your_usage_data_is_stored_and_managed">Quản lý cách dữ liệu sử dụng được lưu trữ.</string>
@@ -132,6 +133,7 @@
     <string name="auto_quick_access">Truy cập nhanh</string>
     <string name="auto_quick_stats">Thống kê nhanh</string>
     <string name="auto_receive_weekly_usage_summaries">Nhận tóm tắt sử dụng hàng tuần</string>
+    <string name="auto_use_gemini_for_richer_online_insight_text_when_available">Dùng Gemini để tạo insight online phong phú hơn khi có mạng và thông tin xác thực được lưu an toàn.</string>
     <string name="auto_recommendation">Khuyến nghị</string>
     <string name="auto_reducing_phone_use_after_midnight_may_improve_sleep_quality">Giảm sử dụng điện thoại sau nửa đêm có thể cải thiện chất lượng giấc ngủ.</string>
     <string name="auto_reset_behavior_analysis">Đặt lại phân tích hành vi</string>

@@ -442,6 +442,59 @@
                     android:minWidth="@dimen/auto_dp_44" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/weekly_row_spacing"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:src="@drawable/cloud"
+                    app:tint="@color/primary"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="@dimen/weekly_row_spacing"
+                    android:layout_width="@dimen/weekly_screen_bottom_padding"
+                    android:layout_height="@dimen/weekly_screen_bottom_padding"/>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/auto_dp_0"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auto_cloud_enhancement"
+                        android:layout_marginBottom="@dimen/weekly_trend_icon_container_padding"
+                        android:textSize="@dimen/weekly_section_title_size"
+                        android:textColor="@color/weekly_overview_text_primary"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auto_use_gemini_for_richer_online_insight_text_when_available"
+                        android:textSize="@dimen/weekly_body_text_size"
+                        android:textColor="@color/weekly_overview_text_secondary"/>
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchCloudEnhancement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/auto_dp_6"
+                    app:track="@drawable/switch_track"
+                    app:thumbTint="@color/white"
+                    app:trackTint="@null"
+                    android:showText="false"
+                    app:switchMinWidth="@dimen/auto_dp_44"
+                    app:switchPadding="@dimen/auto_dp_0"
+                    android:minHeight="@dimen/weekly_screen_bottom_padding"
+                    android:minWidth="@dimen/auto_dp_44" />
+            </LinearLayout>
+
             <!-- App Language -->
             <LinearLayout
                 android:id="@+id/layoutLanguage"
@@ -561,5 +614,4 @@
 
     </LinearLayout>
 </ScrollView>
-
 

@@ -1,19 +1,14 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.home
 
-import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
 import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 
 fun DashboardUiState.toInsightSummaryText(): String {
     return when {
-        errorMessage != null && topInsight == null ->
+        errorMessage != null ->
             errorMessage
 
-        topInsight != null -> {
-            topInsight.description
-        }
-
         else ->
-            "No clear pattern yet. Use your phone normally, then pull to refresh."
+            insightSummaryText
     }
 }
 

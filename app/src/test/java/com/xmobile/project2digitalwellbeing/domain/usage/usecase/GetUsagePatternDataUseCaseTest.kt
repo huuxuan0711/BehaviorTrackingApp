@@ -117,6 +117,8 @@ class GetUsagePatternDataUseCaseTest {
 
         override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
+        override suspend fun resolveAppName(packageName: String): String = packageName
+
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> = sessions
         override suspend fun saveSessions(sessions: List<AppSession>) = Unit
         override suspend fun deleteSessionsInRange(startTimeMillis: Long, endTimeMillis: Long) = Unit
@@ -129,7 +131,7 @@ class GetUsagePatternDataUseCaseTest {
             windowStartMillis: Long,
             windowEndMillis: Long,
             sessions: List<AppSession>,
-            insights: List<Insight>,
+            insights: List<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>,
             newSyncState: UsageSyncState
         ) = Unit
     }

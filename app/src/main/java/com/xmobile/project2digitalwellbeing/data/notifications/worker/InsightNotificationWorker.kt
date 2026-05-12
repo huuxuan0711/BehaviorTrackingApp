@@ -1,14 +1,16 @@
 package com.xmobile.project2digitalwellbeing.data.notifications.worker
 
+import android.Manifest
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.data.notifications.AppNotifier
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetDashboardDataUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.ZoneId
@@ -17,32 +19,35 @@ import java.time.ZoneId
 class InsightNotificationWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val getDashboardDataUseCase: GetDashboardDataUseCase
+    private val getDashboardExperienceUseCase: GetDashboardExperienceUseCase
 ) : CoroutineWorker(appContext, workerParams) {
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     override suspend fun doWork(): Result {
         val nowMillis = System.currentTimeMillis()
         val timezoneId = ZoneId.systemDefault().id
 
         return when (
-            val outcome = getDashboardDataUseCase(
+            val outcome = getDashboardExperienceUseCase(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
                     timezoneId = timezoneId
                 )
             )
         ) {
-            is GetDashboardDataOutcome.Success -> {
-                val insight = outcome.data.topInsight ?: return Result.success()
+            is GetDashboardExperienceOutcome.Success -> {
+                val message = outcome.data.insightSummaryText
+                if (message.isBlank()) return Result.success()
+
                 AppNotifier.showInsightNotification(
                     context = applicationContext,
                     title = applicationContext.getString(R.string.notification_insight_title),
-                    message = insight.description
+                    message = message
                 )
                 Result.success()
             }
 
-            is GetDashboardDataOutcome.Failure -> Result.retry()
+            is GetDashboardExperienceOutcome.Failure -> Result.retry()
         }
     }
 

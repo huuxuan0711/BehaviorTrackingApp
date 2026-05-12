@@ -9,6 +9,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageReposit
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricher
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.TransitionExtractor
 import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGenerator
+import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractor
 import java.time.Instant
 import java.time.ZoneId
 import java.util.concurrent.CancellationException
@@ -27,7 +28,8 @@ data class TransitionGraphData(
     val filter: TransitionFilter,
     val timeRange: AnalysisTimeRange,
     val transitions: List<AppTransitionStat>,
-    val insight: TransitionInsight?
+    val insight: TransitionInsight?,
+    val features: com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures
 )
 
 sealed interface GetTransitionGraphDataOutcome {
@@ -63,6 +65,7 @@ enum class TransitionGraphDataStage {
     READ_PREFERENCES,
     READ_APP_METADATA,
     ENRICH_SESSIONS,
+    EXTRACT_FEATURES,
     EXTRACT_TRANSITIONS,
     FILTER_TRANSITIONS,
     GENERATE_INSIGHT
@@ -74,7 +77,8 @@ class GetTransitionGraphDataUseCase @Inject constructor(
     private val usagePreferencesRepository: UsagePreferencesRepository,
     private val sessionEnricher: SessionEnricher,
     private val transitionExtractor: TransitionExtractor,
-    private val transitionInsightGenerator: TransitionInsightGenerator
+    private val transitionInsightGenerator: TransitionInsightGenerator,
+    private val featureExtractor: UsageFeatureExtractor
 ) {
     suspend operator fun invoke(params: GetTransitionGraphDataParams): GetTransitionGraphDataOutcome {
         val zoneId = runStage(TransitionGraphDataStage.RESOLVE_RANGE, params) {
@@ -106,6 +110,10 @@ class GetTransitionGraphDataUseCase @Inject constructor(
             )
         }.getOrElse { return GetTransitionGraphDataOutcome.Failure(it.toTransitionGraphError(params.timezoneId)) }
 
+        val features = runStage(TransitionGraphDataStage.EXTRACT_FEATURES, params) {
+            featureExtractor.extractFeatures(enrichedSessions, preferences)
+        }.getOrElse { return GetTransitionGraphDataOutcome.Failure(it.toTransitionGraphError(params.timezoneId)) }
+
         val extractedTransitions = runStage(TransitionGraphDataStage.EXTRACT_TRANSITIONS, params) {
             transitionExtractor.extractTransitions(enrichedSessions)
         }.getOrElse { return GetTransitionGraphDataOutcome.Failure(it.toTransitionGraphError(params.timezoneId)) }
@@ -125,7 +133,8 @@ class GetTransitionGraphDataUseCase @Inject constructor(
                 filter = params.filter,
                 timeRange = params.timeRange,
                 transitions = filteredTransitions,
-                insight = insight
+                insight = insight,
+                features = features
             )
         )
     }
@@ -207,6 +216,7 @@ private fun Throwable.toTransitionGraphError(timezoneId: String): TransitionGrap
 
             TransitionGraphDataStage.RESOLVE_RANGE,
             TransitionGraphDataStage.ENRICH_SESSIONS,
+            TransitionGraphDataStage.EXTRACT_FEATURES,
             TransitionGraphDataStage.EXTRACT_TRANSITIONS,
             TransitionGraphDataStage.FILTER_TRANSITIONS,
             TransitionGraphDataStage.GENERATE_INSIGHT -> TransitionGraphDataError.ProcessingFailure(

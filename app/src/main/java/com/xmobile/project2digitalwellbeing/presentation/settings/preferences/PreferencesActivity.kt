@@ -139,6 +139,11 @@ class PreferencesActivity : AppCompatActivity() {
             viewModel.onWeeklyReportsChanged(isChecked)
         }
 
+        binding.switchCloudEnhancement.setOnCheckedChangeListener { _, isChecked ->
+            if (suppressSwitchCallbacks) return@setOnCheckedChangeListener
+            viewModel.onCloudEnhancementChanged(isChecked)
+        }
+
         binding.layoutLanguage.setOnClickListener {
             showLanguageDialog()
         }
@@ -166,6 +171,7 @@ class PreferencesActivity : AppCompatActivity() {
         binding.switchInsight.isChecked = state.insightNotificationsEnabled
         binding.switchDarkMode.isChecked = state.darkModeEnabled
         binding.switchWeekly.isChecked = state.weeklyReportsEnabled
+        binding.switchCloudEnhancement.isChecked = state.cloudEnhancementEnabled
         suppressSwitchCallbacks = false
 
         binding.seekSensitivity.progress = state.sensitivityProgress

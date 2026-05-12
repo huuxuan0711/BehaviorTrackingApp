@@ -17,6 +17,10 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "GEMINI_API_BASE_URL", "\"https://generativelanguage.googleapis.com/\"")
+        buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-2.5-flash\"")
+        buildConfigField("boolean", "GEMINI_CLOUD_ENHANCEMENT_ENABLED", "false")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -61,6 +65,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -82,6 +87,8 @@ dependencies {
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     //OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")

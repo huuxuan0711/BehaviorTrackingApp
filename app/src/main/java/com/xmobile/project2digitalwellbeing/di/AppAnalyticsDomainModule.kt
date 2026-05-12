@@ -14,6 +14,12 @@ import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightCompo
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightComposerImpl
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngine
 import com.xmobile.project2digitalwellbeing.domain.insights.service.InsightEngineImpl
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.BehaviorReasoningEngine
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.BehaviorReasoningEngineImpl
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.InsightResolutionStrategy
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.InsightResolutionStrategyImpl
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.LocalInsightNarrator
+import com.xmobile.project2digitalwellbeing.domain.reasoning.service.LocalInsightNarratorImpl
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregatorImpl
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractor
@@ -84,4 +90,19 @@ abstract class AppAnalyticsDomainModule {
     abstract fun bindUsageErrorMapper(
         implementation: UsageErrorMapperImpl
     ): UsageErrorMapper
+
+    @Binds
+    abstract fun bindBehaviorReasoningEngine(
+        implementation: BehaviorReasoningEngineImpl
+    ): BehaviorReasoningEngine
+
+    @Binds
+    abstract fun bindInsightResolutionStrategy(
+        implementation: InsightResolutionStrategyImpl
+    ): InsightResolutionStrategy
+
+    @Binds
+    abstract fun bindLocalInsightNarrator(
+        implementation: LocalInsightNarratorImpl
+    ): LocalInsightNarrator
 }

@@ -17,6 +17,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageReposit
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricherImpl
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.TransitionExtractorImpl
 import com.xmobile.project2digitalwellbeing.domain.insights.service.TransitionInsightGeneratorImpl
+import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageFeatureExtractorImpl
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -41,7 +42,8 @@ class GetTransitionGraphDataUseCaseTest {
             usagePreferencesRepository = FakeTransitionPreferencesRepository(),
             sessionEnricher = SessionEnricherImpl(),
             transitionExtractor = TransitionExtractorImpl(),
-            transitionInsightGenerator = TransitionInsightGeneratorImpl()
+            transitionInsightGenerator = TransitionInsightGeneratorImpl(),
+            featureExtractor = UsageFeatureExtractorImpl()
         )
 
         val outcome = useCase(
@@ -78,7 +80,8 @@ class GetTransitionGraphDataUseCaseTest {
             ),
             sessionEnricher = SessionEnricherImpl(),
             transitionExtractor = TransitionExtractorImpl(),
-            transitionInsightGenerator = TransitionInsightGeneratorImpl()
+            transitionInsightGenerator = TransitionInsightGeneratorImpl(),
+            featureExtractor = UsageFeatureExtractorImpl()
         )
 
         val outcome = useCase(
@@ -123,6 +126,8 @@ class GetTransitionGraphDataUseCaseTest {
 
         override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
+        override suspend fun resolveAppName(packageName: String): String = packageName
+
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> = sessions
         override suspend fun saveSessions(sessions: List<AppSession>) = Unit
         override suspend fun deleteSessionsInRange(startTimeMillis: Long, endTimeMillis: Long) = Unit
@@ -135,7 +140,7 @@ class GetTransitionGraphDataUseCaseTest {
             windowStartMillis: Long,
             windowEndMillis: Long,
             sessions: List<AppSession>,
-            insights: List<com.xmobile.project2digitalwellbeing.domain.insights.model.Insight>,
+            insights: List<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>,
             newSyncState: UsageSyncState
         ) = Unit
     }

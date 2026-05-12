@@ -40,6 +40,7 @@
     <string name="auto_classify_apps_to_help_the_app_better_understand_your_digital_habits">Classify apps to help the app better understand your digital habits.</string>
     <string name="auto_clear_insights_and_start_fresh">Clear insights and start fresh</string>
     <string name="auto_cloud_backup">Cloud backup</string>
+    <string name="auto_cloud_enhancement">Cloud AI enhancement</string>
     <string name="auto_contact_support">Contact Support</string>
     <string name="auto_control_how_sensitive_pattern_detection_is">Control how sensitive pattern detection is</string>
     <string name="auto_control_how_your_usage_data_is_stored_and_managed">Control how your usage data is stored and managed.</string>
@@ -132,6 +133,7 @@
     <string name="auto_quick_access">Quick Access</string>
     <string name="auto_quick_stats">Quick Stats</string>
     <string name="auto_receive_weekly_usage_summaries">Receive weekly usage summaries</string>
+    <string name="auto_use_gemini_for_richer_online_insight_text_when_available">Use Gemini for richer online insight text when network and secure credentials are available.</string>
     <string name="auto_recommendation">Recommendation</string>
     <string name="auto_reducing_phone_use_after_midnight_may_improve_sleep_quality">Reducing phone use after midnight may improve sleep quality.</string>
     <string name="auto_reset_behavior_analysis">Reset behavior analysis</string>

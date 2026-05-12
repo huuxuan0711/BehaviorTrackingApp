@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.R
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetDashboardExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
@@ -16,9 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +32,8 @@ import kotlinx.coroutines.launch
 class DailyOverviewViewModel @Inject constructor(
     application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
-    private val getDashboardDataUseCase: GetDashboardDataUseCase
+    private val getDashboardDataUseCase: GetDashboardDataUseCase,
+    private val getDashboardExperienceUseCase: GetDashboardExperienceUseCase
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
@@ -100,7 +100,7 @@ class DailyOverviewViewModel @Inject constructor(
                 null
             }
 
-            val todayOutcome = getDashboardDataUseCase(
+            val todayOutcome = getDashboardExperienceUseCase(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
                     timezoneId = timezoneId
@@ -114,20 +114,19 @@ class DailyOverviewViewModel @Inject constructor(
             )
 
             when (todayOutcome) {
-                is GetDashboardDataOutcome.Success -> {
+                is GetDashboardExperienceOutcome.Success -> {
                     hasLoadedData = true
-                    val todayUsage = todayOutcome.data.dailyUsage
+                    val todayUsage = todayOutcome.data.dashboardData.dailyUsage
                     val yesterdayUsage = (yesterdayOutcome as? GetDashboardDataOutcome.Success)
                         ?.data
                         ?.dailyUsage
-                    val topInsight = todayOutcome.data.topInsight
 
                     _uiState.value = DailyOverviewUiState(
                         isLoading = false,
                         selectedDate = resolvedDate,
                         dateLabel = UsageFormatter.formatFriendlyDate(
                             context,
-                            LocalDate.parse(todayOutcome.data.currentLocalDate),
+                            LocalDate.parse(todayOutcome.data.dashboardData.currentLocalDate),
                             today
                         ),
                         totalScreenTimeText = UsageFormatter.formatDuration(context, todayUsage.totalScreenTimeMillis),
@@ -140,15 +139,14 @@ class DailyOverviewViewModel @Inject constructor(
                             .maxOfOrNull { it.durationMillis }
                             ?.let { UsageFormatter.formatDuration(context, it) }
                             ?: context.getString(R.string.auto_text_0m),
-                        hourlyUsage = todayOutcome.data.hourlyUsage,
-                        topApps = todayOutcome.data.topApps,
-                        insightText = topInsight?.description?.takeIf { it.isNotBlank() }
-                            ?: context.getString(R.string.auto_no_daily_insight),
+                        hourlyUsage = todayOutcome.data.dashboardData.hourlyUsage,
+                        topApps = todayOutcome.data.dashboardData.topApps,
+                        insightText = todayOutcome.data.insightSummaryText,
                         errorMessage = refreshError
                     )
                 }
 
-                is GetDashboardDataOutcome.Failure -> {
+                is GetDashboardExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,

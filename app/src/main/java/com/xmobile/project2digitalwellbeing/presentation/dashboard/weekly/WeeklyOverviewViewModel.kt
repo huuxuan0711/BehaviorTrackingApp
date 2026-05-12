@@ -3,13 +3,12 @@ package com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetWeeklyOverviewExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetWeeklyOverviewExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataParams
 import com.xmobile.project2digitalwellbeing.domain.tracking.usecase.RefreshUsageDataUseCase
-import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrendDirection
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOverviewDataOutcome
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOverviewDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetWeeklyOverviewDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.WeeklyOverviewDataError
 import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +16,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +30,7 @@ import kotlinx.coroutines.launch
 class WeeklyOverviewViewModel @Inject constructor(
     application: Application,
     private val refreshUsageDataUseCase: RefreshUsageDataUseCase,
-    private val getWeeklyOverviewDataUseCase: GetWeeklyOverviewDataUseCase
+    private val getWeeklyOverviewExperienceUseCase: GetWeeklyOverviewExperienceUseCase
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
@@ -87,16 +85,16 @@ class WeeklyOverviewViewModel @Inject constructor(
             }
 
             when (
-                val outcome = getWeeklyOverviewDataUseCase(
+                val outcome = getWeeklyOverviewExperienceUseCase(
                     GetWeeklyOverviewDataParams(
                         nowMillis = nowMillis,
                         timezoneId = timezoneId
                     )
                 )
             ) {
-                is GetWeeklyOverviewDataOutcome.Success -> {
+                is GetWeeklyOverviewExperienceOutcome.Success -> {
                     hasLoadedData = true
-                    val weeklyUsage = outcome.data.weeklyUsage
+                    val weeklyUsage = outcome.data.weeklyData.weeklyUsage
                     val dailyUsages = weeklyUsage.dailyUsages
                     val peakUsage = dailyUsages.maxOfOrNull { it.totalScreenTimeMillis } ?: 0L
                     val maxDay = dailyUsages.maxByOrNull { it.totalScreenTimeMillis }
@@ -111,8 +109,7 @@ class WeeklyOverviewViewModel @Inject constructor(
                             "${UsageFormatter.formatShortDay(maxDay.localDate)} - ${UsageFormatter.formatDuration(context, maxDay.totalScreenTimeMillis)}"
                         },
                         totalScreenTimeText = UsageFormatter.formatDuration(context, weeklyUsage.totalScreenTimeMillis),
-                        trendText = refreshError ?: outcome.data.trend.toFriendlySummary().takeIf { it.isNotBlank() }
-                        ?: "No weekly trend yet. Patterns become clearer after a few active days.",
+                        trendText = refreshError ?: outcome.data.insightSummaryText,
                         chartBars = dailyUsages.map { dailyUsage ->
                             WeeklyChartBarUiModel(
                                 label = UsageFormatter.formatShortDay(dailyUsage.localDate),
@@ -120,13 +117,13 @@ class WeeklyOverviewViewModel @Inject constructor(
                                 isHighlighted = peakUsage > 0L && dailyUsage.totalScreenTimeMillis == peakUsage
                             )
                         },
-                        topApps = outcome.data.topApps,
+                        topApps = outcome.data.weeklyData.topApps,
                         errorMessage = refreshError,
                         canNavigateNext = normalizedWeekStart.isBefore(currentWeekStart)
                     )
                 }
 
-                is GetWeeklyOverviewDataOutcome.Failure -> {
+                is GetWeeklyOverviewExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
                             dateRangeLabel = UsageFormatter.formatDateRange(normalizedWeekStart, normalizedWeekStart.plusDays(6)),
@@ -168,15 +165,6 @@ class WeeklyOverviewViewModel @Inject constructor(
                 "Your device time zone could not be resolved."
 
             else -> "Weekly overview data is not available yet."
-        }
-    }
-
-    private fun com.xmobile.project2digitalwellbeing.domain.usage.model.UsageTrend.toFriendlySummary(): String {
-        val ratioPercent = (kotlin.math.abs(deltaRatio) * 100f).toInt()
-        return when (direction) {
-            UsageTrendDirection.UP -> "Your screen time increased by $ratioPercent% compared to last week."
-            UsageTrendDirection.DOWN -> "Your screen time decreased by $ratioPercent% compared to last week."
-            UsageTrendDirection.FLAT -> "Your screen time is stable compared to last week."
         }
     }
 }

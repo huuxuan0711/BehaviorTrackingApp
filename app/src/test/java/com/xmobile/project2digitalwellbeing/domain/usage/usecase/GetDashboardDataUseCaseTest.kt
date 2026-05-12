@@ -20,7 +20,10 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
 import com.xmobile.project2digitalwellbeing.domain.usage.model.WeeklyUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
+import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
+import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -45,6 +48,7 @@ class GetDashboardDataUseCaseTest {
         val useCase = GetDashboardDataUseCase(
             repository = repository,
             appRepository = repository,
+            usagePreferencesRepository = FakeUsagePreferencesRepository(),
             interpreter = InsightInterpreter(),
             aggregator = FakeUsageAggregator()
         )
@@ -70,6 +74,7 @@ class GetDashboardDataUseCaseTest {
         val useCase = GetDashboardDataUseCase(
             repository = FakeUsageRepository(),
             appRepository = FakeUsageRepository(),
+            usagePreferencesRepository = FakeUsagePreferencesRepository(),
             aggregator = FakeUsageAggregator(),
             interpreter = InsightInterpreter()
         )
@@ -98,6 +103,7 @@ class GetDashboardDataUseCaseTest {
                 )
             ),
             appRepository = FakeUsageRepository(),
+            usagePreferencesRepository = FakeUsagePreferencesRepository(),
             aggregator = FakeUsageAggregator(),
             interpreter = InsightInterpreter()
         )
@@ -138,6 +144,8 @@ class GetDashboardDataUseCaseTest {
 
         override suspend fun updateAppCategory(packageName: String, category: AppCategory) = Unit
 
+        override suspend fun resolveAppName(packageName: String): String = packageName
+
         override suspend fun getSessions(startTimeMillis: Long, endTimeMillis: Long): List<AppSession> {
             sessionsError?.let { throw it }
             return sessions
@@ -165,7 +173,7 @@ class GetDashboardDataUseCaseTest {
             windowStartMillis: Long,
             windowEndMillis: Long,
             sessions: List<AppSession>,
-            insights: List<Insight>,
+            insights: List<com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup>,
             newSyncState: UsageSyncState
         ) = Unit
     }
@@ -178,6 +186,21 @@ class GetDashboardDataUseCaseTest {
         ): DailyUsage {
             return DailyUsage(
                 localDate = localDate,
+                timezoneId = timezoneId,
+                totalScreenTimeMillis = sessions.sumOf { it.durationMillis },
+                totalSessionCount = sessions.size,
+                sessions = sessions
+            )
+        }
+
+        override fun buildSlidingUsage(
+            sessions: List<AppSession>,
+            timezoneId: String,
+            windowStartMillis: Long,
+            windowEndMillis: Long
+        ): DailyUsage {
+            return DailyUsage(
+                localDate = "1970-01-01",
                 timezoneId = timezoneId,
                 totalScreenTimeMillis = sessions.sumOf { it.durationMillis },
                 totalSessionCount = sessions.size,
@@ -210,6 +233,15 @@ class GetDashboardDataUseCaseTest {
             return listOf(HourlyUsage(hourOfDay = 0, totalTimeMillis = sessions.sumOf { it.durationMillis }))
         }
 
+        override fun buildSlidingHourlyUsage(
+            sessions: List<AppSession>,
+            timezoneId: String,
+            windowStartMillis: Long,
+            windowEndMillis: Long
+        ): List<HourlyUsage> {
+            return listOf(HourlyUsage(hourOfDay = 0, totalTimeMillis = sessions.sumOf { it.durationMillis }))
+        }
+
         override fun buildWeeklyUsage(
             sessions: List<AppSession>,
             timezoneId: String,
@@ -231,5 +263,13 @@ class GetDashboardDataUseCaseTest {
             sessions: List<AppSession>,
             appMetadataByPackage: Map<String, AppMetadata>
         ): List<CategoryUsage> = emptyList()
+    }
+
+    private class FakeUsagePreferencesRepository : UsagePreferencesRepository {
+        override val usageAnalysisPreferences: Flow<UsageAnalysisPreferences> = flowOf(UsageAnalysisPreferences.DEFAULT)
+
+        override suspend fun getUsageAnalysisPreferences(): UsageAnalysisPreferences = UsageAnalysisPreferences.DEFAULT
+
+        override suspend fun saveUsageAnalysisPreferences(preferences: UsageAnalysisPreferences) = Unit
     }
 }

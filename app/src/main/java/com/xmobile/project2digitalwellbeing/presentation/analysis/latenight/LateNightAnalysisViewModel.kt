@@ -3,9 +3,9 @@ package com.xmobile.project2digitalwellbeing.presentation.analysis.latenight
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetLateNightAnalysisDataOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetLateNightAnalysisExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetLateNightAnalysisExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetLateNightAnalysisDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetLateNightAnalysisDataUseCase
 import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LateNightAnalysisViewModel @Inject constructor(
     application: Application,
-    private val getLateNightAnalysisDataUseCase: GetLateNightAnalysisDataUseCase
+    private val getLateNightAnalysisExperienceUseCase: GetLateNightAnalysisExperienceUseCase
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
@@ -40,9 +40,9 @@ class LateNightAnalysisViewModel @Inject constructor(
                 timezoneId = ZoneId.systemDefault().id
             )
 
-            when (val outcome = getLateNightAnalysisDataUseCase(params)) {
-                is GetLateNightAnalysisDataOutcome.Success -> {
-                    val data = outcome.data
+            when (val outcome = getLateNightAnalysisExperienceUseCase(params)) {
+                is GetLateNightAnalysisExperienceOutcome.Success -> {
+                    val data = outcome.data.data
                     
                     // Map hourly usage to the fixed list of 8 bars (22h -> 5h)
                     val lateNightHours = listOf(22, 23, 0, 1, 2, 3, 4, 5)
@@ -74,12 +74,12 @@ class LateNightAnalysisViewModel @Inject constructor(
                             hourlyUsage = chartValues,
                             topApps = topApps,
                             peakUsageLabel = peakLabel,
-                            insightText = data.insightSummary,
+                            insightText = outcome.data.insightSummaryText,
                             recommendationText = data.recommendation
                         )
                     }
                 }
-                is GetLateNightAnalysisDataOutcome.Failure -> {
+                is GetLateNightAnalysisExperienceOutcome.Failure -> {
                     _uiState.update { 
                         it.copy(
                             isLoading = false, 
