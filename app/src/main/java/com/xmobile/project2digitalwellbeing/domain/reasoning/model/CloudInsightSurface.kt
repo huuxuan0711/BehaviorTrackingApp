@@ -5,6 +5,7 @@ enum class CloudInsightSurface {
     DAILY_OVERVIEW,
     WEEKLY_OVERVIEW,
     LATE_NIGHT_ANALYSIS,
+    USAGE_PATTERN,
     SESSION_TIMELINE,
     TRANSITION_GRAPH
 }

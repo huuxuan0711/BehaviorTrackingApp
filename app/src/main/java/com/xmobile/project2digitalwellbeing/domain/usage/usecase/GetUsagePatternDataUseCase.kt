@@ -4,6 +4,7 @@ import com.xmobile.project2digitalwellbeing.domain.apps.repository.AppRepository
 import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.usage.model.SessionLengthDistribution
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatureTopApp
+import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageFeatures
 import com.xmobile.project2digitalwellbeing.domain.preferences.repository.UsagePreferencesRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.tracking.service.SessionEnricher
@@ -28,7 +29,8 @@ data class UsagePatternData(
     val averageSwitchIntervalMillis: Long,
     val sessionLengthDistribution: SessionLengthDistribution,
     val topAppsByLaunchCount: List<UsageFeatureTopApp>,
-    val topInsight: Insight?
+    val topInsight: Insight?,
+    val features: UsageFeatures
 )
 
 sealed interface GetUsagePatternDataOutcome {
@@ -148,7 +150,8 @@ class GetUsagePatternDataUseCase @Inject constructor(
                 topInsight = insights.maxWithOrNull(
                     compareBy<Insight> { it.score }
                         .thenBy { it.confidence }
-                )
+                ),
+                features = features
             )
         )
     }

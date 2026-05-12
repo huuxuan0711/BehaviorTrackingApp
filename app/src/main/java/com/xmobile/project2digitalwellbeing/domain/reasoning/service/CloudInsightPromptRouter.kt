@@ -8,6 +8,7 @@ class CloudInsightPromptRouter @Inject constructor(
     dashboardBuilder: DashboardCloudInsightPromptBuilder,
     weeklyBuilder: WeeklyCloudInsightPromptBuilder,
     lateNightBuilder: LateNightCloudInsightPromptBuilder,
+    usagePatternBuilder: UsagePatternCloudInsightPromptBuilder,
     sessionTimelineBuilder: SessionTimelineCloudInsightPromptBuilder,
     transitionGraphBuilder: TransitionGraphCloudInsightPromptBuilder
 ) {
@@ -15,6 +16,7 @@ class CloudInsightPromptRouter @Inject constructor(
         dashboardBuilder,
         weeklyBuilder,
         lateNightBuilder,
+        usagePatternBuilder,
         sessionTimelineBuilder,
         transitionGraphBuilder
     )

@@ -8,6 +8,7 @@ import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageReposit
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import com.xmobile.project2digitalwellbeing.domain.usage.model.AppUsageStat
 import com.xmobile.project2digitalwellbeing.domain.usage.model.shouldIncludeCategory
+import java.time.ZoneId
 import javax.inject.Inject
 
 class GetAppCategoryDataUseCase @Inject constructor(
@@ -18,14 +19,20 @@ class GetAppCategoryDataUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Map<AppFocusGroup, List<AppUsageStat>> {
         val nowMillis = System.currentTimeMillis()
-        val startOfDayMillis = nowMillis - 24L * 60 * 60 * 1000
+        val windowStartMillis = nowMillis - MILLIS_PER_DAY
 
-        val sessions = usageRepository.getSessions(startOfDayMillis, nowMillis)
+        val sessions = usageRepository.getSessions(windowStartMillis, nowMillis)
         val allAppMetadataList = appRepository.getAllAppMetadata()
         val preferences = usagePreferencesRepository.getUsageAnalysisPreferences()
         val allAppMetadataMap = allAppMetadataList.associateBy { it.packageName }
 
-        val usageStats = aggregator.buildAppUsageStats(sessions, allAppMetadataMap)
+        val clippedUsage = aggregator.buildSlidingUsage(
+            sessions = sessions,
+            timezoneId = ZoneId.systemDefault().id,
+            windowStartMillis = windowStartMillis,
+            windowEndMillis = nowMillis
+        )
+        val usageStats = aggregator.buildAppUsageStats(clippedUsage.sessions, allAppMetadataMap)
         val usageStatsByPackage = usageStats.associateBy { it.packageName }
 
         val allAppsWithUsage = allAppMetadataList.map { metadata ->
@@ -50,5 +57,9 @@ class GetAppCategoryDataUseCase @Inject constructor(
 
         return finalStats.groupBy { it.category.toFocusGroup() }
             .toSortedMap(compareBy { it.name })
+    }
+
+    private companion object {
+        const val MILLIS_PER_DAY = 24L * 60L * 60L * 1000L
     }
 }

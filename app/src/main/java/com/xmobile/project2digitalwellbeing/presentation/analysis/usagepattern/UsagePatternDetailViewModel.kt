@@ -4,10 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.R
-import com.xmobile.project2digitalwellbeing.domain.insights.model.InsightType
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsagePatternDataOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetUsagePatternExperienceOutcome
+import com.xmobile.project2digitalwellbeing.domain.orchestrator.usecase.GetUsagePatternExperienceUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsagePatternDataParams
-import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsagePatternDataUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.usecase.UsagePatternDataError
 import com.xmobile.project2digitalwellbeing.helper.UsageFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class UsagePatternDetailViewModel @Inject constructor(
     application: Application,
-    private val getUsagePatternDataUseCase: GetUsagePatternDataUseCase
+    private val getUsagePatternExperienceUseCase: GetUsagePatternExperienceUseCase
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
@@ -33,7 +32,7 @@ class UsagePatternDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val outcome = getUsagePatternDataUseCase(
+            val outcome = getUsagePatternExperienceUseCase(
                 GetUsagePatternDataParams(
                     nowMillis = System.currentTimeMillis(),
                     timezoneId = ZoneId.systemDefault().id
@@ -41,8 +40,8 @@ class UsagePatternDetailViewModel @Inject constructor(
             )
 
             when (outcome) {
-                is GetUsagePatternDataOutcome.Success -> {
-                    val data = outcome.data
+                is GetUsagePatternExperienceOutcome.Success -> {
+                    val data = outcome.data.data
                     val distribution = data.sessionLengthDistribution
                     val totalDistributionCount = (
                         distribution.shortSessionCount +
@@ -76,22 +75,11 @@ class UsagePatternDetailViewModel @Inject constructor(
                         mediumSessionRatio = distribution.mediumSessionCount.toFloat() / totalDistributionCount.toFloat(),
                         longSessionRatio = distribution.longSessionCount.toFloat() / totalDistributionCount.toFloat(),
                         topApps = topApps,
-                        insightText = data.topInsight?.let { insight ->
-                            when (insight.type) {
-                                InsightType.LATE_NIGHT_USAGE -> context.getString(R.string.auto_insight_late_night_usage_desc)
-                                InsightType.FREQUENT_SWITCHING -> context.getString(R.string.auto_insight_frequent_switching_desc)
-                                InsightType.BINGE_USAGE -> context.getString(R.string.auto_insight_binge_usage_desc)
-                                InsightType.LATE_NIGHT_SWITCHING -> context.getString(R.string.auto_insight_late_night_switching_desc)
-                                InsightType.WORK_HOUR_DISTRACTION -> context.getString(R.string.auto_insight_work_hour_distraction_desc)
-                                InsightType.MORNING_ROUTINE -> context.getString(R.string.auto_insight_morning_routine_desc)
-                                InsightType.CONSTANT_CHECKING -> context.getString(R.string.auto_insight_constant_checking_desc)
-                                InsightType.APP_RELIANCE -> context.getString(R.string.auto_insight_app_reliance_desc)
-                            }
-                        } ?: context.getString(R.string.auto_usage_pattern_default_insight)
+                        insightText = outcome.data.insightSummaryText
                     )
                 }
 
-                is GetUsagePatternDataOutcome.Failure -> {
+                is GetUsagePatternExperienceOutcome.Failure -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,

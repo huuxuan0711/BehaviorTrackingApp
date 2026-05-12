@@ -1,101 +1,114 @@
 # Digital Wellbeing
 
-Dự án Android: **Digital Wellbeing kết hợp AI-Assisted Behavioral Insights**
+Ứng dụng Android phân tích thói quen sử dụng điện thoại theo hướng local-first, kết hợp các insight hành vi và lớp giải thích AI để giúp người dùng hiểu rõ hơn về screen time của mình.
 
-Ứng dụng không chỉ đóng vai trò là một "app quản lý thời gian", mà còn là một trợ lý phân tích thói quen sử dụng điện thoại, biến những con số thời lượng thô thành những hiểu biết (insights) hữu ích thông qua AI để giúp người dùng cải thiện sức khoẻ kỹ thuật số thực sự.
+## Mục tiêu
 
-## 🎯 Project Philosophy
+Digital Wellbeing không chỉ hiển thị tổng thời lượng sử dụng. Ứng dụng tái cấu trúc dữ liệu UsageStats thành session, xu hướng, chuyển đổi giữa app và insight hành vi để người dùng nhìn thấy các pattern như dùng máy khuya, chuyển app liên tục hoặc phụ thuộc vào một nhóm ứng dụng.
 
-Ứng dụng này tập trung vào việc chuyển đổi dữ liệu thời gian sử dụng màn hình (screen-time data) thô thành nhận thức sâu sắc về hành vi (behavioral insights), đồng thời duy trì trải nghiệm người dùng tối giản, thân thiện, không gây quá tải thông tin.
+Ứng dụng ưu tiên kiến trúc local-first: dữ liệu usage được xử lý và lưu cục bộ bằng Room, vẫn hoạt động khi offline. AI cloud enhancement là tùy chọn và có fallback về insight local.
 
-Bên cạnh đó, dự án tuân thủ kiến trúc **local-first** để bảo vệ quyền riêng tư, giảm độ phức tạp về hạ tầng mạng, đảm bảo ứng dụng luôn hoạt động ổn định kể cả khi không có kết nối internet (offline-first reliability).
+## Tính năng chính
 
-## 📱 Screenshots
+- Dashboard tổng quan screen time, top apps, biểu đồ theo giờ và insight nổi bật.
+- Daily Overview cho dữ liệu theo ngày, so sánh với ngày trước đó.
+- Weekly Overview cho tổng quan tuần, biểu đồ 7 ngày và top apps.
+- Session Timeline tái tạo các phiên sử dụng theo dòng thời gian.
+- App Categories phân nhóm ứng dụng và cho phép chỉnh category thủ công.
+- App Transition Graph phân tích chuyển đổi nhanh giữa các ứng dụng.
+- Usage Pattern phân tích độ dài session, số lần mở app và switch count.
+- Late Night Analysis tập trung vào hành vi sử dụng từ tối muộn đến rạng sáng.
+- Preferences cho ngôn ngữ, dark mode, threshold phân tích, notification và cloud enhancement.
+- Privacy & Data cho export, reset phân tích, xóa dữ liệu và cloud backup toggle.
 
-> `[Dashboard]`
-> `[Timeline]` `[Analysis]` `[Categories]` `[App Detail]`
+## Kiến trúc
 
-## 🌟 Tính năng nổi bật & Chiều sâu sản phẩm
-
-- **Quản lý & Theo dõi sử dụng (Usage Tracking):** Dễ dàng theo dõi thời lượng sử dụng chi tiết theo ngày, tuần và đặc biệt là phân tích theo phiên sử dụng (sessions).
-- **Phân tích hành vi (Behavioral Analysis):** Nhấn mạnh vào xu hướng và thói quen thay vì chỉ hiện con số:
-  - **Late Night:** Đánh giá thói quen thức khuya sử dụng điện thoại.
-  - **Transitions:** Phân tích mô hình chuyển đổi qua lại giữa các ứng dụng gây xao nhãng.
-  - **Categories:** Phân loại và tổng kết thời gian dành cho giải trí, công việc, mạng xã hội, v.v.
-- **AI-Assisted Behavioral Insights:** Ứng dụng tích hợp cấu trúc LLM-enhanced explanation layer (kết nối với Gemini 2.5 Flash), đóng vai trò phân tích các pattern thống kê, từ đó đưa ra lời khuyên cá nhân hóa một cách tự nhiên.
-- **Trực quan hoá thân thiện:** Bản đồ xu hướng hằng ngày và hằng tuần được mô tả dễ nhìn bằng biểu đồ sắc nét (MPAndroidChart), giúp insight tiếp cận người dùng dễ dàng hơn.
-
-## 🏛 Architecture Diagram
-
-Sự phân chia luồng dữ liệu tuân thủ Clean Architecture:
+Dự án dùng Clean Architecture + MVVM:
 
 ```text
-       UsageStats (Raw OS Events)
-                  ↓
-          Tracking Layer (Worker)
-                  ↓
-       Room Database (Local-first)
-                  ↓
-        Insight Engine (Domain Logic)
-                  ↓
-  Presentation Layer (Clean UI/Flow/MVVM)
-                  ↓
-  AI Explanation Layer (LLM Enhancement)
+Presentation Layer
+Activity / Fragment / Adapter / ViewModel / UiState
+        ↓
+Domain Layer
+UseCase / Service / Model / Repository Interface
+        ↓
+Data Layer
+Repository Impl / DataSource / Room / DataStore / Retrofit / Worker
 ```
 
-## 🛠️ Kiến trúc và Công nghệ (Tech Stack)
+Pipeline dữ liệu usage:
 
-Dự án sử dụng Kotlin kết hợp kiến trúc **Clean Architecture** và các tiêu chuẩn tốt nhất trong Android:
+```text
+Android UsageStats
+        ↓
+UsageStatsDataSource
+        ↓
+RefreshUsageDataUseCase
+        ↓
+SessionBuilder / SessionEnricher
+        ↓
+UsageAggregator / UsageFeatureExtractor
+        ↓
+InsightEngine
+        ↓
+Room Database
+        ↓
+Presentation ViewModels
+```
 
-*   **Kiến trúc:** Clean Architecture + MVVM
-*   **Asynchronous:** Kotlin Coroutines & Flow
-*   **Dependency Injection:** Dagger Hilt
-*   **Network / AI Layer:** Retrofit2, OkHttp3 giao tiếp với Gemini API
-*   **Persistence:** Room Database, DataStore Preferences
-*   **Background processing:** WorkManager
+## Công nghệ
 
-## 🧠 Core Modules
+- Kotlin
+- XML Views
+- Coroutines & Flow
+- Dagger Hilt
+- Room
+- DataStore Preferences
+- WorkManager
+- Retrofit + OkHttp
+- Gemini API cho cloud insight tùy chọn
+- MPAndroidChart
 
-Thay vì liệt kê package kỹ thuật đơn thuần, hệ thống được cấu trúc dựa trên các Business Modules chính:
+## Các module chính
 
-- **Usage Tracking Engine:** Module thu thập, làm sạch và định cấu trúc luồng sự kiện từ OS.
-- **Session Analysis:** Trích xuất các phiên sử dụng liền mạch, tính số lần mở app.
-- **Insight Engine:** Phân tích quy luật, độ dài thời gian, phân loại theo category, cảnh báo ranh giới.
-- **AI Explanation Layer:** Xử lý format dữ liệu, truyền ngữ cảnh cho LLM để kết xuất thành thông điệp khuyên dùng tự nhiên.
+- `presentation`: UI, ViewModel, adapter, mapper và state rendering.
+- `domain`: business logic, use case, model, service và repository contract.
+- `data`: Room, DataStore, Android UsageStats, Retrofit, WorkManager và notification.
+- `di`: Hilt modules cho repository, service, database và network.
 
-## ⚡ Engineering Challenges
+## Background Work
 
-Quá trình phát triển gặp phải những bài toán thử thách đã được xử lý để mang lại trải nghiệm hoàn thiện:
-- **Session reconstruction:** Tái tạo lại chuỗi phiên sử dụng từ luồng sự kiện UsageStats phân mảnh của hệ điều hành.
-- **Behavioral transition analysis:** Xây dựng logic phân tích hành vi chuyển đổi nhanh chóng qua lại giữa các ứng dụng (context switching/doomscrolling).
-- **Balancing insight richness with clean UI/UX:** Cân bằng giữa lượng thông tin Insights khổng lồ và một giao diện trực quan không làm choáng ngợp người dùng.
-- **Designing a scalable local-first architecture:** Thiết kế DB nội bộ đủ khả năng thực hiện truy vấn phức tạp đồng thời hạn chế các tác vụ ngốn tài nguyên khi offline.
+Ứng dụng lên lịch `UsageSyncWorker` mỗi 4 giờ để đồng bộ dữ liệu usage vào Room. Notification worker được bật/tắt theo preferences:
 
-## 🚀 Cài đặt và Chạy thử nghiệm
+- `InsightNotificationWorker`: insight định kỳ.
+- `WeeklyReportNotificationWorker`: báo cáo tuần.
 
-Để build và chạy dự án này trên môi trường phát triển của bạn:
+## AI-Assisted Insights
 
-1. **Clone dự án:**
-   ```bash
-   git clone <repository_url>
-   ```
-2. **Mở dự án** thông qua Android Studio (Hỗ trợ AGP 8.12.3).
-3. **Cấu hình AI Key:** Mặc định đã cấu hình sẵn trong `app/build.gradle.kts` (GEMINI_API_KEY). Có thể thay đổi nếu cần.
-4. **Build & Run:**
-   - Đảm bảo thiết bị Android hỗ trợ SDK 24 đến 36.
-   - Bấm **Run** hoặc dùng `./gradlew assembleDebug`.
+Insight có hai tầng:
 
-## 🔮 Future Improvements
+- Local insight: sinh từ rule/domain service, hoạt động offline.
+- Cloud enhancement: nếu người dùng bật tùy chọn, có mạng và có Gemini API key, app gửi grounded context đã được rút gọn sang Gemini để tạo lời giải thích tự nhiên hơn.
 
-Tương lai dự án có thể mở rộng với:
-- Cloud synchronization
-- Cross-device wellbeing tracking (Quản lý đa thiết bị)
-- Adaptive onboarding (Chào mừng cá nhân hoá)
-- Personalized recommendation system (Hệ thống gợi ý thông minh dựa trên ngữ cảnh thực)
-- Advanced on-device ML insights (Đưa mô hình ML nhỏ hoàn toàn offline)
+Nếu cloud không khả dụng, app tự fallback về `LocalInsightNarrator`.
 
-## 📝 Giấy phép (License)
+## Chạy dự án
 
-Dự án này phục vụ với mục đích giáo dục, nghiên cứu cá nhân và làm Portfolio chứng minh năng lực phát triển phần mềm. 
-Được phân phối dưới giấy phép **MIT License**. Chi tiết xem tệp "LICENSE" để biết thêm.
+1. Mở project bằng Android Studio.
+2. Đảm bảo Android Gradle Plugin và Gradle wrapper được sync thành công.
+3. Cấu hình Gemini API key nếu muốn dùng cloud insight.
+4. Build hoặc chạy:
 
+```bash
+./gradlew assembleDebug
+```
+
+Trên Windows:
+
+```powershell
+.\gradlew.bat :app:assembleDebug
+```
+
+## Ghi chú
+
+Project phục vụ mục đích học tập, nghiên cứu và portfolio Android. Điểm trọng tâm của dự án là pipeline phân tích hành vi local-first, không chỉ là giao diện thống kê screen time đơn giản.

@@ -1,38 +1,26 @@
 package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
 
 import android.app.Application
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.R
-import com.xmobile.project2digitalwellbeing.domain.apps.usecase.GetAppMetadataUseCase
-import com.xmobile.project2digitalwellbeing.domain.apps.usecase.ResolveAppNameUseCase
-import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
-import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
-import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import javax.inject.Inject
 
 @HiltViewModel
 class UsageDetailAppViewModel @Inject constructor(
     application: Application,
-    private val savedStateHandle: SavedStateHandle,
-    private val usageRepository: UsageRepository,
-    private val getAppMetadataUseCase: GetAppMetadataUseCase,
-    private val resolveAppNameUseCase: ResolveAppNameUseCase,
-    private val aggregator: UsageAggregator
+    savedStateHandle: SavedStateHandle,
+    private val uiBuilder: UsageDetailAppUiBuilder
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
-
     private val packageName: String = savedStateHandle.get<String>("PACKAGE_NAME") ?: ""
 
     private val _uiState = MutableStateFlow(UsageDetailAppUiState(packageName = packageName))
@@ -55,191 +43,11 @@ class UsageDetailAppViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-            try {
-                val zoneId = ZoneId.systemDefault()
-                val todayDate = LocalDate.now(zoneId)
-                val sevenDaysAgoDate = todayDate.minusDays(6)
-
-                val nowMillis = System.currentTimeMillis()
-                val past24hMillis = Instant.ofEpochMilli(nowMillis)
-                    .atZone(zoneId)
-                    .withMinute(0)
-                    .withSecond(0)
-                    .withNano(0)
-                    .minusHours(23)
-                    .toInstant()
-                    .toEpochMilli()
-                val past48hMillis = past24hMillis - 24L * 60 * 60 * 1000
-                val sevenDaysAgoMillis = sevenDaysAgoDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
-
-            // Read from database to ensure we have data even if the system has deleted old events.
-            // The 8-day sync policy ensures this data is persisted in Room via background worker or dashboard refresh.
-                val sessions = usageRepository.getSessions(sevenDaysAgoMillis, nowMillis)
-
-            // Resolve App Info
-                val appMetadataMap = getAppMetadataUseCase(setOf(packageName))
-                val appName = appMetadataMap[packageName]?.appName ?: resolveAppNameUseCase(packageName)
-
-            // Aggregate data
-                val appSessions = sessions.filter { it.packageName == packageName }
-                val slidingHourlyUsage = aggregator.buildSlidingHourlyUsage(
-                    sessions = appSessions,
-                    timezoneId = zoneId.id,
-                    windowStartMillis = past24hMillis,
-                    windowEndMillis = nowMillis
-                )
-                val hourlyTotals = slidingHourlyUsage.map { it.totalTimeMillis / (60f * 1000f) }.toFloatArray()
-
-                var todayTotalMillis = 0L
-                var yesterdayTotalMillis = 0L
-
-                val dailyTotals = FloatArray(7) { 0f } // 0 = 6 days ago, ..., 6 = today
-                val globalDailyTotals = FloatArray(7) { 0f }
-                val todaySessions = mutableListOf<AppSession>()
-                val allTodaySessionsGlobally = mutableListOf<AppSession>()
-                val currentHour = Instant.ofEpochMilli(nowMillis).atZone(zoneId).hour
-
-                for (session in sessions) {
-                    val sessionLocalDate = Instant.ofEpochMilli(session.startTimeMillis).atZone(zoneId).toLocalDate()
-                    val daysSinceSevenDaysAgo = java.time.temporal.ChronoUnit.DAYS.between(sevenDaysAgoDate, sessionLocalDate).toInt()
-
-                    if (daysSinceSevenDaysAgo in 0..6) {
-                        globalDailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
-                        if (session.packageName == packageName) {
-                            dailyTotals[daysSinceSevenDaysAgo] += session.durationMillis / (60f * 1000f)
-                        }
-                    }
-
-                    if (session.packageName == packageName) {
-                        if (session.endTimeMillis > past24hMillis && session.startTimeMillis < nowMillis) {
-                            val clipped = maxOf(session.startTimeMillis, past24hMillis)
-                            val endClipped = minOf(session.endTimeMillis, nowMillis)
-                            todayTotalMillis += (endClipped - clipped)
-                            todaySessions.add(session)
-                        } else if (session.endTimeMillis > past48hMillis && session.startTimeMillis < past24hMillis) {
-                            val clipped = maxOf(session.startTimeMillis, past48hMillis)
-                            val endClipped = minOf(session.endTimeMillis, past24hMillis)
-                            yesterdayTotalMillis += (endClipped - clipped)
-                        }
-                    }
-
-                    if (session.endTimeMillis > past24hMillis && session.startTimeMillis < nowMillis) {
-                        allTodaySessionsGlobally.add(session)
-                    }
-                }
-
-                val dailyPercentages = dailyTotals.mapIndexed { index, appTotal ->
-                    if (globalDailyTotals[index] > 0) (appTotal / globalDailyTotals[index]) * 100f else 0f
-                }
-
-            // Stats
-                val todayTotalFormatted = formatDuration(todayTotalMillis)
-                val vsYesterdayPercent = if (yesterdayTotalMillis > 0) {
-                    (((todayTotalMillis - yesterdayTotalMillis).toFloat() / yesterdayTotalMillis.toFloat()) * 100).toInt()
-                } else 0
-
-                var mostActiveHour = 0
-                var peakUsage = 0f
-                for (i in hourlyTotals.indices) {
-                    if (hourlyTotals[i] > peakUsage) {
-                        peakUsage = hourlyTotals[i]
-                        mostActiveHour = i
-                    }
-                }
-
-                val endHour = (mostActiveHour + 1)
-                val mostActivePeriod = "${String.format("%02d:00", mostActiveHour)} - ${String.format("%02d:00", endHour)}"
-
-                val peakUsageLabel = when (mostActiveHour) {
-                    in 0..5 -> context.getString(R.string.auto_peak_usage_after_midnight)
-                    in 6..11 -> context.getString(R.string.auto_peak_usage_morning)
-                    in 12..16 -> context.getString(R.string.auto_peak_usage_afternoon)
-                    else -> context.getString(R.string.auto_peak_usage_night)
-                }
-
-                val totalSessionsCount = todaySessions.size
-                val avgSessionMillis = if (totalSessionsCount > 0) todayTotalMillis / totalSessionsCount else 0L
-                val longestSessionMillis = todaySessions.maxOfOrNull { it.durationMillis } ?: 0L
-                val shortestSessionMillis = todaySessions.minOfOrNull { it.durationMillis } ?: 0L
-
-                val timeStartLabel = String.format("%02d:00", (currentHour + 1) % 24)
-                val timeMidLabel = String.format("%02d:00", (currentHour + 13) % 24)
-                val timeEndLabel = String.format("%02d:00", currentHour)
-
-            // App Transitions
-                allTodaySessionsGlobally.sortBy { it.startTimeMillis }
-                val transitionCounts = mutableMapOf<Pair<String, String>, Int>()
-                for (i in 0 until allTodaySessionsGlobally.size - 1) {
-                val current = allTodaySessionsGlobally[i]
-                val next = allTodaySessionsGlobally[i+1]
-
-                // Gap less than 2 minutes to count as transition
-                val gap = next.startTimeMillis - current.endTimeMillis
-                if (gap in 0..2 * 60 * 1000L) {
-                    if (current.packageName != next.packageName) {
-                        if (current.packageName == packageName || next.packageName == packageName) {
-                            val pair = Pair(current.packageName, next.packageName)
-                            transitionCounts[pair] = transitionCounts.getOrDefault(pair, 0) + 1
-                        }
-                    }
-                }
-                }
-
-                val allRequiredPackages = transitionCounts.keys.flatMap { listOf(it.first, it.second) }.toSet()
-                val metaMap = getAppMetadataUseCase(allRequiredPackages)
-
-                val topTransitionsSorted = transitionCounts.entries.sortedByDescending { it.value }
-                    .take(3)
-                    .map { (pair, count) ->
-                        val fromPkg = pair.first
-                        val toPkg = pair.second
-                        AppTransitionUiModel(
-                            fromPackage = fromPkg,
-                            fromAppName = metaMap[fromPkg]?.appName ?: resolveAppNameUseCase(fromPkg),
-                            toPackage = toPkg,
-                            toAppName = metaMap[toPkg]?.appName ?: resolveAppNameUseCase(toPkg),
-                            count = count
-                        )
-                    }
-
-                val insightSummary = "You tend to use $appName mostly " + when (mostActiveHour) {
-                    in 0..5 -> context.getString(R.string.auto_usage_period_late_night)
-                    in 6..11 -> context.getString(R.string.auto_usage_period_morning)
-                    in 12..16 -> context.getString(R.string.auto_usage_period_afternoon)
-                    else -> context.getString(R.string.auto_usage_period_evening)
-                }
-
-                val tipSummary = when (mostActiveHour) {
-                    in 0..5 -> context.getString(R.string.auto_tip_after_midnight, appName)
-                    in 6..11 -> context.getString(R.string.auto_tip_morning_usage)
-                    in 12..16 -> context.getString(R.string.auto_tip_afternoon_usage)
-                    else -> context.getString(R.string.auto_tip_evening_usage)
-                }
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        appName = appName,
-                        todayTotalFormatted = todayTotalFormatted,
-                        todayVsYesterdayPercent = vsYesterdayPercent,
-                        weekLineChartData = dailyPercentages,
-                        mostActivePeriod = mostActivePeriod,
-                        avgSessionFormatted = formatDurationVerbose(avgSessionMillis),
-                        peakUsageLabel = peakUsageLabel,
-                        todayHourlyBarChartData = hourlyTotals.toList(),
-                        totalSessionsToday = totalSessionsCount,
-                        longestSessionFormatted = formatDurationVerbose(longestSessionMillis),
-                        shortestSessionFormatted = formatDurationVerbose(shortestSessionMillis),
-                        timeStartLabel = timeStartLabel,
-                        timeMidLabel = timeMidLabel,
-                        timeEndLabel = timeEndLabel,
-                        topTransitions = topTransitionsSorted,
-                        insightSummary = insightSummary,
-                        tipSummary = tipSummary
-                    )
-                }
-            } catch (_: Throwable) {
+            runCatching {
+                uiBuilder.build(packageName)
+            }.onSuccess { state ->
+                _uiState.value = state
+            }.onFailure {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -248,21 +56,5 @@ class UsageDetailAppViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun formatDuration(millis: Long): String {
-        val totalMinutes = millis / (60 * 1000)
-        val hours = totalMinutes / 60
-        val mins = totalMinutes % 60
-        if (hours > 0) return "${hours}h ${mins}m"
-        return "${mins}m"
-    }
-
-    private fun formatDurationVerbose(millis: Long): String {
-        val totalSeconds = millis / 1000
-        val mins = totalSeconds / 60
-        val secs = totalSeconds % 60
-        if (mins > 0) return "${mins}m ${secs}s"
-        return "${secs}s"
     }
 }

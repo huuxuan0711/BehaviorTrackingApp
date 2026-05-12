@@ -495,8 +495,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/auto_you_often_open_social_media_apps_in_short_sessions_throughout_the_evening"
                         android:textSize="@dimen/auto_sp_14"
-                        android:maxWidth="240dp"
-                        android:maxLines="3"
                         android:ellipsize="end"
                         android:textColor="@color/theme_border_soft"/>
                 </LinearLayout>
