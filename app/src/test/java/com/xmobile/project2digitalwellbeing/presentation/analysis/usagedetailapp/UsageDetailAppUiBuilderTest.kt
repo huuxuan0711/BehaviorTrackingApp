@@ -13,6 +13,7 @@ import com.xmobile.project2digitalwellbeing.domain.insights.model.Insight
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppUsageEvent
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
+import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsageDetailAppUiStateUseCase
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.InsightRefreshGroup
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregatorImpl
@@ -48,7 +49,7 @@ class UsageDetailAppUiBuilderTest {
                 otherPackage to metadata(otherPackage, "Chat App")
             )
         )
-        val builder = UsageDetailAppUiBuilder(
+        val useCase = GetUsageDetailAppUiStateUseCase(
             context = fakeContext(),
             usageRepository = repository,
             getAppMetadataUseCase = GetAppMetadataUseCase(repository),
@@ -56,7 +57,7 @@ class UsageDetailAppUiBuilderTest {
             aggregator = UsageAggregatorImpl()
         )
 
-        val state = builder.build(targetPackage, nowMillis)
+        val state = useCase(targetPackage, nowMillis)
 
         assertEquals(false, state.isLoading)
         assertEquals("Focus App", state.appName)

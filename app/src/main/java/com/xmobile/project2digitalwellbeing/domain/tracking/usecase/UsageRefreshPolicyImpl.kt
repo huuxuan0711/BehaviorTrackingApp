@@ -1,6 +1,8 @@
 package com.xmobile.project2digitalwellbeing.domain.tracking.usecase
 
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.UsageSyncState
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 
 class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
@@ -9,6 +11,16 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
         params: RefreshUsageDataParams,
         syncState: UsageSyncState
     ): UsageRefreshWindow {
+        val requestedStart = params.requestedRangeStartMillis
+        val requestedEnd = params.requestedRangeEndMillis
+        if (requestedStart != null && requestedEnd != null) {
+            return UsageRefreshWindow(
+                startTimeMillis = requestedStart.coerceAtLeast(0L),
+                endTimeMillis = requestedEnd.coerceAtLeast(requestedStart).coerceAtLeast(0L),
+                refreshMode = RefreshMode.INCREMENTAL
+            )
+        }
+
         val lastRefresh = syncState.lastSuccessfulRefreshTimestampMillis ?: 0L
         val isCoolingDown = !params.forceFullRefresh &&
                 syncState.isInitialSyncCompleted &&
@@ -23,7 +35,7 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
         }
 
         val endTimeMillis = params.nowMillis
-        val fullRefreshStartMillis = (params.nowMillis - FULL_REFRESH_WINDOW_MILLIS).coerceAtLeast(0L)
+        val fullRefreshStartMillis = resolveFullRefreshStartMillis(params)
 
         if (params.forceFullRefresh || !syncState.isInitialSyncCompleted) {
             return UsageRefreshWindow(
@@ -43,8 +55,25 @@ class UsageRefreshPolicyImpl @Inject constructor() : UsageRefreshPolicy {
         )
     }
 
+    private fun resolveFullRefreshStartMillis(params: RefreshUsageDataParams): Long {
+        val zoneId = runCatching { ZoneId.of(params.timezoneId) }.getOrNull()
+            ?: return (params.nowMillis - FULL_REFRESH_WINDOW_MILLIS).coerceAtLeast(0L)
+
+        val anchorDate = Instant.ofEpochMilli(params.nowMillis)
+            .atZone(zoneId)
+            .toLocalDate()
+            .minusDays(FULL_REFRESH_DAYS - 1L)
+
+        return anchorDate
+            .atStartOfDay(zoneId)
+            .toInstant()
+            .toEpochMilli()
+            .coerceAtLeast(0L)
+    }
+
     private companion object {
-        private const val FULL_REFRESH_WINDOW_MILLIS = 8L * 24L * 60L * 60L * 1000L
+        private const val FULL_REFRESH_DAYS = 14L
+        private const val FULL_REFRESH_WINDOW_MILLIS = FULL_REFRESH_DAYS * 24L * 60L * 60L * 1000L
         private const val SAFETY_WINDOW_MILLIS = 5L * 60L * 1000L
         private const val COOLDOWN_MILLIS = 60L * 1000L
     }

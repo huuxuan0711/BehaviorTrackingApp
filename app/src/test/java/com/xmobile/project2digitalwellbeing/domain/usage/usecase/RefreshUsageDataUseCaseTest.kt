@@ -191,6 +191,58 @@ class RefreshUsageDataUseCaseTest {
     }
 
     @Test
+    fun `requested range refresh preserves sync state when update sync is disabled`() = runTest {
+        val currentSyncState = UsageSyncState(
+            lastProcessedTimestampMillis = 300_000L,
+            lastSeenEventTimestampMillis = 299_000L,
+            lastSuccessfulRefreshTimestampMillis = 300_000L,
+            isInitialSyncCompleted = true
+        )
+        val repository = FakeUsageRepository(
+            syncState = currentSyncState,
+            usageEvents = listOf(
+                AppUsageEvent("app.a", 110_000L, UsageEventType.FOREGROUND),
+                AppUsageEvent("app.a", 120_000L, UsageEventType.BACKGROUND)
+            )
+        )
+        val sessionBuilder = RecordingSessionBuilder(
+            sessionsToReturn = listOf(
+                AppSession("app.a", 110_000L, 120_000L, 10_000L)
+            )
+        )
+
+        val useCase = RefreshUsageDataUseCase(
+            repository = repository,
+            appRepository = repository,
+            usagePreferencesRepository = FakeUsagePreferencesRepository(),
+            refreshPolicy = DefaultRefreshPolicy,
+            sessionEnricher = DefaultSessionEnricher,
+            errorMapper = UsageErrorMapperImpl(),
+            sessionBuilder = sessionBuilder,
+            aggregator = NoOpUsageAggregator,
+            featureExtractor = NoOpUsageFeatureExtractor,
+            insightEngine = NoOpInsightEngine
+        )
+
+        val outcome = useCase(
+            RefreshUsageDataParams(
+                nowMillis = 130_000L,
+                timezoneId = "Asia/Bangkok",
+                requestedRangeStartMillis = 100_000L,
+                requestedRangeEndMillis = 130_000L,
+                updateSyncState = false
+            )
+        )
+        val result = assertSuccess(outcome)
+
+        assertEquals(100_000L, result.processedRangeStartMillis)
+        assertEquals(130_000L, result.processedRangeEndMillis)
+        assertEquals(100_000L, repository.deletedSessionsStart)
+        assertEquals(130_000L, repository.deletedSessionsEnd)
+        assertEquals(currentSyncState, repository.savedSyncState)
+    }
+
+    @Test
     fun `returns permission error when usage event access fails`() = runTest {
         val repository = FakeUsageRepository(
             syncState = UsageSyncState(

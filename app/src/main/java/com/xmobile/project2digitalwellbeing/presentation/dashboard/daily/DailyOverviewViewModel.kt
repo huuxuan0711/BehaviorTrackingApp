@@ -78,6 +78,16 @@ class DailyOverviewViewModel @Inject constructor(
             resolvedDate.atTime(LocalTime.MAX).atZone(zoneId).toInstant().toEpochMilli()
         }
         val shouldRefreshCurrentDay = resolvedDate == today
+        val historicalBackfillStartMillis = resolvedDate
+            .minusDays(1)
+            .atStartOfDay(zoneId)
+            .toInstant()
+            .toEpochMilli()
+        val historicalBackfillEndMillis = resolvedDate
+            .plusDays(1)
+            .atStartOfDay(zoneId)
+            .toInstant()
+            .toEpochMilli()
 
         viewModelScope.launch {
             val localizedContext = context.localizedForAppLocale()
@@ -96,6 +106,21 @@ class DailyOverviewViewModel @Inject constructor(
                             nowMillis = nowMillis,
                             timezoneId = timezoneId,
                             forceFullRefresh = forceRefresh
+                        )
+                    )
+                ) {
+                    is RefreshUsageDataOutcome.Success -> null
+                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage(localizedContext)
+                }
+            } else if (!shouldRefreshCurrentDay) {
+                when (
+                    val refreshOutcome = refreshUsageDataUseCase(
+                        RefreshUsageDataParams(
+                            nowMillis = historicalBackfillEndMillis - 1L,
+                            timezoneId = timezoneId,
+                            requestedRangeStartMillis = historicalBackfillStartMillis,
+                            requestedRangeEndMillis = historicalBackfillEndMillis,
+                            updateSyncState = false
                         )
                     )
                 ) {

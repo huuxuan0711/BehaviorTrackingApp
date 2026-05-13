@@ -21,7 +21,10 @@ import kotlinx.coroutines.withContext
 data class RefreshUsageDataParams(
     val nowMillis: Long,
     val timezoneId: String,
-    val forceFullRefresh: Boolean = false
+    val forceFullRefresh: Boolean = false,
+    val requestedRangeStartMillis: Long? = null,
+    val requestedRangeEndMillis: Long? = null,
+    val updateSyncState: Boolean = true
 )
 
 data class RefreshUsageDataResult(
@@ -149,12 +152,16 @@ class RefreshUsageDataUseCase @Inject constructor(
             groups
         }.getOrElse { return RefreshUsageDataOutcome.Failure(it.toUsageDataError()) }
 
-        val newSyncState = buildNextSyncState(
-            currentSyncState = syncState,
-            usageEvents = usageEvents,
-            refreshWindow = refreshWindow,
-            nowMillis = params.nowMillis
-        )
+        val newSyncState = if (params.updateSyncState) {
+            buildNextSyncState(
+                currentSyncState = syncState,
+                usageEvents = usageEvents,
+                refreshWindow = refreshWindow,
+                nowMillis = params.nowMillis
+            )
+        } else {
+            syncState
+        }
 
         runStage(UsagePipelineStage.PERSIST_RESULTS, params) {
             repository.commitRefreshResult(
@@ -193,7 +200,10 @@ class RefreshUsageDataUseCase @Inject constructor(
             ?: currentSyncState.lastSeenEventTimestampMillis
 
         return UsageSyncState(
-            lastProcessedTimestampMillis = refreshWindow.endTimeMillis,
+            lastProcessedTimestampMillis = listOfNotNull(
+                currentSyncState.lastProcessedTimestampMillis,
+                refreshWindow.endTimeMillis
+            ).maxOrNull(),
             lastSeenEventTimestampMillis = lastSeenEventTimestampMillis,
             lastSuccessfulRefreshTimestampMillis = nowMillis,
             isInitialSyncCompleted = true

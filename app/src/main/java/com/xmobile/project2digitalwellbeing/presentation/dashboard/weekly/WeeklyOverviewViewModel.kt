@@ -59,6 +59,16 @@ class WeeklyOverviewViewModel @Inject constructor(
         val anchorDate = normalizedWeekStart.plusDays(6)
         val nowMillis = anchorDate.atTime(23, 59, 59).atZone(zoneId).toInstant().toEpochMilli()
         val shouldRefreshCurrentWeek = normalizedWeekStart == currentWeekStart
+        val historicalBackfillStartMillis = normalizedWeekStart
+            .minusWeeks(1)
+            .atStartOfDay(zoneId)
+            .toInstant()
+            .toEpochMilli()
+        val historicalBackfillEndMillis = normalizedWeekStart
+            .plusWeeks(1)
+            .atStartOfDay(zoneId)
+            .toInstant()
+            .toEpochMilli()
 
         viewModelScope.launch {
             _uiState.update {
@@ -76,6 +86,21 @@ class WeeklyOverviewViewModel @Inject constructor(
                             nowMillis = System.currentTimeMillis(),
                             timezoneId = timezoneId,
                             forceFullRefresh = forceRefresh
+                        )
+                    )
+                ) {
+                    is RefreshUsageDataOutcome.Success -> null
+                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage()
+                }
+            } else if (!shouldRefreshCurrentWeek) {
+                when (
+                    val refreshOutcome = refreshUsageDataUseCase(
+                        RefreshUsageDataParams(
+                            nowMillis = historicalBackfillEndMillis - 1L,
+                            timezoneId = timezoneId,
+                            requestedRangeStartMillis = historicalBackfillStartMillis,
+                            requestedRangeEndMillis = historicalBackfillEndMillis,
+                            updateSyncState = false
                         )
                     )
                 ) {
