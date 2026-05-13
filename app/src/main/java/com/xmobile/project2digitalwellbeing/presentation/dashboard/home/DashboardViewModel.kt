@@ -65,21 +65,14 @@ class DashboardViewModel @Inject constructor(
                 )
             }
 
-            val refreshErrorMessage = if (forceRefresh || !hasLoadedData) {
-                when (val refreshOutcome = refreshUsageDataUseCase(
-                    RefreshUsageDataParams(
-                        nowMillis = nowMillis,
-                        timezoneId = timezoneId,
-                        forceFullRefresh = forceRefresh
-                    )
-                )) {
-                    is RefreshUsageDataOutcome.Success -> null
-                    is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage()
-                }
-            } else {
-                null
-            }
+            // Step 1: refresh local cache from UsageStats (write path).
+            val refreshWarningMessage = refreshLocalUsageCacheIfNeeded(
+                nowMillis = nowMillis,
+                timezoneId = timezoneId,
+                forceRefresh = forceRefresh
+            )
 
+            // Step 2: read composed dashboard experience from local data (read path).
             when (val outcome = getDashboardExperienceUseCase(
                 GetDashboardDataParams(
                     nowMillis = nowMillis,
@@ -96,7 +89,7 @@ class DashboardViewModel @Inject constructor(
                         dailyUsage = dashboardData.dailyUsage,
                         hourlyUsage = dashboardData.hourlyUsage,
                         topApps = dashboardData.topApps,
-                        errorMessage = refreshErrorMessage,
+                        errorMessage = refreshWarningMessage,
                         insightSummaryText = outcome.data.insightSummaryText
                     )
                     _uiState.value = state.copy(
@@ -106,7 +99,7 @@ class DashboardViewModel @Inject constructor(
 
                 is GetDashboardExperienceOutcome.Failure -> {
                     _uiState.update {
-                        val error = refreshErrorMessage ?: outcome.error.toUserMessage()
+                        val error = refreshWarningMessage ?: outcome.error.toUserMessage()
                         it.copy(
                             isLoading = false,
                             currentDateLabel = nowMillis.toFriendlyDate(timezoneId),
@@ -116,6 +109,24 @@ class DashboardViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun refreshLocalUsageCacheIfNeeded(
+        nowMillis: Long,
+        timezoneId: String,
+        forceRefresh: Boolean
+    ): String? {
+        if (!forceRefresh && hasLoadedData) return null
+        return when (val refreshOutcome = refreshUsageDataUseCase(
+            RefreshUsageDataParams(
+                nowMillis = nowMillis,
+                timezoneId = timezoneId,
+                forceFullRefresh = forceRefresh
+            )
+        )) {
+            is RefreshUsageDataOutcome.Success -> null
+            is RefreshUsageDataOutcome.Failure -> refreshOutcome.error.toUserMessage()
         }
     }
 
