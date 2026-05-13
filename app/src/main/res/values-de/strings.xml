@@ -359,5 +359,14 @@
     <string name="auto_app_transitions_desc">Follow the app-to-app flow behind distracting loops.</string>
     <string name="auto_usage_patterns_desc">Review long sessions, quick checks, and repeated usage habits.</string>
     <string name="auto_late_night_desc">See how much phone use happens near bedtime and after midnight.</string>
+    <string name="auto_avg_session_format">Durchschn. Sitzung: %1$s</string>
+    <string name="auto_most_active_format">Am aktivsten: %1$s</string>
+    <string name="session_period_after_midnight">Nach Mitternacht</string>
+    <string name="session_period_morning">Morgen</string>
+    <string name="session_period_afternoon">Nachmittag</string>
+    <string name="session_period_evening">Abend</string>
+    <string name="session_period_late_night">Späte Nacht</string>
+    <string name="session_period_with_date">%1$s (%2$s)</string>
+    <string name="auto_usage_detail_trend_vs_yesterday">%1$+d%% im Vergleich zu gestern</string>
 </resources>
 

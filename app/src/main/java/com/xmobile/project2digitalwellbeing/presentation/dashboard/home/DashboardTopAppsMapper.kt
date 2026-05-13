@@ -11,6 +11,7 @@ fun List<AppUsageStat>.toTopAppUiModels(context: Context): List<TopAppUiModel> {
     val totalDurationMillis = sumOf { it.totalTimeMillis }
     return map { app ->
         TopAppUiModel(
+            packageName = app.packageName,
             name = app.appName ?: app.packageName,
             durationText = app.totalTimeMillis.toDashboardDurationText(context),
             progressRatio = if (totalDurationMillis <= 0L) 0f else {

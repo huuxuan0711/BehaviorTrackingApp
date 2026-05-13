@@ -1,4 +1,4 @@
-package com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp
+package com.xmobile.project2digitalwellbeing.domain.usage.usecase
 
 import android.content.Context
 import com.xmobile.project2digitalwellbeing.R
@@ -8,13 +8,15 @@ import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.HourlyUsage
 import com.xmobile.project2digitalwellbeing.domain.usage.repository.UsageRepository
 import com.xmobile.project2digitalwellbeing.domain.usage.service.UsageAggregator
+import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp.AppTransitionUiModel
+import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp.UsageDetailAppUiState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-class UsageDetailAppUiBuilder @Inject constructor(
+class GetUsageDetailAppUiStateUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val usageRepository: UsageRepository,
     private val getAppMetadataUseCase: GetAppMetadataUseCase,
@@ -22,7 +24,10 @@ class UsageDetailAppUiBuilder @Inject constructor(
     private val aggregator: UsageAggregator
 ) {
 
-    suspend fun build(packageName: String, nowMillis: Long = System.currentTimeMillis()): UsageDetailAppUiState {
+    suspend operator fun invoke(
+        packageName: String,
+        nowMillis: Long = System.currentTimeMillis()
+    ): UsageDetailAppUiState {
         val zoneId = ZoneId.systemDefault()
         val todayDate = Instant.ofEpochMilli(nowMillis).atZone(zoneId).toLocalDate()
         val sevenDaysAgoDate = todayDate.minusDays(6)

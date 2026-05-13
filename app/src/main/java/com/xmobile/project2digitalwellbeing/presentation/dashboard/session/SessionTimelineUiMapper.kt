@@ -1,6 +1,7 @@
 package com.xmobile.project2digitalwellbeing.presentation.dashboard.session
 
 import android.content.Context
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.domain.tracking.model.AppSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.EnrichedSession
 import com.xmobile.project2digitalwellbeing.domain.usage.model.UsageAnalysisPreferences
@@ -78,8 +79,8 @@ class SessionTimelineUiMapper @Inject constructor() {
         val gapMillis = next.session.startTimeMillis - session.endTimeMillis
         return session.packageName == next.session.packageName &&
             gapMillis in 0..MERGE_ADJACENT_SESSION_GAP_MILLIS &&
-            session.startTimeMillis.toPeriodLabel(zoneId, selectedDate, lateNightStartHour) ==
-            next.session.startTimeMillis.toPeriodLabel(zoneId, selectedDate, lateNightStartHour)
+            session.startTimeMillis.toPeriodBucket(zoneId, lateNightStartHour) ==
+            next.session.startTimeMillis.toPeriodBucket(zoneId, lateNightStartHour)
     }
 
     private fun EnrichedSession.mergeWith(next: EnrichedSession): EnrichedSession {
@@ -107,6 +108,7 @@ class SessionTimelineUiMapper @Inject constructor() {
             packageName = session.packageName,
             appName = appName ?: session.packageName,
             periodLabel = session.startTimeMillis.toPeriodLabel(
+                context = context,
                 zoneId = zoneId,
                 selectedDate = selectedDate,
                 lateNightStartHour = lateNightStartHour
@@ -125,23 +127,50 @@ class SessionTimelineUiMapper @Inject constructor() {
     }
 
     private fun Long.toPeriodLabel(
+        context: Context,
         zoneId: ZoneId,
         selectedDate: LocalDate,
         lateNightStartHour: Int
     ): String {
         val localDateTime = Instant.ofEpochMilli(this).atZone(zoneId).toLocalDateTime()
-        val hour = localDateTime.hour
-        val prefix = when (localDateTime.hour) {
-            in 0 until UsageAnalysisPreferences.DEFAULT_LATE_NIGHT_END_HOUR -> "After midnight"
-            in 5..11 -> "Morning"
-            in 12..16 -> "Afternoon"
-            else -> if (hour >= lateNightStartHour) "Late night" else "Evening"
+        val prefix = when (toPeriodBucket(zoneId, lateNightStartHour)) {
+            PeriodBucket.AFTER_MIDNIGHT -> context.getString(R.string.session_period_after_midnight)
+            PeriodBucket.MORNING -> context.getString(R.string.session_period_morning)
+            PeriodBucket.AFTERNOON -> context.getString(R.string.session_period_afternoon)
+            PeriodBucket.EVENING -> context.getString(R.string.session_period_evening)
+            PeriodBucket.LATE_NIGHT -> context.getString(R.string.session_period_late_night)
         }
         return if (localDateTime.toLocalDate() == selectedDate) {
             prefix
         } else {
-            "$prefix (${toDateLabel(localDateTime.toLocalDate())})"
+            context.getString(
+                R.string.session_period_with_date,
+                prefix,
+                toDateLabel(localDateTime.toLocalDate())
+            )
         }
+    }
+
+    private fun Long.toPeriodBucket(
+        zoneId: ZoneId,
+        lateNightStartHour: Int
+    ): PeriodBucket {
+        val localDateTime = Instant.ofEpochMilli(this).atZone(zoneId).toLocalDateTime()
+        val hour = localDateTime.hour
+        return when (hour) {
+            in 0 until UsageAnalysisPreferences.DEFAULT_LATE_NIGHT_END_HOUR -> PeriodBucket.AFTER_MIDNIGHT
+            in 5..11 -> PeriodBucket.MORNING
+            in 12..16 -> PeriodBucket.AFTERNOON
+            else -> if (hour >= lateNightStartHour) PeriodBucket.LATE_NIGHT else PeriodBucket.EVENING
+        }
+    }
+
+    private enum class PeriodBucket {
+        AFTER_MIDNIGHT,
+        MORNING,
+        AFTERNOON,
+        EVENING,
+        LATE_NIGHT
     }
 
     private companion object {

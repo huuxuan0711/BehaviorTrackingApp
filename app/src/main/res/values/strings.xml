@@ -33,6 +33,7 @@
     <string name="auto_average_session_length">Average session length</string>
     <string name="auto_avg_duration">Avg. duration</string>
     <string name="auto_avg_session_n_a">Avg session: N/A</string>
+    <string name="auto_avg_session_format">Avg session: %1$s</string>
     <string name="auto_avg_time_between_switches">Avg. time between switches</string>
     <string name="auto_back">Back</string>
     <string name="auto_behavior_insight">Behavior Insight</string>
@@ -98,6 +99,7 @@
     <string name="auto_mon">Mon</string>
     <string name="auto_morning">Morning</string>
     <string name="auto_most_active_n_a">Most active: N/A</string>
+    <string name="auto_most_active_format">Most active: %1$s</string>
     <string name="auto_most_frequently_opened">Most Frequently Opened</string>
     <string name="auto_most_used_apps">Most Used Apps</string>
     <string name="auto_next">Next</string>
@@ -148,6 +150,12 @@
     <string name="auto_session_duration">Session duration</string>
     <string name="auto_session_length_threshold">Session Length Threshold</string>
     <string name="auto_session_timeline">Session Timeline</string>
+    <string name="session_period_after_midnight">After midnight</string>
+    <string name="session_period_morning">Morning</string>
+    <string name="session_period_afternoon">Afternoon</string>
+    <string name="session_period_evening">Evening</string>
+    <string name="session_period_late_night">Late night</string>
+    <string name="session_period_with_date">%1$s (%2$s)</string>
     <string name="auto_sessions">Sessions</string>
     <string name="auto_set_the_language_for_app">Set the language for app</string>
     <string name="auto_set_when_a_session_is_considered_long">Set when a session is considered long</string>
@@ -181,6 +189,7 @@
     <string name="auto_text_20_minutes">20 minutes</string>
     <string name="auto_text_23_59">23:59</string>
     <string name="auto_text_25_vs_yesterday">+25% vs yesterday</string>
+    <string name="auto_usage_detail_trend_vs_yesterday">%1$+d%% vs yesterday</string>
     <string name="auto_text_28_sessions">28 sessions</string>
     <string name="auto_text_2h_15m">2h 15m</string>
     <string name="auto_text_2h_15m_today">2h 15m today</string>

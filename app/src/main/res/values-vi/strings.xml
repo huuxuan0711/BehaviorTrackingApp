@@ -33,6 +33,7 @@
     <string name="auto_average_session_length">Thời lượng phiên trung bình</string>
     <string name="auto_avg_duration">Thời lượng trung bình</string>
     <string name="auto_avg_session_n_a">Phiên TB: N/A</string>
+    <string name="auto_avg_session_format">Phiên TB: %1$s</string>
     <string name="auto_avg_time_between_switches">Thời gian trung bình giữa các lần chuyển đổi</string>
     <string name="auto_back">Quay lại</string>
     <string name="auto_behavior_insight">Thông tin hành vi</string>
@@ -98,6 +99,7 @@
     <string name="auto_mon">Thứ 2</string>
     <string name="auto_morning">Buổi sáng</string>
     <string name="auto_most_active_n_a">Hoạt động nhất: N/A</string>
+    <string name="auto_most_active_format">Hoạt động nhất: %1$s</string>
     <string name="auto_most_frequently_opened">Mở thường xuyên nhất</string>
     <string name="auto_most_used_apps">Ứng dụng dùng nhiều nhất</string>
     <string name="auto_next">Tiếp theo</string>
@@ -148,6 +150,12 @@
     <string name="auto_session_duration">Thời lượng phiên</string>
     <string name="auto_session_length_threshold">Ngưỡng thời lượng phiên</string>
     <string name="auto_session_timeline">Dòng thời gian phiên</string>
+    <string name="session_period_after_midnight">Sau nửa đêm</string>
+    <string name="session_period_morning">Buổi sáng</string>
+    <string name="session_period_afternoon">Buổi chiều</string>
+    <string name="session_period_evening">Buổi tối</string>
+    <string name="session_period_late_night">Đêm khuya</string>
+    <string name="session_period_with_date">%1$s (%2$s)</string>
     <string name="auto_sessions">Phiên sử dụng</string>
     <string name="auto_set_the_language_for_app">Đặt ngôn ngữ cho ứng dụng</string>
     <string name="auto_set_when_a_session_is_considered_long">Đặt thời điểm một phiên được coi là dài</string>
@@ -181,6 +189,7 @@
     <string name="auto_text_20_minutes">20 phút</string>
     <string name="auto_text_23_59">23:59</string>
     <string name="auto_text_25_vs_yesterday">+25% so với hôm qua</string>
+    <string name="auto_usage_detail_trend_vs_yesterday">%1$+d%% so với hôm qua</string>
     <string name="auto_text_28_sessions">28 phiên</string>
     <string name="auto_text_2h_15m">2h 15m</string>
     <string name="auto_text_2h_15m_today">2h 15m hôm nay</string>

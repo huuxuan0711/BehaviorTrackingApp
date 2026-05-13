@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.xmobile.project2digitalwellbeing.R
+import com.xmobile.project2digitalwellbeing.domain.usage.usecase.GetUsageDetailAppUiStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class UsageDetailAppViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    private val uiBuilder: UsageDetailAppUiBuilder
+    private val getUsageDetailAppUiStateUseCase: GetUsageDetailAppUiStateUseCase
 ) : AndroidViewModel(application) {
 
     private val context get() = getApplication<Application>()
@@ -44,7 +45,7 @@ class UsageDetailAppViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             runCatching {
-                uiBuilder.build(packageName)
+                getUsageDetailAppUiStateUseCase(packageName)
             }.onSuccess { state ->
                 _uiState.value = state
             }.onFailure {

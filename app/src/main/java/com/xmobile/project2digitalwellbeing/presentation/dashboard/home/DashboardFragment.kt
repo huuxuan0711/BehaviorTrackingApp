@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.FragmentDashboardBinding
 import com.xmobile.project2digitalwellbeing.helper.UsageAccessPermissionHelper
+import com.xmobile.project2digitalwellbeing.presentation.analysis.usagedetailapp.UsageDetailAppActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.daily.DailyOverviewActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.session.SessionTimelineActivity
 import com.xmobile.project2digitalwellbeing.presentation.dashboard.weekly.WeeklyOverviewActivity
@@ -29,7 +30,12 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: DashboardViewModel by viewModels()
-    private val topAppsAdapter = DashboardTopAppsAdapter()
+    private val topAppsAdapter = DashboardTopAppsAdapter { app ->
+        val intent = Intent(requireContext(), UsageDetailAppActivity::class.java).apply {
+            putExtra("PACKAGE_NAME", app.packageName)
+        }
+        startActivity(intent)
+    }
     private var lastShownErrorMessage: String? = null
 
     override fun onCreateView(

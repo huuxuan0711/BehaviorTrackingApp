@@ -1,18 +1,33 @@
 package com.xmobile.project2digitalwellbeing.presentation.main
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.xmobile.project2digitalwellbeing.databinding.ActivityMainBinding
+import com.xmobile.project2digitalwellbeing.domain.preferences.usecase.ObserveUsageAnalysisPreferencesUseCase
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var observeUsageAnalysisPreferencesUseCase: ObserveUsageAnalysisPreferencesUseCase
+
     private lateinit var binding: ActivityMainBinding
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         setupViewPager(savedInstanceState)
         setupBottomNavigation()
+        maybeRequestNotificationPermission()
     }
 
     private fun setupViewPager(savedInstanceState: Bundle?) {
@@ -88,6 +104,28 @@ class MainActivity : AppCompatActivity() {
         binding.navSettings.isSelected = isSettingsSelected
         binding.iconSettings.isSelected = isSettingsSelected
         binding.textSettings.isSelected = isSettingsSelected
+    }
+
+    private fun maybeRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return
+        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        lifecycleScope.launch {
+            val preferences = observeUsageAnalysisPreferencesUseCase().first()
+            val shouldRequestNotificationPermission =
+                preferences.insightNotificationsEnabled || preferences.weeklyReportsEnabled
+            if (shouldRequestNotificationPermission) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     companion object {

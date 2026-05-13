@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
+import com.xmobile.project2digitalwellbeing.R
 import com.xmobile.project2digitalwellbeing.databinding.ActivityUsageDetailAppBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,14 +48,23 @@ class UsageDetailAppActivity : AppCompatActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { state ->
                     binding.tvTodayTotal.text = state.todayTotalFormatted
-                    binding.tvTrendText.text = if (state.todayVsYesterdayPercent >= 0) "+${state.todayVsYesterdayPercent}% vs yesterday" else "${state.todayVsYesterdayPercent}% vs yesterday"
+                    binding.tvTrendText.text = getString(
+                        R.string.auto_usage_detail_trend_vs_yesterday,
+                        state.todayVsYesterdayPercent
+                    )
 
                     if (state.appName.isNotBlank()) {
                         binding.tvAppTitle.text = state.appName
                     }
 
-                    binding.tvMostActive.text = "Most active: ${state.mostActivePeriod}"
-                    binding.tvAvgSession.text = "Avg session: ${state.avgSessionFormatted}"
+                    binding.tvMostActive.text = getString(
+                        R.string.auto_most_active_format,
+                        state.mostActivePeriod
+                    )
+                    binding.tvAvgSession.text = getString(
+                        R.string.auto_avg_session_format,
+                        state.avgSessionFormatted
+                    )
                     binding.tvPeakUsage.text = state.peakUsageLabel
 
                     binding.tvTotalSessions.text = state.totalSessionsToday.toString()

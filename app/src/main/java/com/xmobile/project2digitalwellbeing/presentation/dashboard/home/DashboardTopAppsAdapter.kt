@@ -6,7 +6,9 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.xmobile.project2digitalwellbeing.databinding.ItemAppUsageBinding
 
-class DashboardTopAppsAdapter : RecyclerView.Adapter<DashboardTopAppsAdapter.TopAppViewHolder>() {
+class DashboardTopAppsAdapter(
+    private val onAppClick: (TopAppUiModel) -> Unit = {}
+) : RecyclerView.Adapter<DashboardTopAppsAdapter.TopAppViewHolder>() {
 
     private val items = mutableListOf<TopAppUiModel>()
 
@@ -26,7 +28,10 @@ class DashboardTopAppsAdapter : RecyclerView.Adapter<DashboardTopAppsAdapter.Top
     }
 
     override fun onBindViewHolder(holder: TopAppViewHolder, position: Int) {
-        holder.bind(app = items[position])
+        holder.bind(
+            app = items[position],
+            onAppClick = onAppClick
+        )
     }
 
     override fun getItemCount(): Int = items.size
@@ -35,10 +40,14 @@ class DashboardTopAppsAdapter : RecyclerView.Adapter<DashboardTopAppsAdapter.Top
         private val binding: ItemAppUsageBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(app: TopAppUiModel) {
+        fun bind(
+            app: TopAppUiModel,
+            onAppClick: (TopAppUiModel) -> Unit
+        ) {
             binding.tvName.text = app.name
             binding.tvDuration.text = app.durationText
             binding.imgIcon.setImageDrawable(app.icon)
+            binding.root.setOnClickListener { onAppClick(app) }
 
             binding.root.post {
                 val containerWidth = (binding.root.width - binding.root.paddingStart - binding.root.paddingEnd)
